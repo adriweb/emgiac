@@ -640,11 +640,11 @@ target="_blank">Python</a>
   <li> Sequences
   <a
   href="#exec&python=0&+///First%20terms%20of%20an%20explicit%20sequence%20(given%20by%20an%20expression)&+u(n)%3A%3D1%2Fn&+s%3A%3Dseq(u(n)%2Cn%2C1%2C10)&+seq(point(n%2Cu(n))%2Cn%2C1%2C10)&+///Computation%20of%20the%20first%20terms%20of%20a%20recurrent%20sequence%20$u[n+1]=f(u[n])$&+function%20nterms(f%2Cu0%2CN)%20%0A%20%20var%20n%2Cu%3B%0A%20%20u%3A%3D%5Bu0%5D%3B%0A%20%20for%20n%20from%201%20to%20N%20do%0A%20%20%20%20u%5Bn%5D%3A%3Df(u%5Bn-1%5D)%3B%0A%20%20od%3B%0A%20%20return%20u%3B%20%0A%20%20%2F%2F%20ou%20retourne%20u%5BN%5D%20pour%20le%20dernier%20terme%0Affunction%3A%3B&+f(x)%3A%3D1%2F2*(x%2B2%2Fx)&+nterms(f%2C1.0%2C1)&+U%3A%3Dnterms(f%2C1.0%2C5)&+nterms(f%2C1%2C5)&+seq(point(n%2CU%5Bn%5D)%2Cn%2C0%2Csize(U)-1)&"
-  target="_blank"">Xcas
+  target="_blank">Xcas
   </a>,
   <a
   href="#exec&python=1&+///First%20terms%20of%20an%20explicit%20sequence%20(given%20by%20an%20expression)&+def%20u(n)%3A%0A%20%20%20%20return%201.0%2Fn%0A&+s%3D%5Bu(n)%20for%20n%20in%20range(1%2C11)%5D&+%5Bpoint(n%2Cu(n))%20for%20n%20in%20range(1%2C11)%5D&+///Computation%20of%20the%20first%20terms%20of%20a%20recurrent%20sequence%20$u[n+1]=f(u[n])$&+def%20nterms(f%2Cu0%2CN)%3A%0A%20%20%20%20%23%20local%20n%2Cu%0A%20%20%20%20u%3D%5Bu0%5D%3B%0A%20%20%20%20for%20n%20in%20range(N)%3A%0A%20%20%20%20%20%20%20%20u.append(f(u%5Bn%5D))%0A%20%20%20%20return%20u%20%0A%20%20%20%20%23%20ou%20retourne%20u%5BN%5D%20pour%20le%20dernier%20terme%0A&+def%20f(x)%3A%0A%20%20%20%20return%201%2F2*(x%2B2%2Fx)&+nterms(f%2C1.0%2C1)&+U%3Dnterms(f%2C1.0%2C5)&+nterms(f%2C1%2C5)&+%5Bpoint(n%2CU%5Bn%5D)%20for%20n%20in%20range(size(U))%5D%0A&"
-  target="_blank"">Python</a>
+  target="_blank">Python</a>
   </li>
   <li> Binomial and truncated geometric law
   <a
@@ -975,7 +975,7 @@ onclick="var tmp=document.getElementById('tutocfg'); if (tmp.style.display=='non
 <strong>Manuals</strong>
 </button>
 <span id="manuels" style="display:none">
-  <string>Xcas manals</strong> <button class="bouton"
+  <strong>Xcas manals</strong> <button class="bouton"
 onclick="document.getElementById('manuels').style.display='none';">Hide</button>
 <br>
 Most of the documentation is in French, not yet translated.
@@ -1392,7 +1392,7 @@ onclick="var tmp=document.getElementById('tutoanalyse'); if (tmp.style.display==
   Once <tt>f</tt> is defined, we can compute the value of the function
   and derivative like this:
   <button  
-  onclick="UI.insert(UI.focused,'f(sqrt(pi)); f\'(2);f'(y);')">
+  onclick="UI.insert(UI.focused,'f(sqrt(pi)); f\'(2);f\'(y);')">
   <tt>f(sqrt(pi)); f'(2); f'(y) </tt></button>.
   <br>
   <tt>'</tt> denotes the derivative with respect to <tt>x</tt>,
@@ -2842,7 +2842,7 @@ value="sample" onclick="UI.insert(UI.focused,'sample(');">
   Choose <strong>loop</strong>
   <button class="bouton" onmousedown="event.preventDefault()" onclick="document.getElementById('assistant_pour').style.display='block';UI.set_focus('pourvarname'); document.getElementById('assistant_tantque').style.display='none';">for</button>
 or
-  <button class="bouton" onmousedown="event.preventDefault()" onclick="document.getElementById('assistant_pour').style.display='none';document.getElementById('assistant_tantque').style.display='block';UI.set_focus('tantquecond'); "document.getElementById('tantquecond').focus();>while</button>
+  <button class="bouton" onmousedown="event.preventDefault()" onclick="document.getElementById('assistant_pour').style.display='none';document.getElementById('assistant_tantque').style.display='block';UI.set_focus('tantquecond'); document.getElementById('tantquecond').focus();">while</button>
 <div id="assistant_pour" style="display:none">
   for <textarea onclick="UI.focused=this;" style="height:25px;font-size:large"
   id="pourvarname" title="variable name, for example j" rows=1></textarea><br>

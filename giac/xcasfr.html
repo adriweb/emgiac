@@ -637,11 +637,11 @@ target="_blank"><strong>Python</strong></a>
   <li> Premi&egrave;re, suites
   <a
   href="#exec&python=0&+///Calcul%20des%20premiers%20termes%20d'une%20suite%20donn%C3%A9e%20par%20une%20expression%20$u[n]=f(n)$&+u(n)%3A%3D1%2Fn&+s%3A%3Dseq(u(n)%2Cn%2C1%2C10)&+seq(point(n%2Cu(n))%2Cn%2C1%2C10)&+///Recherche%20du%20premier%20terme%20de%20la%20suite%20plus%20petit%20que%20eps.&+fonction%20N0(u%2Ceps)%0A%20%20local%20n%3B%0A%20%20n%3A%3D1%3B%0A%20%20tantque%20u(n)%3Eeps%20faire%0A%20%20%20%20n%3A%3Dn%2B1%3B%0A%20%20ftantque%3B%0A%20%20return%20n%3B%0Affonction%3A%3B%0A&+N0(u%2C0.01)&+///Calcul%20des%20premiers%20termes%20d'une%20suite%20r%C3%A9currente%20$u[n+1]=f(u[n])$&+fonction%20ntermes(f%2Cu0%2CN)%20%0A%20%20var%20n%2Cu%3B%0A%20%20u%3A%3D%5Bu0%5D%3B%0A%20%20pour%20n%20de%201%20jusque%20N%20faire%0A%20%20%20%20u%5Bn%5D%3A%3Df(u%5Bn-1%5D)%3B%0A%20%20fpour%3B%0A%20%20retourne%20u%3B%20%0A%20%20%2F%2F%20ou%20retourne%20u%5BN%5D%20pour%20le%20dernier%20terme%0Affonction%3A%3B&+f(x)%3A%3D1%2F2*(x%2B2%2Fx)&+ntermes(f%2C1.0%2C1)&+U%3A%3Dntermes(f%2C1.0%2C5)&+ntermes(f%2C1%2C5)&+seq(point(n%2CU%5Bn%5D)%2Cn%2C0%2Csize(U)-1)&"
-  target="_blank"">Xcas
+  target="_blank">Xcas
   </a>,
   <a
   href="#exec&python=1&+///Calcul%20des%20premiers%20termes%20d'une%20suite%20donn%C3%A9e%20par%20une%20expression%20$u[n]=f(n)$&+def%20u(n)%3A%0A%20%20%20%20return%201.0%2Fn%0A&+s%3D%5Bu(n)%20for%20n%20in%20range(1%2C11)%5D&+%5Bpoint(n%2Cu(n))%20for%20n%20in%20range(1%2C11)%5D&+///Calcul%20du%20premier%20rang%20tel%20que%20$u[n]%3Ceps$&+def%20N0(u%2Ceps)%3A%0A%20%20%20%20%23%20local%20n%0A%20%20%20%20n%3D0%0A%20%20%20%20while%20u(n)%3Eeps%3A%0A%20%20%20%20%20%20%20%20n%3Dn%2B1%0A%20%20%20%20return%20n&+N0(u%2C0.01)&+///Calcul%20des%20premiers%20termes%20d'une%20suite%20r%C3%A9currente%20$f(u[n+1])=f(u[n])$&+def%20ntermes(f%2Cu0%2CN)%3A%0A%20%20%20%20%23%20local%20n%2Cu%0A%20%20%20%20u%3D%5Bu0%5D%3B%0A%20%20%20%20for%20n%20in%20range(N)%3A%0A%20%20%20%20%20%20%20%20u.append(f(u%5Bn%5D))%0A%20%20%20%20return%20u%20%0A%20%20%20%20%23%20ou%20retourne%20u%5BN%5D%20pour%20le%20dernier%20terme%0A&+def%20f(x)%3A%0A%20%20%20%20return%200.5*(x%2B2.0%2Fx)&+ntermes(f%2C1.0%2C10)&+U%3Dntermes(f%2C1.0%2C5)&+ntermes(f%2C1%2C5)&+%5Bpoint(n%2CU%5Bn%5D)%20for%20n%20in%20range(size(U))%5D%0A&"
-  target="_blank""><strong>Python</strong></a>
+  target="_blank"><strong>Python</strong></a>
   </li>
   <li> Premi&egrave;re, Loi binomiale et loi g&eacute;om&eacute;trique tronqu&eacute;e
   <a
@@ -703,7 +703,7 @@ target="_blank">Xcas</a>
 <a
     href="#exec&python=0&+def%20bezout(a%2Cb)%3A%0A%20%20%20%20%23%20local%20l1%2Cl2%2Cq%0A%20%20%20%20l1%3D%5B1%2C0%2Ca%5D%0A%20%20%20%20l2%3D%5B0%2C1%2Cb%5D%0A%20%20%20%20while%20l2%5B2%5D!%3D0%3A%0A%20%20%20%20%20%20%20%20q%3Dl1%5B2%5D%2F%2Fl2%5B2%5D%0A%20%20%20%20%20%20%20%20l1%2Cl2%3Dl2%2C%5Bl1%5B0%5D-q*l2%5B0%5D%2Cl1%5B1%5D-q*l2%5B1%5D%2Cl1%5B2%5D-q*l2%5B2%5D%5D%0A%20%20%20%20return%20l1&+bezout(15%2C25)&+fonction%20bezout(a%2Cb)%0A%20%20local%20l1%2Cl2%2Cq%3B%0A%20%20l1%3A%3D%5B1%2C0%2Ca%5D%3B%0A%20%20l2%3A%3D%5B0%2C1%2Cb%5D%3B%0A%20%20tantque%20l2%5B2%5D!%3D0%20faire%0A%20%20%20%20q%3A%3Diquo(l1%5B2%5D%2Cl2%5B2%5D)%3B%0A%20%20%20%20l1%2Cl2%3A%3Dl2%2Cl1-q*l2%3B%0A%20%20ftantque%3B%0A%20%20return%20l1%3B%0Affonction%3A%3B&+bezout(15%2C25)&"
 target="_blank">
-<strong>Identit&eacute; de B&eacute;zout.</strong>
+<strong>Identit&eacute; de B&eacute;zout.</strong></a>
 </li>
 <li>
 <a href="#exec&python=1&+//Trois%20enfants%20A%2C%20B%2C%20C%20jouent%20%C3%A0%20la%20balle.%20Lorsque%20A%20a%20la%20balle%2C%20il%20l'envoie%20avec%20probabilit%C3%A9%203%2F4%20vers%20B%20et%201%2F4%20vers%20C%2C%20lorsque%20B%20a%20la%20balle%2C%20il%20l'envoie%20vers%20A%20avec%20probabilit%C3%A9%203%2F4%20et%20vers%20C%20avec%20probabilit%C3%A9%201%2F4%2C%20lorsque%20A%20a%20la%20balle%20il%20l'envoie%20vers%20B.&+m%3A%3D%5B%5B0%2C3%2F4%2C1%2F4%5D%2C%5B3%2F4%2C0%2C1%2F4%5D%2C%5B0%2C1%2C0%5D%5D&+axes%3D0%3B%20plotproba(m%2C%5B%22A%22%2C%22B%22%2C%22C%22%5D)&+p%3A%3Dmarkov(m)&+//La%20probabilit%C3%A9%20invariante%20est%20donc%20(12%2F35%2C16%2F35%2C1%2F5)&+p%5B1%5D*m%3B%20evalf(p%5B1%5D)&+//Simulation%20de%20lancers%20et%20comparaison%20du%20nombre%20de%20fois%20que%20le%20ballon%20est%20en%20A%2C%20B%20ou%20C%20avec%20la%20probabilit%C3%A9%20invariante.&+s%3A%3Drandmarkov(m%2C1%2C1000)&+count_eq(0%2Cs)%3B%20count_eq(1%2Cs)%3B%20count_eq(2%2Cs)&"
@@ -760,7 +760,7 @@ Xcas
 href="#exec&python=0&+///M%C3%A9thodes%20it%C3%A9ratives&+///M%C3%A9thode%20du%20%3Cstrong%3epoint%20fixe%3C/strong%3e.%0aOn%20consid%C3%A8re%20la%20suite%20$u[n+1]=f(u[n])$,%20si%20la%20fonction%20$f$%20est%20contractante%20sur%20un%20intervalle,%20alors%20$u[n]$%20converge%20vers%20$l$%20tel%20que%20$f(l)=l$.&+def%20fixe(f%2Cu0%2CN%2Ceps)%3A%0A%20%20%23%20local%20j%2Cu1%0A%20%20u0%3Du0*1.0%20%0A%20%20for%20j%20in%20range(N)%3A%0A%20%20%20%20u1%3Df(u0)%0A%20%20%20%20if%20abs(u1-u0)%3Ceps*abs(u0)%3A%0A%20%20%20%20%20%20return%20u1%2Cj%0A%20%20%20%20u0%3Du1%0A%20%20return%20%22Pas%20de%20convergence%22&+fixe(cos%2C0%2C100%2C1e-6)%3B%0Afixe(cos%2C0%2C100%2C1e-8)%3B%0Afixe(cos%2C0%2C100%2C1e-10)&+///La%20convergence%20est%20lin%C3%A9aire,%20il%20faut%20%C3%A0%20peu%20pr%C3%A8s%20le%20m%C3%AAme%20nombre%20d'it%C3%A9rations%20pour%20gagner%20une%20d%C3%A9cimale.%0aLa%20m%C3%A9thode%20de%20%3Cstrong%3eNewton%3C/strong%3e%20permet%20de%20r%C3%A9soudre%20$f(x)=0$%20en%20doublant%20le%20nombre%20de%20d%C3%A9cimales%20%C3%A0%20chaque%20it%C3%A9ration%20%3Cstrong%3esi%3C/strong%3e%20on%20est%20assez%20proche%20de%20la%20solution.%0aOn%20utilise%20la%20suite%20r%C3%A9currente%20$u[n+1]=u[n]-f(u[n])/f'(u[n])$,%20g%C3%A9om%C3%A9triquement%20c'est%20l'abscisse%20du%20point%20o%C3%B9%20la%20tangente%20au%20graphe%20de%20$f$%20en%20$x=u[n]$%20rencontre%20l'axe%20des%20$x$.&+gl_x%3D-1..2%3B%0Agl_y%3D-1..1.5%3B%0Af(x)%3A%3Dcos(x)-x%3B%0AG%3A%3Dplot(f(x)%2Cx%2C-1%2C2%2C%0A%20%20display%3Depaisseur_ligne_2)%3B%0AI0%3A%3Dpoint(0)%3B%0Avecteur(0%2Cpoint(0%2Cf(0)))%3B%0AT0%3A%3Dtangent(G%2C0%2C%0A%20%20display%3Dred%2Bhidden_name)%3B%0AI1%3A%3Dinter_unique(T0%2Cdroite(y%3D0))%3B%0Au1%3A%3Dabscisse(I1)%3B%0Avecteur(I1%2Cpoint(u1%2Cf(u1)))%3B%0AT1%3A%3Dtangent(G%2Cu1%2C%0A%20%20display%3Dmagenta%2Bhidden_name)%3B%0AI2%3A%3Dinter_unique(T1%2Cdroite(y%3D0))%3B%0A%2F%2Fu2%3A%3Dabscisse(I0)%3B%0A&+def%20Newton(f%2Cu0%2CN%2Ceps)%3A%0A%20%20%23%20local%20j%2Cu1%2Cx%0A%20%20%23%20en%20Python%20pur%2C%0A%20%20%23%20il%20faudrait%20utiliser%20%0A%20%20%23%20une%20valeur%20approchee%20de%20la%20d%C3%A9riv%C3%A9e%0A%20%20purge(x)%0A%20%20u0%3Du0*1.0%0A%20%20for%20j%20in%20range(N)%3A%0A%20%20%20%20u1%3Du0-f(u0)%2Ffunction_diff(f)(u0)%0A%20%20%20%20if%20abs(u1-u0)%3Ceps*abs(u0)%3A%0A%20%20%20%20%20%20return%20u1%2Cj%0A%20%20%20%20u0%3Du1%0A%20%20return%20%22Pas%20de%20convergence%22&+def%20f(x)%3A%0A%20%20return%20cos(x)-x&+Newton(f%2C0%2C100%2C1e-3)%3B%0ANewton(f%2C0%2C100%2C1e-6)%3B%0ANewton(f%2C0%2C100%2C1e-12)&+///Remarques:%20%0a*%20on%20observe%20le%20doublement%20du%20nombre%20de%20d%C3%A9cimales%20%C3%A0%20chaque%20it%C3%A9ration%0a*%20il%20faudrait%20stocker%20la%20d%C3%A9riv%C3%A9e%20de%20$f$%20dans%20une%20variable%20locale%20pour%20ne%20pas%20la%20recalculer%20%C3%A0%20chaque%20it%C3%A9ration%0a*%20on%20peut%20d%C3%A9finir%20Newton%20en%20utilisant%20la%20fonction%20fixe%20ci-dessus,%20voir%20ci-dessous%0a*%20il%20existe%20d'autres%20m%C3%A9thodes%20it%C3%A9ratives,%20par%20exemple%20la%20m%C3%A9thode%20de%20la%20s%C3%A9cante&+Newton(f%2Cu0%2CN%2Ceps)%3A%3D%0Afixe(id-f%2Ff'%2Cu0%2CN%2Ceps)&+///%3Cstrong%3eM%C3%A9thode%20de%20la%20puissance%3C/strong%3e%0aElle%20permet%20de%20trouver%20la%20plus%20grande%20valeur%20propre%20en%20module%20d'une%20matrice.%20L'id%C3%A9e%20est%20d'it%C3%A9rer%20$v[n+1]=A*v[n]$%20avec%20un%20vecteur%20$v[0]$%20al%C3%A9atoire,%20dans%20la%20base%20propre%20de%20$A$%20les%20coordonn%C3%A9es%20sont%20des%20suites%20g%C3%A9om%C3%A9triques%20de%20raisons%20les%20valeurs%20propres,%20donc%20la%20coordonn%C3%A9e%20correspondant%20%C3%A0%20la%20valeur%20propre%20de%20module%20maximal%20va%20dominer.&+def%20pui(A%2CN%2Ceps)%3A%0A%20%20%23%20local%20v0%2Cv1%2Cl%2Cj%2Cn%0A%20%20n%3Dsize(A)%0A%20%20v0%3Dranv(n%2Cuniformd%2C-1%2C1)%0A%20%20v0%3Dnormalize(v0)%0A%20%20for%20j%20in%20range(N)%3A%0A%20%20%20%20v1%3DA*v0%0A%20%20%20%20l%3Ddot(v0%2Cv1)%0A%20%20%20%20if%20l2norm(v1-l*v0)%3Ceps%3A%0A%20%20%20%20%20%20return(v0%2Cl%2Cj)%0A%20%20%20%20v0%3Dnormalize(v1)%0A%20%20return%20%22Pas%20de%20convergence%2C%20essayez%20avec%20A%2Bi*identity(A)%22&+a%3A%3Dranm(3%2C3)%3B%0AA%3A%3Da%2Btran(a)%3B%0A&+pui(A%2C1000%2C1e-6)%3B%0Apui(A%2C1000%2C1e-8)%3B%0Apui(A%2C1000%2C1e-10)%0A&+///La%20convergence%20est%20lin%C3%A9aire.%0aSi%20on%20a%20un%20couple%20de%20valeurs%20propres%20conjugu%C3%A9s%20de%20module%20maximal,%20il%20faut%20briser%20la%20sym%C3%A9trie%20par%20exemple%20en%20translatant%20de%20$i$%20dans%20la%20complexe.&+a%3A%3D%5B%5B-11%2C-69%2C-60%5D%2C%0A%20%20%5B84%2C-71%2C-88%5D%2C%0A%20%20%5B33%2C72%2C1%5D%5D%2F100.%3B%0A&+pui(a%2C1000%2C1e-6)%3B%0Apui(a%2Bi%2C1000%2C1e-6)&+///Si%20on%20connait%20une%20valeur%20approch%C3%A9e%20$lambda$%20d'une%20valeur%20propre,%20on%20peut%20acc%C3%A9l%C3%A9rer%20la%20convergence%20en%20it%C3%A9rant%20sur%20$(A-lambda*I)^(-1)$%20(on%20peut%20%C3%A9viter%20le%20calcul%20explicite%20de%20l'inverse%20en%20utilisant%20la%20d%C3%A9composition%20LU).&+pui((a%2B0.27)%5E-1%2C1000%2C1e-6)&"
 target="_blank"><em>Python</em></a>
 </li>
-<li><a name="exemplescas"> Polyn&ocirc;me en une variable, Horner et Taylor
+<li><a name="exemplescas"> Polyn&ocirc;me en une variable, Horner et Taylor</a>
 <a href="xcasfr.html#exec&python=0&+///M%C3%A9thode%20de%20Horner%20pour%20%C3%A9valuer%20un%20polyn%C3%B4me%20en%20un%20point&+fonction%20Horner(p%2Ca)%0A%20%20%2F%2F%20p%20liste%20des%20coefficients%20par%20ordre%20decroissant%0A%20%20%2F%2F%20renvoie%20p%20evalue%20en%20a%0A%20%20local%20c%2Cr%3B%0A%20%20r%3A%3D0%3B%0A%20%20pour%20c%20in%20p%20faire%0A%20%20%20%20r%3A%3Dr*a%2Bc%3B%0A%20%20fpour%3B%0A%20%20return%20r%3B%0Affonction%3A%3B&+Horner(%5B1%2C2%2C3%5D%2C4)%3B%20%0Ahorner(%5B1%2C2%2C3%5D%2C4)&+///On%20modifie%20le%20programme%20pr%C3%A9c%C3%A9dent%20pour%20renvoyer%20le%20quotient%20de%20$p$%20par%20$x-a$.%0aNotez%20que%20%3Ctt%3eq.append%3C/tt%3e%20modifie%20en%20place%20la%20liste%20$q$,%20il%20faut%20donc%20l'initialiser%20en%20faisant%20une%20copie%20de%20la%20liste%20vide.&+fonction%20Horner2(p%2Ca)%0A%20%20local%20c%2Cr%2Cq%3B%0A%20%20r%3A%3D0%3B%20q%3A%3Dcopy(%5B%5D)%3B%0A%20%20pour%20c%20in%20p%20faire%0A%20%20%20%20r%3A%3Dr*a%2Bc%3B%0A%20%20%20%20q.append(r)%3B%0A%20%20fpour%3B%0A%20%20q%3A%3Dq%5B0..-2%5D%3B%0A%20%20return%20q%2Cr%3B%0Affonction%3A%3B&+Horner2(%5B1%2C2%2C3%5D%2C4)&+///Et%20on%20l'appelle%20pour%20faire%20un%20changement%20d'origine,%20on%20exprime%20$P(X)$%20en%20fonction%20des%20$(X-a)^k$&+fonction%20Taylor(p%2Ca)%0A%20%20local%20q%2Cj%2Cn%3B%0A%20%20q%3A%3Dp%3B%0A%20%20n%3A%3Ddegree(p)%3B%0A%20%20pour%20j%20de%200%20jusque%20n%20faire%0A%20%20%20%20p%2Cq%5Bj%5D%3A%3DHorner2(p%2Ca)%3B%0A%20%20fpour%3B%0A%20%20return%20reverse(q)%3B%0Afpour%3A%3B&+Taylor(%5B1%2C2%2C3%5D%2C4)%3B%0Aptayl(%5B1%2C2%2C3%5D%2C4)&"
 target="_blank">Xcas</a>,
 <a
@@ -1134,7 +1134,7 @@ onclick="var tmp=document.getElementById('tutocfg'); if (tmp.style.display=='non
 <strong>Manuels</strong>
 </button>
 <span id="manuels" style="display:none">
-  <string>Manuels de Xcas</strong> <button class="bouton"
+  <strong>Manuels de Xcas</strong> <button class="bouton"
 onclick="document.getElementById('manuels').style.display='none';">Masquer</button>
 <br>
 La version "disque dur" est accessible en local sous Linux si vous avez
@@ -1558,7 +1558,7 @@ onclick="var tmp=document.getElementById('tutoanalyse'); if (tmp.style.display==
   On peut ensuite calcule la valeur
   de <tt>f</tt> ou de sa d&eacute;riv&eacute;e par
    <button  
-  onclick="UI.insert(UI.focused,'f(sqrt(pi)); f\'(2);f'(y);')">
+  onclick="UI.insert(UI.focused,'f(sqrt(pi)); f\'(2);f\'(y);')">
   <tt>f(sqrt(pi)); f'(2); f'(y) </tt></button>.
   <br>
   Une d&eacute;riv&eacute;e se calcule avec
@@ -1590,7 +1590,7 @@ onclick="var tmp=document.getElementById('tutoanalyse'); if (tmp.style.display==
 onclick="var tmp=document.getElementById('tutoproba'); if (tmp.style.display=='none') tmp.style.display='block'; else tmp.style.display='none';">
   <strong>Probabilit&eacute;s </strong></button>
   <span id="tutoproba" style="display:none">
-  Utiliser l'assistant <tt>al&ecute;a</tt> de <tt>math</tt> pour
+  Utiliser l'assistant <tt>al&eacute;a</tt> de <tt>math</tt> pour
   g&eacute;n&eacute;rer des nombres pseudo-al&eacute;atoires.
   <br>
   Lois continues:
@@ -2470,7 +2470,7 @@ ou  <button class="bouton" onclick="document.getElementById('assistant_plotfunc1
   θmax <textarea onclick="UI.focused=this;" style="height:25px;font-size:large"
   id="plotpolarvarmax" title="Valeur de fin" rows=1></textarea><br>
   θstep <textarea onclick="UI.focused=this;" style="height:25px;font-size:large"
-  id="plotpolarvarstep" title="Pas entre deux &ecaute;valuations" rows=1></textarea>
+  id="plotpolarvarstep" title="Pas entre deux &eacute;valuations" rows=1></textarea>
   <br>
   <button class="bouton" onclick="UI.assistant_plotpolar_ok();">&#x2705;</button> 
 <button class="bouton" onclick="UI.focused=UI.savefocused;document.getElementById('assistant_plotpolar').style.display='none'">&#x274C;</button>
@@ -3017,7 +3017,7 @@ value="sample" onclick="UI.insert(UI.focused,'sample(');">
   Choisir <strong>type de boucle</strong>
   <button class="bouton" onmousedown="event.preventDefault()" onclick="document.getElementById('assistant_pour').style.display='block';UI.set_focus('pourvarname'); document.getElementById('assistant_tantque').style.display='none';">pour</button>
 ou
-  <button class="bouton" onmousedown="event.preventDefault()" onclick="document.getElementById('assistant_pour').style.display='none';document.getElementById('assistant_tantque').style.display='block';UI.set_focus('tantquecond'); "document.getElementById('tantquecond').focus();>tantque</button>
+  <button class="bouton" onmousedown="event.preventDefault()" onclick="document.getElementById('assistant_pour').style.display='none';document.getElementById('assistant_tantque').style.display='block';UI.set_focus('tantquecond'); document.getElementById('tantquecond').focus();">tantque</button>
 <div id="assistant_pour" style="display:none">
   pour <textarea onclick="UI.focused=this;" style="height:25px;font-size:large"
   id="pourvarname" title="Nom de variable, par exemple j" rows=1></textarea><br>

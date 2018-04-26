@@ -68,181 +68,181 @@ title="show scientific keyboard">
   style="display: none">
   <tr>
     <td>  
-      <input type="button" style="width:30;height:30"
+      <input type="button" style="width:30px;height:30px"
   onClick="entree.focus(); UI.moveCaret(entree,-1)" value=" ← "
   title="Move left (for tablets)">
-      <input type="button" style="width:30;height:30"
+      <input type="button" style="width:30px;height:30px"
   onClick="entree.focus(); UI.moveCaret(entree,1)" value=" → "
   title="Move right (for tablets)">
     </td>
     <td>
-      <input type="button" style="width:30;height:30" name="add_,"
+      <input type="button" style="width:30px;height:30px" name="add_,"
   value="," onClick="UI.insert(entree,',')" title="Use , as a separator for vector/matrices.">  
     </td>
     <td>
-      <input type="button" style="width:30;height:30" name="add_left_paren" value="(" onClick="UI.insert(entree,'(')">  
-      <input type="button" style="width:30;height:30"
+      <input type="button" style="width:30px;height:30px" name="add_left_paren" value="(" onClick="UI.insert(entree,'(')">  
+      <input type="button" style="width:30px;height:30px"
       name="add_right_paren" value=")"
       onClick="UI.insert(entree,')')">
     </td>
     <td>
-      <input type="button" style="width:30;height:30" name="add_e"
+      <input type="button" style="width:30px;height:30px" name="add_e"
   value="e" onClick="UI.insert(entree,'e')" title="e is the exponential basis or the separator between mantissa and exponent in an approx number">  
-      <input type="button" style="width:30;height:30" name="add_7" value="7" onClick="UI.insert(entree,'7')">  
-      <input type="button" style="width:30;height:30" name="add_8" value="8" onClick="UI.insert(entree,'8')">  
-      <input type="button" style="width:30;height:30" name="add_9" value="9" onClick="UI.insert(entree,'9')">  
-      <input type="button" style="width:30;height:30" name="add_/" value="/" onClick="UI.insert(entree,'/')">  
+      <input type="button" style="width:30px;height:30px" name="add_7" value="7" onClick="UI.insert(entree,'7')">  
+      <input type="button" style="width:30px;height:30px" name="add_8" value="8" onClick="UI.insert(entree,'8')">  
+      <input type="button" style="width:30px;height:30px" name="add_9" value="9" onClick="UI.insert(entree,'9')">  
+      <input type="button" style="width:30px;height:30px" name="add_/" value="/" onClick="UI.insert(entree,'/')">  
     </td>
     <td>
-      <input type="button" style="width:30;height:30" name="add_sin"
+      <input type="button" style="width:30px;height:30px" name="add_sin"
   value="sin" onClick="UI.insert(entree,'sin(')" title="sine function, type asin for arcinus">        
-      <input type="button" style="width:30;height:30" name="add_sqrt"
+      <input type="button" style="width:30px;height:30px" name="add_sqrt"
   value="√" onClick="UI.insert(entree,'sqrt(')" title="square root">        
     </td>
     <td>
-      <input type="button" style="width:50;height:30"
+      <input type="button" style="width:50px;height:30px"
   name="add_factor" value="factor"
   onClick="UI.insert(entree,'factor(')" title="Factorization, for exemple factor(x^4-1). Run cfactor for factorization over C">        
-      <input type="button" style="width:50;height:30" name="add_solve"
+      <input type="button" style="width:50px;height:30px" name="add_solve"
   value="solve" onClick="UI.insert(entree,'solve(')"
   title="solve an equation or expression=0 with respect to one or more variables, for example solve(x^4-1=0) or solve(y^3-1,y) or solve([x^2-y^2=1,x+y=3],[x,y]). Run csolve for factorization over C.">        
-      <input type="button" style="width:50;height:30" name="add_limit"
+      <input type="button" style="width:50px;height:30px" name="add_limit"
   value="limit" onClick="UI.insert(entree,'limit(')" title="limit of an expression when a variable tends to a limit point like limit(sin(x)/x,x,0).Add an optionnal 4th argument 1 or -1 for directional limit">        
-      <input type="button" style="width:50;height:30" name="add_plot"
+      <input type="button" style="width:50px;height:30px" name="add_plot"
   value="plotfunc" onClick="UI.insert(entree,'plotfunc(')"
   title="Graphe of an expression, e.g. plotfunc(sin(x),x=-5..5,xstep=0.1)">  
     </td>
   </tr>
   <tr>
     <td>
-      <input type="button" style="height:30" name="select_button" value="select"
+      <input type="button" style="height:30px" name="select_button" value="select"
       onClick="entree.select(); entree.focus();" title="Select commandline">  
     </td>
     <td>
-      <input type="button" style="width:30;height:30"
+      <input type="button" style="width:30px;height:30px"
       name="add_semi" value=";" onClick="UI.insert(entree,' ;')"
   title="Semicolumn is a separator between commands for example in programs">
     </td>
     <td>
-      <input type="button" style="width:30;height:30"
+      <input type="button" style="width:30px;height:30px"
   name="add_left_[" value="[" onClick="UI.insert(entree,'[')"
   title="[ is a open delimitor for vectors, lists and matrices, for example [1,2,3] or [[1,2],[3,4]]">  
-      <input type="button" style="width:30;height:30" name="add_right_]"
+      <input type="button" style="width:30px;height:30px" name="add_right_]"
       value="]" onClick="UI.insert(entree,']')" title="End delimitor for lists, vectors or matrices">
     </td>
     <td>
-      <input type="button" style="width:30;height:30" name="add_pi" value="π" onClick="UI.insert(entree,'pi')">
-      <input type="button" style="width:30;height:30" name="add_4" value="4" onClick="UI.insert(entree,'4')">  
-      <input type="button" style="width:30;height:30" name="add_5" value="5" onClick="UI.insert(entree,'5')">  
-      <input type="button" style="width:30;height:30" name="add_6" value="6" onClick="UI.insert(entree,'6')">  
-      <input type="button" style="width:30;height:30" name="add_*" value="*" onClick="UI.insert(entree,'*')">  
+      <input type="button" style="width:30px;height:30px" name="add_pi" value="π" onClick="UI.insert(entree,'pi')">
+      <input type="button" style="width:30px;height:30px" name="add_4" value="4" onClick="UI.insert(entree,'4')">  
+      <input type="button" style="width:30px;height:30px" name="add_5" value="5" onClick="UI.insert(entree,'5')">  
+      <input type="button" style="width:30px;height:30px" name="add_6" value="6" onClick="UI.insert(entree,'6')">  
+      <input type="button" style="width:30px;height:30px" name="add_*" value="*" onClick="UI.insert(entree,'*')">  
     </td>
     <td>
-      <input type="button" style="width:30;height:30" name="add_cos"
+      <input type="button" style="width:30px;height:30px" name="add_cos"
   value="cos" onClick="UI.insert(entree,'cos(')" title="cosine function, type acos for arccosinus">        
-      <input type="button" style="width:30;height:30" name="add_exp"
+      <input type="button" style="width:30px;height:30px" name="add_exp"
   value="exp" onClick="UI.insert(entree,'exp(')" title="exponential function">        
     </td>
     <td>
-      <input type="button" style="width:50;height:30"
+      <input type="button" style="width:50px;height:30px"
   name="add_normal" value="normal"
   onClick="UI.insert(entree,'normal(')" title="normal expands an expression, for example normal((x+1)^6)">        
-      <input type="button" style="width:50;height:30"
+      <input type="button" style="width:50px;height:30px"
   name="add_fsolve" value="fsolve"
   onClick="UI.insert(entree,'fsolve(')" title="fsolve finds an approximate solution to an equation or system, for example fsolve(cos(x)=x,x=0..5) or fsolve(cos(x),x=0.0)">        
-      <input type="button" style="width:50;height:30"
+      <input type="button" style="width:50px;height:30px"
   name="add_series" value="series"
   onClick="UI.insert(entree,'series(')" title="series expansion of an expression if a variable tends to a limit point for example series(sin(x),x=0,5,polynom). Add 1 or -1 before polynom for directional series">        
-      <input type="button" style="width:50;height:30"
+      <input type="button" style="width:50px;height:30px"
   name="add_plotparam" value="plotparam"
   onClick="UI.insert(entree,'plotparam(')" title="Parametric plot, e.g. plotparam([cos(t),sin(t)],t=0..2*pi,tstep=0.1)">  
     </td>
   </tr>
   <tr>
     <td>
-      <input type="button" style="height:30" name="copy_button" value="copy"
+      <input type="button" style="height:30px" name="copy_button" value="copy"
       onClick="entree.select(); entree.focus();
       var prg=document.getElementById('prog');
   prg.value=prg.value+entree.value+';\n';" title="Make a copy of the commandline to the program/figure textarea">  
     </td>
     <td>
-      <input type="button" style="width:30;height:30" name="add_:="
+      <input type="button" style="width:30px;height:30px" name="add_:="
   value=":=" onClick="UI.insert(entree,' :=')" title=":= assigns a variable to a value, e.g. a:=pi/2; sin(a)">
     </td>
     <td>
-      <input type="button" style="width:30;height:30"
+      <input type="button" style="width:30px;height:30px"
   name="add_left_{" value="{" onClick="UI.insert(entree,'{')"
   title="{ is a begin bloc delimiter for programs">  
-      <input type="button" style="width:30;height:30" name="add_right_}"
+      <input type="button" style="width:30px;height:30px" name="add_right_}"
       value="}" onClick="UI.insert(entree,'}')" title="} ends a program bloc">
     </td>
     <td>
-      <input type="button" style="width:30;height:30" name="add_i"
+      <input type="button" style="width:30px;height:30px" name="add_i"
   value="i" onClick="UI.insert(entree,'i')" title="Complex number square root of -1">
-      <input type="button" style="width:30;height:30" name="add_1" value="1" onClick="UI.insert(entree,'1')">  
-      <input type="button" style="width:30;height:30" name="add_2" value="2" onClick="UI.insert(entree,'2')">  
-      <input type="button" style="width:30;height:30" name="add_3" value="3" onClick="UI.insert(entree,'3')">  
-      <input type="button" style="width:30;height:30" name="add_-" value="-" onClick="UI.insert(entree,'-')">  
+      <input type="button" style="width:30px;height:30px" name="add_1" value="1" onClick="UI.insert(entree,'1')">  
+      <input type="button" style="width:30px;height:30px" name="add_2" value="2" onClick="UI.insert(entree,'2')">  
+      <input type="button" style="width:30px;height:30px" name="add_3" value="3" onClick="UI.insert(entree,'3')">  
+      <input type="button" style="width:30px;height:30px" name="add_-" value="-" onClick="UI.insert(entree,'-')">  
     </td>
     <td>
-      <input type="button" style="width:30;height:30" name="add_tan"
+      <input type="button" style="width:30px;height:30px" name="add_tan"
   value="tan" onClick="UI.insert(entree,'tan(')" title="tangent function, run atan for arctangent">        
-      <input type="button" style="width:30;height:30" name="add_ln"
+      <input type="button" style="width:30px;height:30px" name="add_ln"
   value="ln" onClick="UI.insert(entree,'ln(')" title="natural logarithm">        
     </td>    
     <td>
-      <input type="button" style="width:50;height:30"
+      <input type="button" style="width:50px;height:30px"
   name="add_simplify" value="simplify"
   onClick="UI.insert(entree,'simplify(')" title="Attempt to simplify an expression, for example simplify(sin(3x)/sin(x)). Try normal or a rewrite command if simplify fails.">        
-      <input type="button" style="width:50;height:30"
+      <input type="button" style="width:50px;height:30px"
   name="add_desolve" value="desolve"
   onClick="UI.insert(entree,'desolve(')" title="Differential equation solver, for example desolve(y''+y=0), desolve(y'+y=0,y(0)=1)">        
-      <input type="button" style="width:50;height:30" name="add_diff"
+      <input type="button" style="width:50px;height:30px" name="add_diff"
   value="∂" onClick="UI.insert(entree,'diff(')" title="Derivative of an expression for example f(x):=sin(x^2), for functions, the derivative of f is f', for example g:=f' or f'(2)">        
-      <input type="button" style="width:50;height:30"
+      <input type="button" style="width:50px;height:30px"
   name="add_plotpolar" value="plotpolar"
   onClick="UI.insert(entree,'plotpolar(')" title="Polar plot, e.g. plotpolar(exp(r),r=-3..3)">  
     </td>
   </tr>
   <tr>
     <td>
-      <input type="button" style="width:30;height:30" name="add_?"
+      <input type="button" style="width:30px;height:30px" name="add_?"
   value="?" onClick="UI.insert(entree,'?')" title="Short help on a command for example ?factor.">  
     </td>
     <td>
-      <input type="button" style="width:30;height:30" name="add-=" value="=" onClick="UI.insert(entree,'=')">
+      <input type="button" style="width:30px;height:30px" name="add-=" value="=" onClick="UI.insert(entree,'=')">
     </td>
     <td>
-      <input type="button" style="width:30;height:30" name="add_'" value="'" onClick="UI.insert(entree,'\'')">
-      <input type="button" style="width:30;height:30" name="add_%"
+      <input type="button" style="width:30px;height:30px" name="add_'" value="'" onClick="UI.insert(entree,'\'')">
+      <input type="button" style="width:30px;height:30px" name="add_%"
   value="%" onClick="UI.insert(entree,'%')" title="Sert a calculer
   dans Z/nZ, par example (3 % 7)^6">  
     </td>
     <td>
-      <input type="button" style="width:30;height:30" name="add_∞"
+      <input type="button" style="width:30px;height:30px" name="add_∞"
   value="∞" onClick="UI.insert(entree,'∞')" title="+∞. Type infinity for complex infinity.">
-      <input type="button" style="width:30;height:30" name="add_0" value="0" onClick="UI.insert(entree,'0')">  
-      <input type="button" style="width:30;height:30" name="add_." value="." onClick="UI.insert(entree,'.')">  
-      <input type="button" style="width:30;height:30" name="add_+" value="+" onClick="UI.insert(entree,'+')">  
-      <input type="button" style="width:30;height:30" name="add_^" value="^" onClick ="UI.insert(entree,'^')">  
+      <input type="button" style="width:30px;height:30px" name="add_0" value="0" onClick="UI.insert(entree,'0')">  
+      <input type="button" style="width:30px;height:30px" name="add_." value="." onClick="UI.insert(entree,'.')">  
+      <input type="button" style="width:30px;height:30px" name="add_+" value="+" onClick="UI.insert(entree,'+')">  
+      <input type="button" style="width:30px;height:30px" name="add_^" value="^" onClick ="UI.insert(entree,'^')">  
     </td>
     <td>
-      <input type="button" style="width:30;height:30" name="add_inv"
+      <input type="button" style="width:30px;height:30px" name="add_inv"
   value="inv" onClick="UI.insert(entree,'inv')" title="inverse">        
-      <input type="button" style="width:30;height:30" name="add_log10"
+      <input type="button" style="width:30px;height:30px" name="add_log10"
   value="log10" onClick="UI.insert(entree,'log10(')" title="base 10 logarithm">        
     </td>    
     <td>
-      <input type="button" style="width:50;height:30"
+      <input type="button" style="width:50px;height:30px"
   name="add_regroup" value="regroup"
   onClick="UI.insert(entree,'regroup(')" title="for example regroup(x+y+2x-3y)">        
-      <input type="button" style="width:50;height:30"
+      <input type="button" style="width:50px;height:30px"
   name="add_rsolve" value="rsolve"
   onClick="UI.insert(entree,'rsolve(')" title="Attempt to solve a recurrence relation, forr example rsolve(u(n+2)=u(n+1)+u(n),u(n),[u(0)=1,u(1)=1])">        
-      <input type="button" style="width:50;height:30"
+      <input type="button" style="width:50px;height:30px"
   name="add_integrate" value="∫" onClick="UI.insert(entree,'∫(')"
   title="Integral computations, for example ∫(x^2*sin(x)*exp(x),x) or ∫(1/(x^4+1),x,0,inf)">        
-      <input type="button" style="width:50;height:30" name="add_sum"
+      <input type="button" style="width:50px;height:30px" name="add_sum"
   value="∑" onClick="UI.insert(entree,'∑(')" title="Discrete summation of an expression wrt a variable between boundaries, for example ∑(k,k,1,n) or ∑(1/n^2,n,1,inf)">  
     </td>
   </tr>
@@ -295,11 +295,11 @@ title="show scientific keyboard">
   <button
   onClick="Module.insert(entree,'factor(')"><tt>factor(</tt></button>
   or <button
-  onClick="Module.insert(entree,cfactor(')"><tt>cfactor(</tt>)</button>
+  onClick="Module.insert(entree,'cfactor(')"><tt>cfactor(</tt>)</button>
   factors an expression (like <button
   onClick="Module.insert(entree,'x^4-1')"><tt>x^4-1</tt></button>)
   over Q or Q[i]. 
-    <br> simplify(sin(3x)/sin(x)); gcd(x^4-1,x^3-1) </tt>
+    <br> <tt> simplify(sin(3x)/sin(x)); gcd(x^4-1,x^3-1) </tt>
   </li>
   <li> Solve equations :
     <tt> solve(x^2-3*x+2=0); csolve(x^2=2*i);
