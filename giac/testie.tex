@@ -1,0 +1,119 @@
+% Pour compiler ce fichier, vous devez d'abord installer
+% hevea: http://hevea.inria.fr
+% giac.tex: http://www-fourier.ujf-grenoble.fr/~parisse/giac/giac.tex
+% copier hevea.sty dans le repertoire courant
+% ensuite vous pouvez tester avec la commande hevea test 
+\documentclass[a4paper,11pt]{article}
+%\textwidth 11,8 cm
+%\textheight 17 cm
+\textheight 23 cm
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+\usepackage{makeidx}
+\usepackage{times}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage{latexsym}
+\usepackage{graphicx}
+%\usepackage{pst-plot}
+\usepackage{ifpdf}
+\ifpdf
+ \usepackage[pdftex,colorlinks]{hyperref}
+\else
+ \usepackage[ps2pdf,
+            breaklinks=true,
+            colorlinks=true,
+            linkcolor=red,
+            citecolor=green
+            ]{hyperref}
+\fi
+
+\input{giacie.tex}
+%HEVEA\htmlfoot{Back to the homepage of \ahref{http://www-fourier.ujf-grenoble.fr/\~parisse/giac.html}{Giac/Xcas}.}
+%HEVEA\htmlhead{Back to the homepage of \ahref{http://www-fourier.ujf-grenoble.fr/\~parisse/giac.html}{Giac/Xcas}.} 
+
+
+\newtheorem{thm}{Theorem}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{example}[thm]{Example}
+
+
+\newcommand{\R}{{\mathbb{R}}}
+\newcommand{\C}{{\mathbb{C}}}
+\newcommand{\Z}{{\mathbb{Z}}}
+\newcommand{\N}{{\mathbb{N}}}
+\newcommand{\Q}{{\mathbb{Q}}}
+\newcommand{\tr}{\mbox{tr\,}}
+
+
+\title {Examples using the giac CAS inside a \LaTeX\ file.}
+\author{B. Parisse\\Institut Fourier\\UMR 5582 du CNRS
+\\Université de Grenoble}
+
+\date{2015}
+
+
+\begin{document}
+\maketitle
+
+This \LaTeX\ source will output an interactive HTML file if you compile
+with {\tt hevea} (tested with \verb|hevea 2.23|), where interactive
+computations are done with the computer algebra system Giac.
+You must first enter the command \verb|\input{giac.tex}| in the
+preamble and add one of the commands \verb|\loadgiacjs| or \verb|\loadgiacjsonline|
+somewhere in the document: the difference is that the javascript
+kernel \verb|giac.js|
+will be found on the hard disk (assuming that Giac/Xcas is
+installed on the target computer) or downloaded from Internet.
+\loadgiacjs
+
+Inline command example with text or plot output \verb|\giacinput|, 
+example: \verb|\giacinput{factor(x^4-1)}|~:\\
+\giacinput{factor(x^4-1)}\\
+Same command with optional style argument\\
+\verb|\giacinput[style="width:200px;height:20px;font-size:large"]{plot(sin(x))}|\\
+\giacinput[style="width:200px;height:20px;font-size:large"]{plot(sin(x))}
+
+A button with a command applied on the field entry with
+\verb|\giaccmd|, example \verb|\giaccmd{factor}{x^4-1}|~:\\
+\giaccmd{factor}{x^4-1}\\
+with optional style argument
+\giaccmd[style="width:200px;height:20px;font-size:large"]{factor}{x^4-1}
+
+For a program or multi-line commands\\
+\verb|\begin{giacprog}...\end{giacprog}|, example homemade absolute value\\
+\begin{giacprog}
+f(x):={
+  local y;
+  if x<0 then y:=-x; else y=x; fi;
+  return y;
+}
+\end{giacprog}
+
+Inline command with mathml output
+\verb|\giacinputmath{}| or \verb|\giaccmdmath{}{}|~:
+\giacinputmath{factor(x^10-1)}
+\giacinputmath[style="width:200px;height:20px;font-size:large"]{factor(x^10-1)}
+\giaccmdmath{factor}{x^4-1}
+\giaccmdmath[style="width:200px;height:20px;font-size:large"]{factor}{x^4-1}
+
+Outline command with mathml output
+\verb|\giacinputbigmath{}| or \verb|\giaccmdbigmath{}{}|~:
+\giacinputbigmath{factor(x^100-1)}
+\giacinputbigmath[style="width:600px;height:20px;font-size:large"]{factor(x^100-1)}
+\giaccmdbigmath{factor}{x^100-1}
+\giaccmdbigmath[style="width:600px;height:20px;font-size:large"]{factor}{x^100-1}
+
+A link to Xcas under the Sun (by contrast to applications in the
+cloud that require more server ressources) with a few commands
+\giaclink{http://www-fourier.ujf-grenoble.fr/\%7eparisse/xcasen.html#+1,2&+[1,2]&+poly1[1,2]&+idn(3)&}
+
+A slider
+\giacslider{a}{-5}{5}{0.1}{0}{plot(sin(a*x))}
+\end{document}

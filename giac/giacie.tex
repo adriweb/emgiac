@@ -1,0 +1,311 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% giac/hevea interaction code definitions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Type one of the commands \loadgiacjs or \loadgiacjsonline 
+%% to load the javascript code (from hard disk or Internet)
+%% Commands \giacinput{} or \giacinputmath{} or \giacinputbigmath{} 
+%% \giaccmd{} or \giaccmdmath{} or \giaccmdbigmath{} 
+%% or \begin{giacprog}...\end{giacprog}
+\usepackage{hevea} 
+\usepackage{listings}
+\usepackage{fancyvrb}
+\newcommand{\loadgiacjs}{
+\ifhevea
+\@print{<script language="javascript"> 
+var Module = { preRun: [], postRun: []};
+</script>
+<script src="file:///usr/share/giac/doc/giac.js" async></script> 
+<script language="javascript"> 
+ var UI = {
+  histcount:0,
+  usemathjax:false,
+  eval_form: function(field){
+    caseval(field.name.value+':='+field.valname.value);
+    console.log(field.prog.value);
+    var s=caseval(field.prog.value);
+    var is_svg=s.substr(1,4)=='<svg';
+    if (is_svg) field.result.innerHTML=s.substr(1,s.length-2);
+    else field.result.innerHTML=s;
+  },
+  latexeval:function(text){
+    var tmp=text;
+     if (UI.usemathjax){
+       tmp=caseval('latex(quote('+tmp+'))');
+       tmp='$$'+tmp.substr(1,tmp.length-2)+'$$';
+       return tmp;
+     }
+     tmp=caseval('mathml(quote('+text+',1))');
+     tmp=tmp.substr(1,tmp.length-2);
+    return tmp;   
+  },
+  ckenter:function(event,field,mode){
+    var key = event.keyCode;
+    if (key != 13 || event.shiftKey) return true;
+    var tmp=field.value;
+    tmp=caseval(tmp);
+    if (mode==1){
+      if (tmp.charCodeAt(0)==34) tmp=tmp.substr(1,tmp.length-2); 
+   }
+   if (mode==2){
+     tmp=UI.latexeval(text);
+   }
+   field.nextSibling.nextSibling.innerHTML='&nbsp;'+tmp;
+   if (UI.usemathjax) MathJax.Hub.Queue(["Typeset",MathJax.Hub,field.nextSibling.nextSibling]);
+   if (event.preventDefault) event.preventDefault();
+    return false;
+  },
+   exec: function(field){
+     if (field.nodeName=="BUTTON"){
+        field.click();
+        return;
+     }
+     var f=field.firstChild;
+     while (f){
+       UI.exec(f);
+       f=f.nextSibling;
+     }
+   }
+ };
+ window.onload = function(e){
+  var ua = window.navigator.userAgent;
+  var old_ie = ua.indexOf('MSIE ');
+  var new_ie = ua.indexOf('Trident/');
+  if ((old_ie > -1) || (new_ie > -1) || window.chrome){
+     UI.usemathjax=true;
+     alert("Your browser does not support MathML, using MathJax for 2d rendering. Consider switching to Firefox for better rendering and faster results");
+  }
+  if (UI.usemathjax){
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  }
+  caseval=Module.cwrap('_ZN4giac7casevalEPKc',  'string', ['string']);
+  caseval('set_language(1)');
+  if (confirm('Run history commands?')){
+    UI.exec(document.documentElement);
+  }
+ };
+</script>
+}
+\else
+The HTML version of this text has interactive fields running Giac
+computer algebra system commands.
+\fi
+}
+\newcommand{\loadgiacjsonline}{
+\ifhevea
+\@print{<script language="javascript"> 
+var Module = { preRun: [], postRun: []};
+</script>
+<script src="http://www-fourier.ujf-grenoble.fr/~parisse/giac.js" async></script> 
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script language="javascript">
+ var UI = {
+  histcount:0,
+  usemathjax:false,
+  eval_form: function(field){
+    caseval(field.name.value+':='+field.valname.value);
+    console.log(field.prog.value);
+    var s=caseval(field.prog.value);
+    var is_svg=s.substr(1,4)=='<svg';
+    if (is_svg) field.result.innerHTML=s.substr(1,s.length-2);
+    else field.result.innerHTML=s;
+  },
+  latexeval:function(text){
+    var tmp=text;
+     if (UI.usemathjax){
+       tmp=caseval('latex(quote('+tmp+'))');
+       tmp='$$'+tmp.substr(1,tmp.length-2)+'$$';
+       return tmp;
+     }
+     tmp=caseval('mathml(quote('+tmp+',1))');
+     tmp=tmp.substr(1,tmp.length-2);
+    return tmp;   
+  },
+  ckenter:function(event,field,mode){
+    var key = event.keyCode;
+    if (key != 13 || event.shiftKey) return true;
+    var tmp=field.value;
+    tmp=caseval(tmp);
+    if (mode==1){
+      if (tmp.charCodeAt(0)==34) tmp=tmp.substr(1,tmp.length-2); 
+   }
+   if (mode==2){
+     tmp=UI.latexeval(tmp);
+   }
+   field.nextSibling.nextSibling.innerHTML=tmp;
+   if (UI.usemathjax) MathJax.Hub.Queue(["Typeset",MathJax.Hub,field.nextSibling.nextSibling]);
+   if (event.preventDefault) event.preventDefault();
+    return false;
+  },
+  exec: function(field){
+     if (field.nodeName=="BUTTON"){
+        field.click();
+        return;
+     }
+     var f=field.firstChild;
+     while (f){
+       UI.exec(f);
+       f=f.nextSibling;
+     }
+   }
+ };
+ window.onload = function(e){
+  var ua = window.navigator.userAgent;
+  var old_ie = ua.indexOf('MSIE ');
+  var new_ie = ua.indexOf('Trident/');
+  if ((old_ie > -1) || (new_ie > -1) || window.chrome){
+     UI.usemathjax=true;
+     alert("Your browser does not support MathML, using MathJax for 2d rendering. Consider switching to Firefox for better results");
+  }
+  if (UI.usemathjax){
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  }
+  caseval=Module.cwrap('_ZN4giac7casevalEPKc',  'string', ['string']);
+  caseval('set_language(1)');
+  if (confirm('Run history commands?')){
+    UI.exec(document.documentElement);
+  }
+ };
+</script>
+}
+\else
+The HTML version of this text has interactive fields running Giac
+computer algebra system commands.
+\fi
+}
+\ifhevea
+\newenvironment{giacprog}{
+\verbatim}
+{\endverbatim 
+\@print{<button onclick="var field=parentNode.previousSibling; var tmp=field.innerHTML;if(tmp.length==0) tmp=field.value;var t=createElement('TEXTAREA');t.style.fontSize=16;t.cols=60;t.rows=10;t.value=tmp;tmp=caseval(tmp);if (tmp.charCodeAt(0)==34) tmp=tmp.substr(1,tmp.length-2);nextSibling.innerHTML=tmp; field.parentNode.insertBefore(t,field);field.parentNode.removeChild(field);">ok</button><span></span><br>
+}
+}
+\else
+\newenvironment{giacprog}
+{
+\VerbatimEnvironment
+\begin{Verbatim}
+}
+{
+\end{Verbatim}
+}
+\fi
+
+% for example \giaccmd{factor}{x^4-1}
+\newcommand{\giaccmd}[3][style="width:400px;height:20px;font-size:large"]{
+\ifhevea
+\@print{<textarea}
+\@getprint{#1>#3}
+\@print{</textarea><button onclick="var tmp=caseval(}
+\@getprint{'#2('}
+\@print{+previousSibling.value+')');if (tmp.charCodeAt(0)==34) tmp=tmp.substr(1,tmp.length-2); nextSibling.innerHTML='&nbsp;'+tmp">}
+\@getprint{#2}
+\@print{</button><span></span><br>}
+\else
+\lstinline@#2(#3)@
+\fi
+}
+\newcommand{\giacinput}[2][style="width:400px;height:20px;font-size:large"]{
+\ifhevea
+\@print{<textarea onkeypress="UI.ckenter(event,this,1)"}
+\@getprint{#1>#2}
+\@print{</textarea><button onclick="var tmp=caseval(previousSibling.value);if (tmp.charCodeAt(0)==34) tmp=tmp.substr(1,tmp.length-2); nextSibling.innerHTML='&nbsp;'+tmp">ok</button><span></span><br>}
+\else
+\lstinline@#2@
+\fi
+}
+\newcommand{\giaccmdmath}[3][style="width:400px;height:20px;font-size:large"]{\ifhevea
+\begin{rawhtml}<br><textarea \end{rawhtml}
+\@getprint{#1>#3}
+\begin{rawhtml}</textarea><button onclick="var tmp=caseval(\end{rawhtml} 
+\@getprint{'#2('+}
+\begin{rawhtml}previousSibling.value+')');  tmp=UI.latexeval(tmp);nextSibling.innerHTML='&nbsp;'+tmp; if (UI.usemathjax) MathJax.Hub.Queue(['Typeset',MathJax.Hub,nextSibling]);
+">\end{rawhtml}
+\@getprint{#2}
+\begin{rawhtml}</button><span></span><br>\end{rawhtml}
+\else
+\lstinline@#2(#3)@
+\fi
+}
+\newcommand{\giacinputmath}[2][style="width:400px;height:20px;font-size:large"]{\ifhevea
+\begin{rawhtml}<br><textarea onkeypress="UI.ckenter(event,this,2)"\end{rawhtml}
+\@getprint{#1>#2} 
+\begin{rawhtml}</textarea><button onclick="var tmp=caseval(previousSibling.value); tmp=UI.latexeval(tmp);nextSibling.innerHTML='&nbsp;'+tmp; if (UI.usemathjax) MathJax.Hub.Queue(['Typeset',MathJax.Hub,nextSibling])">ok</button><span></span><br>\end{rawhtml}
+\else
+\lstinline@#2@
+\fi
+}
+\newcommand{\giaccmdbigmath}[3][style="width:800px;height:20px;font-size:large"]{\ifhevea
+\begin{rawhtml}<br><textarea \end{rawhtml}
+\@getprint{#1>#3} 
+\begin{rawhtml}</textarea><button onclick="var tmp=caseval(\end{rawhtml} 
+\@getprint{'#2('+}
+\begin{rawhtml}previousSibling.value+')');  tmp=UI.latexeval(tmp);nextSibling.innerHTML=tmp; if (UI.usemathjax) MathJax.Hub.Queue(['Typeset',MathJax.Hub,nextSibling])">\end{rawhtml}
+\@getprint{#2}
+\begin{rawhtml}</button><div style="width:800px;max-height:200px;overflow:auto;color:blue;text-align:center"></div><br>\end{rawhtml}
+\else
+\lstinline@#2(#3)@
+\fi
+}
+\newcommand{\giacinputbigmath}[2][style="width:800px;height:20px;font-size:large"]{\ifhevea
+\begin{rawhtml}<div><textarea onkeypress="UI.ckenter(event,this,2)"\end{rawhtml}
+\@getprint{#1>#2} 
+\begin{rawhtml}</textarea><button onclick="var tmp=caseval(previousSibling.value); tmp=UI.latexeval(tmp);nextSibling.innerHTML=tmp; if (UI.usemathjax) MathJax.Hub.Queue(['Typeset',MathJax.Hub,nextSibling])">ok</button><div style="width:800px;max-height:200px;overflow:auto;color:blue;text-align:center"></div></div>\end{rawhtml}
+\else
+\lstinline@#2@
+\fi
+}
+\newcommand{\giaclink}[2][Test online]{\ifhevea
+\begin{rawhtml}<a href=\end{rawhtml}\@getprint{"#2"}
+\begin{rawhtml} target="_blank">\end{rawhtml}
+\@getprint{#1}
+\begin{rawhtml}</a>\end{rawhtml}
+\else
+\fi
+}
+% \giacslider{name}{mini}{maxi}{step}{value}{prog}
+\newcommand{\giacslider}[6]{
+\ifhevea
+\begin{rawhtml}
+<form onsubmit="setTimeout(function(){UI.eval_form(form);});return false;">
+<input type="text" name="name" size="1" value=
+\end{rawhtml}
+\@getprint{"#1">}
+\begin{rawhtml}
+=<input type="number" name="valname" onchange="UI.eval_form(form);" value=
+\end{rawhtml}
+\@getprint{"#5">}
+\begin{rawhtml}
+<input type="button" value="-" onclick="valname.value -= stepname.value;UI.eval_form(form);">
+<input type="button" value="+" onclick="valname.value -= -stepname.value;UI.eval_form(form);">
+<input type="number" name="stepname" value=
+\end{rawhtml}
+\@getprint{"#4">}
+\begin{rawhtml}
+<input type="range" name="rangename"
+onclick="valname.value=value;UI.eval_form(form);" value=
+\end{rawhtml}
+\@getprint{"#5" min="#2" max="#3" step="#4">}
+\begin{rawhtml}
+<br>
+<textarea name="prog" onchange="UI.eval_form(form)" style="width:400px;height:180px;vertical-align:bottom;font-size:large">
+\end{rawhtml}
+\@getprint{#6}
+\begin{rawhtml}
+</textarea>
+<output name="result" style="vertical-align:bottom"></output>
+</form>
+\end{rawhtml}
+\else
+\fi
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% giac/hevea end code definitions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,0 +1,490 @@
+<html manifest="webxcas.appcache">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>
+    Xcas_session
+  </title>
+    <style>
+      .emscripten { padding-right: 0; margin-left: auto; margin-right: auto; display: block; }
+      canvas.emscripten { border: 1px solid black; }
+      textarea.emscripten { font-family: monospace; width: 80%; }
+      div.emscripten { text-align: center; }
+    </style>
+</head>
+<body onload="var hashParams = window.location.hash.substr(1).split('&'); // substr(1) to remove the `#`
+for(var i = 0; i < hashParams.length; i++){
+    var p = hashParams[i].split('=');
+    document.getElementById(p[0]).value = decodeURIComponent(p[1]);;
+}
+">
+<h1>Xcas in your browser!</h1>
+For help on how to complete the commandline below, you can open the
+keyboard (keyboard button) and hover the mouse for tips, look at
+some <a href="#examples">examples</a> below or consult the
+<a
+href="http://www-fourier.ujf-grenoble.fr/~parisse/giac/doc/en/cascmd_en">Xcas
+documentation</a>.
+<hr>
+
+History :
+<button onclick="UI.exec(document.getElementById('mathoutput'))"
+title="Evaluate all commands from history">Exec</button>
+<button onclick="Module.cwrap('caseval',  'string', ['string'])('restart')"
+title="Clear the content of all variables">Restart</button>
+<button onclick="document.getElementById('mathoutput').innerHTML=' '"
+title="Clear history">Clear</button>
+<ul id="mathoutput"></ul> 
+
+  <form id="formulaire" onsubmit="setTimeout(function() {
+UI.histcount++;
+  entree.autocomplete=false;
+  caseval = Module.cwrap('caseval',  'string', ['string']);
+  var out=caseval('set_language(1);'+entree.value);
+  var s=caseval('mathml(quote('+out+'),1)');
+  var add=UI.addin(entree.value,out,s,UI.histcount);
+  //var s=caseval('mathml(quote('+entree.value+'),1)');
+  //add += '&nbsp;&nbsp;'+s.substr(1,s.length-2);
+  Module.print(entree.value+'  ->  '+out);
+  entree.autocomplete=true; // problematic on android
+  entree.select();entree.focus();
+  //document.getElementById('canvas').focus();
+  var mathoutput=document.getElementById('mathoutput');
+  mathoutput.innerHTML += add;
+  }); 
+  return false">
+
+      Command : <input type="text" name="entree" id="entree" 
+      size=60 title="Enter your command here">
+      <input type="submit" value="ok" title="Eval commandline">
+  <input type="button" value="keyboard"
+      onclick="document.getElementById('keyboard').style.display='inline'"
+title="show scientific keyboard">
+    <input type="button" value="x"
+      onclick="document.getElementById('keyboard').style.display='none'"
+      title="Remove keyboard">
+
+<table border="0" align="left" summary="" id="keyboard"
+  style="display: none">
+  <tr>
+    <td>  
+      <input type="button" style="width:30;height:30"
+  onClick="entree.focus(); UI.moveCaret(entree,-1)" value=" ← "
+  title="Move left (for tablets)">
+      <input type="button" style="width:30;height:30"
+  onClick="entree.focus(); UI.moveCaret(entree,1)" value=" → "
+  title="Move right (for tablets)">
+    </td>
+    <td>
+      <input type="button" style="width:30;height:30" name="add_,"
+  value="," onClick="UI.insert(entree,',')" title="Use , as a separator for vector/matrices.">  
+    </td>
+    <td>
+      <input type="button" style="width:30;height:30" name="add_left_paren" value="(" onClick="UI.insert(entree,'(')">  
+      <input type="button" style="width:30;height:30"
+      name="add_right_paren" value=")"
+      onClick="UI.insert(entree,')')">
+    </td>
+    <td>
+      <input type="button" style="width:30;height:30" name="add_e"
+  value="e" onClick="UI.insert(entree,'e')" title="e is the exponential basis or the separator between mantissa and exponent in an approx number">  
+      <input type="button" style="width:30;height:30" name="add_7" value="7" onClick="UI.insert(entree,'7')">  
+      <input type="button" style="width:30;height:30" name="add_8" value="8" onClick="UI.insert(entree,'8')">  
+      <input type="button" style="width:30;height:30" name="add_9" value="9" onClick="UI.insert(entree,'9')">  
+      <input type="button" style="width:30;height:30" name="add_/" value="/" onClick="UI.insert(entree,'/')">  
+    </td>
+    <td>
+      <input type="button" style="width:30;height:30" name="add_sin"
+  value="sin" onClick="UI.insert(entree,'sin(')" title="sine function, type asin for arcinus">        
+      <input type="button" style="width:30;height:30" name="add_sqrt"
+  value="√" onClick="UI.insert(entree,'sqrt(')" title="square root">        
+    </td>
+    <td>
+      <input type="button" style="width:50;height:30"
+  name="add_factor" value="factor"
+  onClick="UI.insert(entree,'factor(')" title="Factorization, for exemple factor(x^4-1). Run cfactor for factorization over C">        
+      <input type="button" style="width:50;height:30" name="add_solve"
+  value="solve" onClick="UI.insert(entree,'solve(')"
+  title="solve an equation or expression=0 with respect to one or more variables, for example solve(x^4-1=0) or solve(y^3-1,y) or solve([x^2-y^2=1,x+y=3],[x,y]). Run csolve for factorization over C.">        
+      <input type="button" style="width:50;height:30" name="add_limit"
+  value="limit" onClick="UI.insert(entree,'limit(')" title="limit of an expression when a variable tends to a limit point like limit(sin(x)/x,x,0).Add an optionnal 4th argument 1 or -1 for directional limit">        
+      <input type="button" style="width:50;height:30" name="add_plot"
+  value="plotfunc" onClick="UI.insert(entree,'plotfunc(')"
+  title="Graphe of an expression, e.g. plotfunc(sin(x),x=-5..5,xstep=0.1)">  
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <input type="button" style="height:30" name="select_button" value="select"
+      onClick="entree.select(); entree.focus();" title="Select commandline">  
+    </td>
+    <td>
+      <input type="button" style="width:30;height:30"
+      name="add_semi" value=";" onClick="UI.insert(entree,' ;')"
+  title="Semicolumn is a separator between commands for example in programs">
+    </td>
+    <td>
+      <input type="button" style="width:30;height:30"
+  name="add_left_[" value="[" onClick="UI.insert(entree,'[')"
+  title="[ is a open delimitor for vectors, lists and matrices, for example [1,2,3] or [[1,2],[3,4]]">  
+      <input type="button" style="width:30;height:30" name="add_right_]"
+      value="]" onClick="UI.insert(entree,']')" title="End delimitor for lists, vectors or matrices">
+    </td>
+    <td>
+      <input type="button" style="width:30;height:30" name="add_pi" value="π" onClick="UI.insert(entree,'pi')">
+      <input type="button" style="width:30;height:30" name="add_4" value="4" onClick="UI.insert(entree,'4')">  
+      <input type="button" style="width:30;height:30" name="add_5" value="5" onClick="UI.insert(entree,'5')">  
+      <input type="button" style="width:30;height:30" name="add_6" value="6" onClick="UI.insert(entree,'6')">  
+      <input type="button" style="width:30;height:30" name="add_*" value="*" onClick="UI.insert(entree,'*')">  
+    </td>
+    <td>
+      <input type="button" style="width:30;height:30" name="add_cos"
+  value="cos" onClick="UI.insert(entree,'cos(')" title="cosine function, type acos for arccosinus">        
+      <input type="button" style="width:30;height:30" name="add_exp"
+  value="exp" onClick="UI.insert(entree,'exp(')" title="exponential function">        
+    </td>
+    <td>
+      <input type="button" style="width:50;height:30"
+  name="add_normal" value="normal"
+  onClick="UI.insert(entree,'normal(')" title="normal expands an expression, for example normal((x+1)^6)">        
+      <input type="button" style="width:50;height:30"
+  name="add_fsolve" value="fsolve"
+  onClick="UI.insert(entree,'fsolve(')" title="fsolve finds an approximate solution to an equation or system, for example fsolve(cos(x)=x,x=0..5) or fsolve(cos(x),x=0.0)">        
+      <input type="button" style="width:50;height:30"
+  name="add_series" value="series"
+  onClick="UI.insert(entree,'series(')" title="series expansion of an expression if a variable tends to a limit point for example series(sin(x),x=0,5,polynom). Add 1 or -1 before polynom for directional series">        
+      <input type="button" style="width:50;height:30"
+  name="add_plotparam" value="plotparam"
+  onClick="UI.insert(entree,'plotparam(')" title="Parametric plot, e.g. plotparam([cos(t),sin(t)],t=0..2*pi,tstep=0.1)">  
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <input type="button" style="height:30" name="copy_button" value="copy"
+      onClick="entree.select(); entree.focus();
+      var prg=document.getElementById('prog');
+  prg.value=prg.value+entree.value+';\n';" title="Make a copy of the commandline to the program/figure textarea">  
+    </td>
+    <td>
+      <input type="button" style="width:30;height:30" name="add_:="
+  value=":=" onClick="UI.insert(entree,' :=')" title=":= assigns a variable to a value, e.g. a:=pi/2; sin(a)">
+    </td>
+    <td>
+      <input type="button" style="width:30;height:30"
+  name="add_left_{" value="{" onClick="UI.insert(entree,'{')"
+  title="{ is a begin bloc delimiter for programs">  
+      <input type="button" style="width:30;height:30" name="add_right_}"
+      value="}" onClick="UI.insert(entree,'}')" title="} ends a program bloc">
+    </td>
+    <td>
+      <input type="button" style="width:30;height:30" name="add_i"
+  value="i" onClick="UI.insert(entree,'i')" title="Complex number square root of -1">
+      <input type="button" style="width:30;height:30" name="add_1" value="1" onClick="UI.insert(entree,'1')">  
+      <input type="button" style="width:30;height:30" name="add_2" value="2" onClick="UI.insert(entree,'2')">  
+      <input type="button" style="width:30;height:30" name="add_3" value="3" onClick="UI.insert(entree,'3')">  
+      <input type="button" style="width:30;height:30" name="add_-" value="-" onClick="UI.insert(entree,'-')">  
+    </td>
+    <td>
+      <input type="button" style="width:30;height:30" name="add_tan"
+  value="tan" onClick="UI.insert(entree,'tan(')" title="tangent function, run atan for arctangent">        
+      <input type="button" style="width:30;height:30" name="add_ln"
+  value="ln" onClick="UI.insert(entree,'ln(')" title="natural logarithm">        
+    </td>    
+    <td>
+      <input type="button" style="width:50;height:30"
+  name="add_simplify" value="simplify"
+  onClick="UI.insert(entree,'simplify(')" title="Attempt to simplify an expression, for example simplify(sin(3x)/sin(x)). Try normal or a rewrite command if simplify fails.">        
+      <input type="button" style="width:50;height:30"
+  name="add_desolve" value="desolve"
+  onClick="UI.insert(entree,'desolve(')" title="Differential equation solver, for example desolve(y''+y=0), desolve(y'+y=0,y(0)=1)">        
+      <input type="button" style="width:50;height:30" name="add_diff"
+  value="∂" onClick="UI.insert(entree,'diff(')" title="Derivative of an expression for example f(x):=sin(x^2), for functions, the derivative of f is f', for example g:=f' or f'(2)">        
+      <input type="button" style="width:50;height:30"
+  name="add_plotpolar" value="plotpolar"
+  onClick="UI.insert(entree,'plotpolar(')" title="Polar plot, e.g. plotpolar(exp(r),r=-3..3)">  
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <input type="button" style="width:30;height:30" name="add_?"
+  value="?" onClick="UI.insert(entree,'?')" title="Short help on a command for example ?factor.">  
+    </td>
+    <td>
+      <input type="button" style="width:30;height:30" name="add-=" value="=" onClick="UI.insert(entree,'=')">
+    </td>
+    <td>
+      <input type="button" style="width:30;height:30" name="add_'" value="'" onClick="UI.insert(entree,'\'')">
+      <input type="button" style="width:30;height:30" name="add_%"
+  value="%" onClick="UI.insert(entree,'%')" title="Sert a calculer
+  dans Z/nZ, par example (3 % 7)^6">  
+    </td>
+    <td>
+      <input type="button" style="width:30;height:30" name="add_∞"
+  value="∞" onClick="UI.insert(entree,'∞')" title="+∞. Type infinity for complex infinity.">
+      <input type="button" style="width:30;height:30" name="add_0" value="0" onClick="UI.insert(entree,'0')">  
+      <input type="button" style="width:30;height:30" name="add_." value="." onClick="UI.insert(entree,'.')">  
+      <input type="button" style="width:30;height:30" name="add_+" value="+" onClick="UI.insert(entree,'+')">  
+      <input type="button" style="width:30;height:30" name="add_^" value="^" onClick ="UI.insert(entree,'^')">  
+    </td>
+    <td>
+      <input type="button" style="width:30;height:30" name="add_inv"
+  value="inv" onClick="UI.insert(entree,'inv')" title="inverse">        
+      <input type="button" style="width:30;height:30" name="add_log10"
+  value="log10" onClick="UI.insert(entree,'log10(')" title="base 10 logarithm">        
+    </td>    
+    <td>
+      <input type="button" style="width:50;height:30"
+  name="add_regroup" value="regroup"
+  onClick="UI.insert(entree,'regroup(')" title="for example regroup(x+y+2x-3y)">        
+      <input type="button" style="width:50;height:30"
+  name="add_rsolve" value="rsolve"
+  onClick="UI.insert(entree,'rsolve(')" title="Attempt to solve a recurrence relation, forr example rsolve(u(n+2)=u(n+1)+u(n),u(n),[u(0)=1,u(1)=1])">        
+      <input type="button" style="width:50;height:30"
+  name="add_integrate" value="∫" onClick="UI.insert(entree,'∫(')"
+  title="Integral computations, for example ∫(x^2*sin(x)*exp(x),x) or ∫(1/(x^4+1),x,0,inf)">        
+      <input type="button" style="width:50;height:30" name="add_sum"
+  value="∑" onClick="UI.insert(entree,'∑(')" title="Discrete summation of an expression wrt a variable between boundaries, for example ∑(k,k,1,n) or ∑(1/n^2,n,1,inf)">  
+    </td>
+  </tr>
+</table>
+  </form>
+
+<hr/>
+<div class="emscripten" id="status">Downloading...</div>
+<div class="emscripten">
+  <progress value="0" max="100" id="progress" hidden=1></progress>  
+</div>
+
+<table border="0" align="left" summary="">
+<tr>
+<td>
+  <form onsubmit="setTimeout(function() {     
+		  caseval = Module.cwrap('caseval',
+  'string', ['string']);
+		  Module.print('  '+caseval(prog.value));prog.focus();}); 
+		  return false">
+  Program/Figure: <textarea name="prog" id="prog" rows=15 cols=60>
+</textarea>
+    <input type="submit" value="ok">
+  </form>
+</td>
+<td> 2d/3d 
+  <button onclick="Module.giac_renderer('-')">out</button>
+  <button onclick="Module.giac_renderer('+')">in</button>
+  <button onclick="Module.giac_renderer('l')"> ← </button>
+  <button onclick="Module.giac_renderer('r')"> → </button>
+  <button onclick="Module.giac_renderer('u')"> ↑ </button>
+  <button onclick="Module.giac_renderer('d')"> ↓ </button>
+
+    <!--- <canvas class="emscripten" id="canvas"
+  oncontextmenu="event.preventDefault()"></canvas> --->
+<canvas id='canvas' width=400 height=250></canvas>
+</td>
+</tr>
+</table>
+
+<textarea class="emscripten" id="output" rows="5" cols="80">Log</textarea>
+<hr>
+<a name="examples"><b>examples of input:</b></a>
+<ul>
+  <li> Algebra : You can expand an expression with
+  <button onclick="Module.insert(entree,'normal(')"><tt>normal</tt></button>
+  for example <button
+  onclick="Module.insert(entree,'(x+1)^4')"><tt>(x+1)^4</tt></button>.
+  Conversely,
+  <button
+  onClick="Module.insert(entree,'factor(')"><tt>factor(</tt></button>
+  or <button
+  onClick="Module.insert(entree,cfactor(')"><tt>cfactor(</tt>)</button>
+  factors an expression (like <button
+  onClick="Module.insert(entree,'x^4-1')"><tt>x^4-1</tt></button>)
+  over Q or Q[i]. 
+    <br> simplify(sin(3x)/sin(x)); gcd(x^4-1,x^3-1) </tt>
+  </li>
+  <li> Solve equations :
+    <tt> solve(x^2-3*x+2=0); csolve(x^2=2*i);
+  solve([x+y=1,x-y=3],[x,y]) </tt>
+  </li>
+  <li>Calculus :
+    <tt> f(x):=sin(x^2):; f(sqrt(pi)); f'(2); f'(y) 
+    <br> int(1/(x^4-1)); int(1/(x^4+1)^4,x,0,+infinity) 
+  <br> limit(sin(x)/x,x=0); series(sin(x),x=0,5);</tt>
+  </li>
+  <li> Linear algebra :
+    <tt> A:=[[1,2],[3,4]]; inv(A); det(A-x*idn(A)); A[0,0]; rref(A);
+  eigenvalues(A); eigenvectors(A);</tt>
+  </li>
+  <li> Plots :
+  <tt>plot([sin(x),x-x^3/3!],x=-3..3,color=[red,blue])
+  <br> plotfunc(x^2-y^2,[x=-2..2,y=-2..2]); plane(z=0,color=cyan+filled);
+  </tt>
+  </ul>
+
+<hr>
+This is a demo interface to a full web-based CAS engine.
+This CAS does not need any server,
+all the computations are done locally with the javascript
+engine of your browser (requires Firefox version 19 or later,
+or Chrome, the latest version of Firefox is recommended for good performances).
+The code of the CAS is 12M, it is downloaded once
+(giac.js and giac.js.mem, javascript 
+  compiled from native <a href="http://www-fourier.ujf-grenoble.fr/~parisse/giac/emgiac.tgz">Giac/Xcas</a> by emscripten).
+  The javascript code is at least 2 times slower than the native 
+code, and sometimes much much slower (e.g. more than 15 times slower
+for computing a Groebner basis like cyclic7). Most of the time
+it is however fast enough (that would justify a better interface...),
+but it is recommended to run large computations with
+  <a href="http://www-fourier.ujf-grenoble.fr/~parisse/giac.html">Xcas</a>!
+<br>
+  Giac/Xcas, (c) B. Parisse, R. De Graeve, Institut Fourier,
+Université de Grenoble I., licensed under the GPL3, for commercial
+licenses contact us.
+
+<script type='text/javascript'>
+  var UI ={
+  histcount:0,
+  exec: function(field){
+   // collect all text in <tt> and execute
+   var s=field.innerHTML;
+   var extracted="",pos1,pos2,add;
+   for (;s.length>0;){
+     pos1=s.search("<tt>");
+     if (pos1<0 || pos1>=s.length)
+       break;
+     pos2=s.search("</tt>");
+     if (pos2<pos1 || pos2>=s.length)
+       break;
+     add=s.substr(pos1+4,pos2-pos1-4);
+     if (add.length && add.charAt(add.length-1)!=';')
+       add += ';';
+     extracted += add;
+     s=s.substr(pos2+4,s.length-pos2-4);
+   }
+   Module.print(extracted);
+   var caseval = Module.cwrap('caseval',  'string', ['string']);
+   caseval(extracted);
+  },
+addin: function(textin,textout,mathmlout,count){
+var s="<li>";
+  s += '<button onclick=\'UI.erase(this)\' title="remove level">x</button>&nbsp;&nbsp;';
+  s += '<button onclick=\'UI.moveup(this)\' title="move up">↑</button>';
+  s += '<button onclick=\'UI.movedown(this)\' title="move down">↓</button>';
+  s += '<button onclick=\'UI.insert(entree,"'+textin+'")\' title="copy command">cmd</button>';
+  s += '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>'+textin+'</tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+  s +=' = &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +mathmlout.substr(1,mathmlout.length-2)+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+  s += '<button onclick=\'UI.insert(entree,"'+textout+'")\'  title="copy result">val</button>';
+  s += '<button onclick=\'UI.insert(entree,"evalf('+textin+')")\'  title="copy command to get approx value">~</button>';
+  s += '</li>';
+  return s;
+},
+giac_renderer: function(text){
+var gr = Module.cwrap('giac_renderer','number', ['string']);
+gr(text);
+},
+moveCaret: function(field, charCount) {
+var pos=field.selectionStart;
+pos = pos+charCount;
+if (pos<0) pos=0;
+if (pos>field.value.length) pos=field.value.length;
+field.setSelectionRange(pos,pos);
+  },
+  erase: function(field){
+  var par=field.parentNode;
+  var list = par.parentNode;
+  list.removeChild(par);
+  },
+  moveup: function(field){
+  var par=field.parentNode;
+  var prev=par.previousSibling;
+  var list = par.parentNode;
+  list.removeChild(par);
+  list.insertBefore(par,prev);
+  },
+  movedown: function(field){
+  var par=field.parentNode;
+  var nxt=par.nextSibling;
+  nxt=nxt.nextSibling;
+  var list = par.parentNode;
+  list.removeChild(par);
+  list.insertBefore(par,nxt);
+  },
+insert: function(myField, myValue) {
+var pos=myField.selectionStart;
+pos=pos+myValue.length;
+  //IE support
+    if (document.selection) {
+  Module.print('del');
+        myField.focus();
+        var sel = document.selection.createRange();
+        sel.text = myValue;
+    }
+    //MOZILLA and others
+else {
+var startPos = myField.selectionStart;
+var endPos = myField.selectionEnd;
+ if (myField.selectionStart || myField.selectionStart == '0') {
+        myField.value = myField.value.substring(0, startPos)
+            + myValue
+            + myField.value.substring(endPos, myField.value.length);
+    } else {
+        myField.value += myValue;
+}
+}
+   myField.focus();
+myField.setSelectionRange(pos,pos);
+}
+  };
+  // connect to canvas  
+ var Module = {
+        preRun: [],
+        postRun: [],
+        print: (function() {
+          var element = document.getElementById('output');
+          element.value = ''; // clear browser cache
+          return function(text) {
+            // These replacements are necessary if you render to raw HTML
+            //text = text.replace(/&/g, "&amp;");
+            //text = text.replace(/</g, "&lt;");
+            //text = text.replace(/>/g, "&gt;");
+            //text = text.replace('\n', '<br>', 'g');
+            element.value += text + "\n";
+    element.scrollTop = 99999; // focus on bottom
+          };
+        })(),
+        printErr: function(text) {
+          if (0) { // XXX disabled for safety typeof dump == 'function') {
+            dump(text + '\n'); // fast, straight to the real console
+          } else {
+            console.log(text);
+          }
+        },
+        canvas: document.getElementById('canvas'),
+        setStatus: function(text) {
+          if (Module.setStatus.interval) clearInterval(Module.setStatus.interval);
+          var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+          var statusElement = document.getElementById('status');
+          var progressElement = document.getElementById('progress');
+          if (m) {
+            text = m[1];
+            progressElement.value = parseInt(m[2])*100;
+            progressElement.max = parseInt(m[4])*100;
+            progressElement.hidden = false;
+          } else {
+            progressElement.value = null;
+            progressElement.max = null;
+            progressElement.hidden = true;
+          }
+          statusElement.innerHTML = text;
+        },
+        totalDependencies: 0,
+        monitorRunDependencies: function(left) {
+          this.totalDependencies = Math.max(this.totalDependencies, left);
+          Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
+        }
+      };
+      Module.setStatus('Downloading...');
+    </script>      
+  <script src="giac.js"></script>
+</body>
+</html>
+

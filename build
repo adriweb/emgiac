@@ -1,0 +1,15 @@
+#! /bin/bash
+#
+# Compiling with pari support requires adding #define HAVE_LIBPARI in giac/config.h
+#
+#cd libtommath
+#make
+#make -f Makefile.llvm
+#llvm-ranlib libtommath_x86.a
+#cp libtommath.a ..
+#echo "add emcctime: function(){ return Math.floor(Date.now());	    }, in src/library.js"
+cd giac
+#rm -f *.o
+#make -f Makefile.llvm
+#rm -f *.o
+make

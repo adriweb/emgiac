@@ -1,0 +1,29 @@
+#! /bin/bash
+cd ~/newgiac/src
+cp      input_lexer.ll input_lexer.cc sym2poly.cc gausspol.cc threaded.cc \
+        moyal.cc maple.cc ti89.cc lpsolve.cc optimization.cc signalprocessing.cc mathml.cc\
+        misc.cc permu.cc quater.cc desolve.cc input_parser.cc \
+        symbolic.cc index.cc modpoly.cc modfactor.cc \
+        ezgcd.cc derive.cc solve.cc intg.cc intgab.cc \
+        risch.cc lin.cc series.cc \
+        subst.cc vecteur.cc sparse.cc csturm.cc tex.cc global.cc \
+        ifactor.cc alg_ext.cc gauss.cc isom.cc plot.cc plot3d.cc\
+        rpn.cc prog.cc \
+        pari.cc cocoa.cc lpsolve.cc unary.cc usual.cc identificateur.cc \
+        gen.cc tinymt32.cc first.cc \
+        help.cc opengl.cc translate.cc \
+  dispatch.h fraction.h gen.h desolve.h misc.h ti89.h lpsolve.h optimization.h \
+  signalprocessing.h mathml.h identificateur.h unary.h symbolic.h index.h \
+  modpoly.h modfactor.h permu.h \
+  monomial.h poly.h threaded.h gausspol.h sym2poly.h ezgcd.h derive.h \
+  solve.h quater.h subst.h usual.h intg.h intgab.h risch.h lin.h series.h \
+  vecteur.h sparse.h vector.h csturm.h moyal.h tex.h global.h \
+  ifactor.h alg_ext.h gauss.h isom.h plot.h plot3d.h rpn.h prog.h \
+  pari.h cocoa.h giac.h first.h maple.h help.h opengl.h tinymt32.h tinymt32_license.h \
+  static.h static_extern.h static_lexer.h static_lexer_.h\
+  lexer_tab_int.h \
+  static_help.h giacPCH.h giacintl.h gmp_replacements.h \
+  TmpFGLM.H TmpLESystemSolver.H \
+  path.h lexer.h \
+  input_lexer.h input_parser.h aspen_translate.h \
+  ~/emgiac/giac
