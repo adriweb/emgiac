@@ -1291,13 +1291,18 @@ id="matr_case'+i+'_'+j+'">'+oldval+'</textarea><div class="matrixcell" style="di
       s=filename+s;
       //console.log(s);
       smail=smail+s;
-      if (UI.langue==-1)
+      var sforum;
+      if (UI.langue==-1){
+	sforum = UI.base_url+"xcasfr.html#exec&"+s;	
 	s = UI.base_url+"xcasfr.html#"+s;
-      else
+      }
+      else {
+	sforum = UI.base_url+"xcasen.html#exec&"+s;
 	s = UI.base_url+"xcasen.html#"+s;
+      }
       //s=encodeURIComponent(s); // does not work innerHTML will add a prefix
       //var sforum=encodeURIComponent('[url]'+s+'[/url]');
-      var sforum='[url]'+s+'[/url]';
+      sforum='[url]'+sforum+'[/url]';
       document.getElementById('theforumlink').innerHTML=sforum;
       var copy="<button title=";
       copy += UI.langue==-1?"'Partager cette session sur le forum'":"'Share this session on the forum'";
@@ -3528,7 +3533,7 @@ id="matr_case'+i+'_'+j+'">'+oldval+'</textarea><div class="matrixcell" style="di
   pixon_draw:function(id,s){
     var v=eval(s);
     if (!Array.isArray(v)) return;
-    //console.log(v[0],v.length);
+    console.log(v[0],v.length);
     var canvas = document.getElementById(id);
     var l=v.length,w=0,h=0;
     if (l<2) return;
@@ -3536,6 +3541,10 @@ id="matr_case'+i+'_'+j+'">'+oldval+'</textarea><div class="matrixcell" style="di
     for (var k=1;k<l;k++){
       var cur=v[k];
       var x=cur[0],y=cur[1];
+      if (cur.length==4){
+	var tmp=cur[3];
+	if (tmp>0) y+= tmp; else x-=tmp;
+      }
       //console.log(cur,x,y);
       if (x>w) w=x;
       if (y>h) h=y;
