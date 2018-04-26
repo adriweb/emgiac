@@ -3618,7 +3618,7 @@ Module['onRuntimeInitialized']=function(){ console.log('UI is ready'); UI.ready=
   script.type = "text/javascript";
   var webAssemblyAvailable = false;
   if (Boolean(window.chrome)){
-    if (!UI.detectmob()) webAssemblyAvailable =  window.location.href.substr(0,4)!='file';
+    if (!UI.detectmob()) webAssemblyAvailable = !!window.WebAssembly && window.location.href.substr(0,4)!='file';
   }
   else {
     var ua = window.navigator.userAgent;
