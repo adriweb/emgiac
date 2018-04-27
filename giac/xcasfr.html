@@ -3621,7 +3621,20 @@ Module['onRuntimeInitialized']=function(){ console.log('UI is ready'); UI.ready=
 <script async>
   var script = document.createElement("script");
   script.type = "text/javascript";
-  var webAssemblyAvailable = false;
+  const supported = (() => {
+    try {
+        if (typeof WebAssembly === "object"
+            && typeof WebAssembly.instantiate === "function") {
+            const module = new WebAssembly.Module(Uint8Array.of(0x0, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00));
+            if (module instanceof WebAssembly.Module)
+                return new WebAssembly.Instance(module) instanceof WebAssembly.Instance;
+        }
+    } catch (e) {
+    }
+    return false;
+  })();
+  var webAssemblyAvailable = supported;
+  /*
   if (Boolean(window.chrome)){
     if (!UI.detectmob()) webAssemblyAvailable = !!window.WebAssembly && window.location.href.substr(0,4)!='file';
   }
@@ -3631,7 +3644,7 @@ Module['onRuntimeInitialized']=function(){ console.log('UI is ready'); UI.ready=
     var new_ie = ua.indexOf('Trident/');
     if (!UI.detectmob() && old_ie<=-1 && new_ie<=-1)
       webAssemblyAvailable =!!window.WebAssembly;
-  }
+  } */
   if (webAssemblyAvailable){
     var ck=UI.readCookie('xcas_wasm');
     if (ck){
@@ -3640,6 +3653,7 @@ Module['onRuntimeInitialized']=function(){ console.log('UI is ready'); UI.ready=
       webAssemblyAvailable=form.wasm_mode.checked;
     }
   }
+  console.log('wasm ',supported,webAssemblyAvailable);
   if (webAssemblyAvailable) // fixme: enable
     script.src = "giacwasm.js";
   else
