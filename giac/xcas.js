@@ -5,7 +5,7 @@ var UI ={
   focusaftereval:true,
   docprefix:"https://www-fourier.ujf-grenoble.fr/%7eparisse/giac/doc/fr/cascmd_fr/",
   base_url:"https://www-fourier.ujf-grenoble.fr/%7eparisse/",
-  forum_url:"https://xcas.e.ujf-grenoble.fr/XCAS/posting.php?mode=post&f=12&subject=session",
+  forum_url:"http://xcas.e.ujf-grenoble.fr/XCAS/posting.php?mode=post&f=12&subject=session",
   forum_warn:true,
   focused:entree,
   savefocused:entree,
