@@ -1,3 +1,5 @@
+function $id(id) { return document.getElementById(id); }
+
 var UI = {
   mailto: '',
   from: '',
@@ -45,14 +47,14 @@ var UI = {
     var t = UI.assistant_list;
     var s = t.length;
     for (var i = 0; i < s; i++) {
-      document.getElementById('assistant_' + t[i]).style.display = 'none';
+      $id('assistant_' + t[i]).style.display = 'none';
     }
   },
   assistant_ok: function () {
     var t = UI.assistant_list;
     var s = t.length;
     for (var i = 0; i < s; i++) {
-      var tmp = document.getElementById('assistant_' + t[i]);
+      var tmp = $id('assistant_' + t[i]);
       if (tmp.style.display == 'block') {
         tmp = 'UI.assistant_' + t[i] + '_ok()';
         //console.log(tmp);
@@ -64,9 +66,9 @@ var UI = {
   },
   assistant_pour_ok: function () {
     UI.focused = UI.savefocused;
-    var st = document.getElementById('pourvarstep').value;
+    var st = $id('pourvarstep').value;
     if (UI.python_mode) {
-      UI.insert(UI.focused, '\nfor ' + document.getElementById('pourvarname').value + ' in range(' + document.getElementById('pourvarmin').value + ',' + document.getElementById('pourvarmax').value);
+      UI.insert(UI.focused, '\nfor ' + $id('pourvarname').value + ' in range(' + $id('pourvarmin').value + ',' + $id('pourvarmax').value);
       if (st.length) st = ',' + st;
       UI.insert(UI.focused, st + '):');
       UI.indentline(UI.focused);
@@ -74,7 +76,7 @@ var UI = {
       UI.indentline(UI.focused);
     }
     else {
-      var tmp = '\npour ' + document.getElementById('pourvarname').value + ' de ' + document.getElementById('pourvarmin').value + ' jusque ' + document.getElementById('pourvarmax').value;
+      var tmp = '\npour ' + $id('pourvarname').value + ' de ' + $id('pourvarmin').value + ' jusque ' + $id('pourvarmax').value;
       //console.log(tmp);
       UI.insert(UI.focused, tmp);
       UI.indentline(UI.focused);
@@ -85,18 +87,18 @@ var UI = {
       UI.indentline(UI.focused);
     }
     UI.focused.focus();
-    document.getElementById('assistant_pour').style.display = 'none';
-    document.getElementById('assistant_boucle').style.display = 'none';
+    $id('assistant_pour').style.display = 'none';
+    $id('assistant_boucle').style.display = 'none';
   },
   assistant_tantque_ok: function () {
     UI.focused = UI.savefocused;
     if (UI.python_mode) {
-      UI.insert(UI.focused, '\nwhile ' + document.getElementById('tantquecond').value + ':');
+      UI.insert(UI.focused, '\nwhile ' + $id('tantquecond').value + ':');
       UI.indentline(UI.focused);
       UI.insert(UI.focused, '\n');
     }
     else {
-      UI.insert(UI.focused, '\ntantque ' + document.getElementById('tantquecond').value + ' faire\n\nftantque;');
+      UI.insert(UI.focused, '\ntantque ' + $id('tantquecond').value + ' faire\n\nftantque;');
       UI.indentline(UI.focused);
       UI.moveCaretUpDown(UI.focused, -1);
       UI.indentline(UI.focused);
@@ -105,63 +107,63 @@ var UI = {
       UI.moveCaretUpDown(UI.focused, 1);
     }
     UI.focused.focus();
-    document.getElementById('assistant_tantque').style.display = 'none';
-    document.getElementById('assistant_boucle').style.display = 'none';
+    $id('assistant_tantque').style.display = 'none';
+    $id('assistant_boucle').style.display = 'none';
   },
   assistant_solve_ok: function () {
     UI.focused = UI.savefocused;
-    if (document.getElementById('solveC').style.display == 'inline') UI.insert(UI.focused, 'c');
-    if (document.getElementById('solvenum').style.display == 'inline') UI.insert(UI.focused, 'f');
-    UI.insert(UI.focused, 'solve(' + document.getElementById('solveeq').value);
+    if ($id('solveC').style.display == 'inline') UI.insert(UI.focused, 'c');
+    if ($id('solvenum').style.display == 'inline') UI.insert(UI.focused, 'f');
+    UI.insert(UI.focused, 'solve(' + $id('solveeq').value);
     UI.indentline(UI.focused);
-    var tmp = document.getElementById('solvevar').value;
+    var tmp = $id('solvevar').value;
     if (tmp.length) UI.insert(UI.focused, ',' + tmp);
     UI.insert(UI.focused, ')');
-    document.getElementById('assistant_solve').style.display = 'none';
+    $id('assistant_solve').style.display = 'none';
   },
   assistant_rsolve_ok: function () {
     UI.focused = UI.savefocused;
-    UI.insert(UI.focused, 'rsolve(' + document.getElementById('rsolveeq').value + ',' + document.getElementById('rsolvevar').value);
-    var tmp = document.getElementById('rsolveinit').value;
+    UI.insert(UI.focused, 'rsolve(' + $id('rsolveeq').value + ',' + $id('rsolvevar').value);
+    var tmp = $id('rsolveinit').value;
     if (tmp.length) UI.insert(UI.focused, ',[' + tmp + ']');
     UI.insert(UI.focused, ')');
-    document.getElementById('assistant_rsolve').style.display = 'none';
-    document.getElementById('assistant_suites').style.display = 'none';
+    $id('assistant_rsolve').style.display = 'none';
+    $id('assistant_suites').style.display = 'none';
   },
   assistant_desolve_ok: function () {
     UI.focused = UI.savefocused;
-    var tmpeq = document.getElementById('desolveeq').value;
-    var tmpt = document.getElementById('desolvevar').value;
-    var tmpy = document.getElementById('desolvey').value;
-    var tmp = document.getElementById('desolveinit').value;
+    var tmpeq = $id('desolveeq').value;
+    var tmpt = $id('desolvevar').value;
+    var tmpy = $id('desolvey').value;
+    var tmp = $id('desolveinit').value;
     if (tmp.length) tmp = 'desolve([' + tmpeq + ',' + tmp + ']'; else tmp = 'desolve(' + tmpeq;
     tmp += ',' + tmpt + ',' + tmpy + ')';
     UI.insert(UI.focused, tmp);
-    document.getElementById('assistant_desolve').style.display = 'none';
+    $id('assistant_desolve').style.display = 'none';
   },
   assistant_fixe_ok: function () {
     UI.focused = UI.savefocused;
-    var tmp = document.getElementById('rsolvef').value;
+    var tmp = $id('rsolvef').value;
     if (tmp.length) {
-      tmp += ':=' + document.getElementById('rsolvevarf').value + '->' + document.getElementById('rsolveexpr').value + ';\nplotseq(' + tmp + '(' + document.getElementById('rsolvevarf').value + ')';
-    } else tmp = 'plotseq(' + document.getElementById('rsolveexpr').value;
-    tmp += ',' + document.getElementById('rsolvevarf').value + '===';
-    var tmp1 = document.getElementById('rsolvemin').value;
-    if (tmp1.length) tmp += '[' + document.getElementById('rsolveu0').value + ',' + tmp1 + ',' + document.getElementById('rsolvemax').value + ']'; else tmp += document.getElementById('rsolveu0').value;
-    tmp += ',' + document.getElementById('rsolven').value + ')';
+      tmp += ':=' + $id('rsolvevarf').value + '->' + $id('rsolveexpr').value + ';\nplotseq(' + tmp + '(' + $id('rsolvevarf').value + ')';
+    } else tmp = 'plotseq(' + $id('rsolveexpr').value;
+    tmp += ',' + $id('rsolvevarf').value + '===';
+    var tmp1 = $id('rsolvemin').value;
+    if (tmp1.length) tmp += '[' + $id('rsolveu0').value + ',' + tmp1 + ',' + $id('rsolvemax').value + ']'; else tmp += $id('rsolveu0').value;
+    tmp += ',' + $id('rsolven').value + ')';
     UI.insert(UI.focused, tmp);
-    document.getElementById('assistant_fixe').style.display = 'none';
-    document.getElementById('assistant_suites').style.display = 'none';
+    $id('assistant_fixe').style.display = 'none';
+    $id('assistant_suites').style.display = 'none';
   },
   assistant_test_ok: function () {
     UI.focused = UI.savefocused;
     if (UI.python_mode) {
-      UI.insert(UI.focused, '\nif ' + document.getElementById('sicond').value + ':');
+      UI.insert(UI.focused, '\nif ' + $id('sicond').value + ':');
       UI.indentline(UI.focused);
-      UI.insert(UI.focused, '\n' + document.getElementById('sialors').value);
-    } else UI.insert(UI.focused, '\nsi ' + document.getElementById('sicond').value + ' alors ' + document.getElementById('sialors').value);
+      UI.insert(UI.focused, '\n' + $id('sialors').value);
+    } else UI.insert(UI.focused, '\nsi ' + $id('sicond').value + ' alors ' + $id('sialors').value);
     UI.indentline(UI.focused);
-    var tmp = document.getElementById('sisinon').value;
+    var tmp = $id('sisinon').value;
     if (tmp.length) {
       if (UI.python_mode) {
         UI.indentline(UI.focused);
@@ -180,14 +182,14 @@ var UI = {
     UI.indentline(UI.focused);
     UI.funcoff();
     UI.focused.focus();
-    document.getElementById('assistant_test').style.display = 'none';
+    $id('assistant_test').style.display = 'none';
   },
   assistant_prog_ok: function () {
     UI.focused = UI.savefocused;
-    var loc = document.getElementById('localvars').value;
-    var fc = document.getElementById('funcname').value;
-    var argu = document.getElementById('argsname').value;
-    var ret = document.getElementById('returnedvar').value;
+    var loc = $id('localvars').value;
+    var fc = $id('funcname').value;
+    var argu = $id('argsname').value;
+    var ret = $id('returnedvar').value;
     if (UI.python_mode) {
       UI.insert(UI.focused, 'def ' + fc + '(' + argu + '):');
       UI.indentline(UI.focused);
@@ -213,203 +215,203 @@ var UI = {
         UI.moveCaret(UI.focused, 2);
       }
     }
-    document.getElementById('assistant_prog').style.display = 'none';
+    $id('assistant_prog').style.display = 'none';
     UI.focused.focus();
   },
   assistant_seq_ok: function () {
     UI.focused = UI.savefocused;
-    var tmp = 'seq(' + document.getElementById('seqexpr').value + ',' + document.getElementById('seqvarname').value + ',' + document.getElementById('seqvarmin').value + ',' + document.getElementById('seqvarmax').value;
+    var tmp = 'seq(' + $id('seqexpr').value + ',' + $id('seqvarname').value + ',' + $id('seqvarmin').value + ',' + $id('seqvarmax').value;
     UI.insert(UI.focused, tmp);
-    tmp = document.getElementById('seqvarstep').value;
+    tmp = $id('seqvarstep').value;
     if (tmp.length) UI.insert(UI.focused, ',' + tmp);
     UI.insert(UI.focused, ')');
-    document.getElementById('assistant_seq').style.display = 'none';
+    $id('assistant_seq').style.display = 'none';
   },
   assistant_plot_polar: function () {
     UI.focused = UI.savefocused;
-    var tmp = 'plotpolar(' + document.getElementById('plotpolarexpr').value + ',' + document.getElementById('plotpolarvarname').value + ',' + document.getElementById('plotpolarvarmin').value + ',' + document.getElementById('plotpolarvarmax').value;
+    var tmp = 'plotpolar(' + $id('plotpolarexpr').value + ',' + $id('plotpolarvarname').value + ',' + $id('plotpolarvarmin').value + ',' + $id('plotpolarvarmax').value;
     UI.insert(UI.focused, tmp);
-    tmp = document.getElementById('plotpolarvarstep').value;
+    tmp = $id('plotpolarvarstep').value;
     if (tmp.length) UI.insert(UI.focused, ',tstep===' + tmp);
     UI.insert(UI.focused, ')');
-    document.getElementById('assistant_plotpolar').style.display = 'none';
+    $id('assistant_plotpolar').style.display = 'none';
   },
   assistant_series_ok: function () {
     UI.focused = UI.savefocused;
-    var tmp = 'series(' + document.getElementById('seriesexpr').value + ',' + document.getElementById('seriesvarname').value + '===' + document.getElementById('seriesvarlim').value + ',' + document.getElementById('seriesvarorder').value;
+    var tmp = 'series(' + $id('seriesexpr').value + ',' + $id('seriesvarname').value + '===' + $id('seriesvarlim').value + ',' + $id('seriesvarorder').value;
     UI.insert(UI.focused, tmp);
-    tmp = document.getElementById('seriesvarstep').value;
+    tmp = $id('seriesvarstep').value;
     if (tmp.length) UI.insert(UI.focused, ',' + tmp);
     UI.insert(UI.focused, ')');
-    document.getElementById('assistant_series').style.display = 'none';
+    $id('assistant_series').style.display = 'none';
   },
   assistant_limit_ok: function () {
     UI.focused = UI.savefocused;
-    var tmp = 'limit(' + document.getElementById('limitexpr').value + ',' + document.getElementById('limitvarname').value + ',' + document.getElementById('limitvarlim').value;
+    var tmp = 'limit(' + $id('limitexpr').value + ',' + $id('limitvarname').value + ',' + $id('limitvarlim').value;
     UI.insert(UI.focused, tmp);
-    tmp = document.getElementById('limitvardir').value;
+    tmp = $id('limitvardir').value;
     if (tmp.length) UI.insert(UI.focused, ',' + tmp);
     UI.insert(UI.focused, ')');
-    document.getElementById('assistant_limit').style.display = 'none';
+    $id('assistant_limit').style.display = 'none';
   },
   assistant_int_ok: function () {
     UI.focused = UI.savefocused;
-    var tmp = document.getElementById('intexpr').value;
+    var tmp = $id('intexpr').value;
     if (tmp.length) {
-      tmp = 'integrate(' + tmp + ',' + document.getElementById('intvarname').value;
+      tmp = 'integrate(' + tmp + ',' + $id('intvarname').value;
       UI.insert(UI.focused, tmp);
-      tmp = document.getElementById('intvarmin').value;
-      if (tmp.length) UI.insert(UI.focused, ',' + tmp + ',' + document.getElementById('intvarmax').value);
+      tmp = $id('intvarmin').value;
+      if (tmp.length) UI.insert(UI.focused, ',' + tmp + ',' + $id('intvarmax').value);
       UI.insert(UI.focused, ')');
     } else UI.insert(UI.focused, 'integrate(');
-    document.getElementById('assistant_int').style.display = 'none';
+    $id('assistant_int').style.display = 'none';
   },
   assistant_diff_ok: function () {
     UI.focused = UI.savefocused;
-    var tmp = document.getElementById('diffexpr').value;
+    var tmp = $id('diffexpr').value;
     if (tmp.length) {
-      tmp = 'diff(' + tmp + ',' + document.getElementById('diffvarname').value;
+      tmp = 'diff(' + tmp + ',' + $id('diffvarname').value;
       UI.insert(UI.focused, tmp);
-      tmp = document.getElementById('diffnumber').value;
+      tmp = $id('diffnumber').value;
       if (tmp.length) UI.insert(UI.focused, ',' + tmp);
       UI.insert(UI.focused, ')');
     } else UI.insert(UI.focused, 'diff(');
-    document.getElementById('assistant_diff').style.display = 'none';
+    $id('assistant_diff').style.display = 'none';
   },
   assistant_sum_ok: function () {
     UI.focused = UI.savefocused;
-    var tmp = document.getElementById('sumexpr').value;
+    var tmp = $id('sumexpr').value;
     if (tmp.length) {
-      tmp = 'sum(' + tmp + ',' + document.getElementById('sumvarname').value;
+      tmp = 'sum(' + tmp + ',' + $id('sumvarname').value;
       UI.insert(UI.focused, tmp);
-      tmp = document.getElementById('sumvarmin').value;
-      if (tmp.length) UI.insert(UI.focused, ',' + tmp + ',' + document.getElementById('sumvarmax').value);
+      tmp = $id('sumvarmin').value;
+      if (tmp.length) UI.insert(UI.focused, ',' + tmp + ',' + $id('sumvarmax').value);
       UI.insert(UI.focused, ')');
     } else UI.insert(UI.focused, 'sum(');
-    document.getElementById('assistant_sum').style.display = 'none';
+    $id('assistant_sum').style.display = 'none';
   },
   assistant_tabvarfunc_ok: function () {
     UI.focused = UI.savefocused;
-    document.getElementById('assistant_tabvar').style.display = 'none';
-    document.getElementById('assistant_tabvarfunc').style.display = 'none';
-    var tmp = document.getElementById('tabvarfuncname').value;
+    $id('assistant_tabvar').style.display = 'none';
+    $id('assistant_tabvarfunc').style.display = 'none';
+    var tmp = $id('tabvarfuncname').value;
     if (tmp.length) {
-      tmp += ':=' + document.getElementById('tabvarfuncvarname').value + '->' + document.getElementById('tabvarfuncexpr').value + ';\n';
-      tmp = tmp + 'tabvar(' + document.getElementById('tabvarfuncname').value + '(' + document.getElementById('tabvarfuncvarname').value + '),';
+      tmp += ':=' + $id('tabvarfuncvarname').value + '->' + $id('tabvarfuncexpr').value + ';\n';
+      tmp = tmp + 'tabvar(' + $id('tabvarfuncname').value + '(' + $id('tabvarfuncvarname').value + '),';
     } else {
-      tmp = tmp + 'tabvar(' + document.getElementById('tabvarfuncexpr').value + ','
+      tmp = tmp + 'tabvar(' + $id('tabvarfuncexpr').value + ','
     }
-    tmp += document.getElementById('tabvarfuncvarname').value + ',' + document.getElementById('tabvarfuncvarmin').value + ',' + document.getElementById('tabvarfuncvarmax').value;
-    var tmp1 = document.getElementById('tabvarfuncopt').value;
+    tmp += $id('tabvarfuncvarname').value + ',' + $id('tabvarfuncvarmin').value + ',' + $id('tabvarfuncvarmax').value;
+    var tmp1 = $id('tabvarfuncopt').value;
     if (tmp1.length) tmp += ',' + tmp1;
-    tmp1 = document.getElementById('tabvarfuncvarstep').value;
+    tmp1 = $id('tabvarfuncvarstep').value;
     if (tmp1.length) tmp = tmp + ',xstep===' + tmp1;
     tmp += ',plot)';
     UI.insert(UI.focused, tmp);
   },
   assistant_tabvarparam_ok: function () {
     UI.focused = UI.savefocused;
-    document.getElementById('assistant_tabvar').style.display = 'none';
-    document.getElementById('assistant_tabvarparam').style.display = 'none';
-    var varname = document.getElementById('tabvarparamvarname').value;
-    var exprx = document.getElementById('tabvarparamexprx').value;
-    var expry = document.getElementById('tabvarparamexpry').value;
-    var tmp = document.getElementById('tabvarparamnamex').value;
-    if (tmp.length) tmp = tmp + ':=' + varname + '->' + exprx + ';\n' + document.getElementById('tabvarparamnamey').value + ':=' + varname + '->' + expry + ';\n';
-    tmp = tmp + 'tabvar([' + exprx + ',' + expry + '],' + varname + '===' + document.getElementById('tabvarparamvarmin').value + '..' + document.getElementById('tabvarparamvarmax').value;
-    var tmp1 = document.getElementById('tabvarparamvarstep').value;
+    $id('assistant_tabvar').style.display = 'none';
+    $id('assistant_tabvarparam').style.display = 'none';
+    var varname = $id('tabvarparamvarname').value;
+    var exprx = $id('tabvarparamexprx').value;
+    var expry = $id('tabvarparamexpry').value;
+    var tmp = $id('tabvarparamnamex').value;
+    if (tmp.length) tmp = tmp + ':=' + varname + '->' + exprx + ';\n' + $id('tabvarparamnamey').value + ':=' + varname + '->' + expry + ';\n';
+    tmp = tmp + 'tabvar([' + exprx + ',' + expry + '],' + varname + '===' + $id('tabvarparamvarmin').value + '..' + $id('tabvarparamvarmax').value;
+    var tmp1 = $id('tabvarparamvarstep').value;
     if (tmp1.length) tmp = tmp + ',tstep===' + tmp1;
     tmp += ',plot)';
     UI.insert(UI.focused, tmp);
   },
   assistant_plotfunc1var_ok: function () {
     UI.focused = UI.savefocused;
-    document.getElementById('assistant_plotfunc').style.display = 'none';
-    document.getElementById('assistant_plotfunc1var').style.display = 'none';
-    var tmp = 'plotfunc(' + document.getElementById('plotfuncexpr').value + ',' + document.getElementById('plotfuncvarname').value + ',' + document.getElementById('plotfuncvarmin').value + ',' + document.getElementById('plotfuncvarmax').value;
-    var tmp1 = document.getElementById('plotfuncvarstep').value;
+    $id('assistant_plotfunc').style.display = 'none';
+    $id('assistant_plotfunc1var').style.display = 'none';
+    var tmp = 'plotfunc(' + $id('plotfuncexpr').value + ',' + $id('plotfuncvarname').value + ',' + $id('plotfuncvarmin').value + ',' + $id('plotfuncvarmax').value;
+    var tmp1 = $id('plotfuncvarstep').value;
     if (tmp1.length) tmp = tmp + ',xstep===' + tmp1;
     tmp += ')';
     UI.insert(UI.focused, tmp);
   },
   assistant_plotfunc2var_ok: function () {
     UI.focused = UI.savefocused;
-    document.getElementById('assistant_plotfunc').style.display = 'none';
-    document.getElementById('assistant_plotfunc2var').style.display = 'none';
-    var tmp = 'plotfunc(' + document.getElementById('plotfunc2expr').value + ',[' + document.getElementById('plotfunc2varx').value + ',' + document.getElementById('plotfunc2vary').value + ']';
-    var tmp1 = document.getElementById('plotfunc2varxstep').value;
+    $id('assistant_plotfunc').style.display = 'none';
+    $id('assistant_plotfunc2var').style.display = 'none';
+    var tmp = 'plotfunc(' + $id('plotfunc2expr').value + ',[' + $id('plotfunc2varx').value + ',' + $id('plotfunc2vary').value + ']';
+    var tmp1 = $id('plotfunc2varxstep').value;
     if (tmp1.length) tmp = tmp + ',xstep===' + tmp1;
-    tmp1 = document.getElementById('plotfunc2varystep').value;
+    tmp1 = $id('plotfunc2varystep').value;
     if (tmp1.length) tmp = tmp + ',ystep===' + tmp1;
     tmp += ')';
     UI.insert(UI.focused, tmp);
   },
   assistant_plotparam_ok: function () {
     UI.focused = UI.savefocused;
-    document.getElementById('assistant_plotparam').style.display = 'none';
-    document.getElementById('assistant_plotparam1var').style.display = 'none';
-    var tmp = 'plotparam([' + document.getElementById('plotparamexprx').value + ',' + document.getElementById('plotparamexpry').value + '],' + document.getElementById('plotparamvarname').value + ',' + document.getElementById('plotparamvarmin').value + ',' + document.getElementById('plotparamvarmax').value;
-    var tmp1 = document.getElementById('plotparamvarstep').value;
+    $id('assistant_plotparam').style.display = 'none';
+    $id('assistant_plotparam1var').style.display = 'none';
+    var tmp = 'plotparam([' + $id('plotparamexprx').value + ',' + $id('plotparamexpry').value + '],' + $id('plotparamvarname').value + ',' + $id('plotparamvarmin').value + ',' + $id('plotparamvarmax').value;
+    var tmp1 = $id('plotparamvarstep').value;
     if (tmp1.length) tmp = tmp + ',tstep===' + tmp1;
     tmp += ',display===cap_flat_line)';
     UI.insert(UI.focused, tmp);
   },
   assistant_plotparam2var_ok: function () {
     UI.focused = UI.savefocused;
-    document.getElementById('assistant_plotparam').style.display = 'none';
-    document.getElementById('assistant_plotparam2var').style.display = 'none';
-    var tmp = 'plotparam([' + document.getElementById('plotparam2exprx').value + ',' + document.getElementById('plotparam2expry').value + ',' + document.getElementById('plotparam2exprz').value + '],[' + document.getElementById('plotparam2varx').value + ',' + document.getElementById('plotparam2vary').value + ']';
-    var tmp1 = document.getElementById('plotparam2varxstep').value;
+    $id('assistant_plotparam').style.display = 'none';
+    $id('assistant_plotparam2var').style.display = 'none';
+    var tmp = 'plotparam([' + $id('plotparam2exprx').value + ',' + $id('plotparam2expry').value + ',' + $id('plotparam2exprz').value + '],[' + $id('plotparam2varx').value + ',' + $id('plotparam2vary').value + ']';
+    var tmp1 = $id('plotparam2varxstep').value;
     if (tmp1.length) tmp = tmp + ',ustep===' + tmp1;
-    tmp1 = document.getElementById('plotparam2varystep').value;
+    tmp1 = $id('plotparam2varystep').value;
     if (tmp1.length) tmp = tmp + ',vstep===' + tmp1;
     tmp += ')';
     UI.insert(UI.focused, tmp);
   },
   assistant_plotimplicit_ok: function () {
     UI.focused = UI.savefocused;
-    document.getElementById('assistant_plotimplicit').style.display = 'none';
-    var ctr = document.getElementById('plotimplicitlevel').value;
-    var tmp = document.getElementById('plotimplicitexprf').value + ',[' + document.getElementById('plotimplicitvarx').value + ',' + document.getElementById('plotimplicitvary').value + ']';
+    $id('assistant_plotimplicit').style.display = 'none';
+    var ctr = $id('plotimplicitlevel').value;
+    var tmp = $id('plotimplicitexprf').value + ',[' + $id('plotimplicitvarx').value + ',' + $id('plotimplicitvary').value + ']';
     if (ctr.length) tmp = 'plotcontour(' + tmp + ',' + ctr; else tmp = 'plotimplicit(' + tmp;
-    var tmp1 = document.getElementById('plotimplicitvarxstep').value;
+    var tmp1 = $id('plotimplicitvarxstep').value;
     if (tmp1.length) tmp = tmp + ',xstep===' + tmp1;
-    tmp1 = document.getElementById('plotimplicitvarystep').value;
+    tmp1 = $id('plotimplicitvarystep').value;
     if (tmp1.length) tmp = tmp + ',ystep===' + tmp1;
     tmp += ')';
     UI.insert(UI.focused, tmp);
   },
   assistant_plotfield_ok: function () {
     UI.focused = UI.savefocused;
-    document.getElementById('assistant_plotfield').style.display = 'none';
-    var ctr = document.getElementById('plotfieldinit').value;
-    var tmp = document.getElementById('plotfieldexprf').value + ',[' + document.getElementById('plotfieldvarx').value + ',' + document.getElementById('plotfieldvary').value + ']';
+    $id('assistant_plotfield').style.display = 'none';
+    var ctr = $id('plotfieldinit').value;
+    var tmp = $id('plotfieldexprf').value + ',[' + $id('plotfieldvarx').value + ',' + $id('plotfieldvary').value + ']';
     if (ctr.length) tmp = 'plotfield(' + tmp + ',plotode===' + ctr; else tmp = 'plotfield(' + tmp;
-    var tmp1 = document.getElementById('plotfieldvarxstep').value;
+    var tmp1 = $id('plotfieldvarxstep').value;
     if (tmp1.length) tmp = tmp + ',xstep===' + tmp1;
-    tmp1 = document.getElementById('plotfieldvarystep').value;
+    tmp1 = $id('plotfieldvarystep').value;
     if (tmp1.length) tmp = tmp + ',ystep===' + tmp1;
     tmp += ')';
     UI.insert(UI.focused, tmp);
   },
   assistant_plotpolar_ok: function () {
     UI.focused = UI.savefocused;
-    var tmp = 'plotpolar(' + document.getElementById('plotpolarexpr').value + ',' + document.getElementById('plotpolarvarname').value + ',' + document.getElementById('plotpolarvarmin').value + ',' + document.getElementById('plotpolarvarmax').value;
+    var tmp = 'plotpolar(' + $id('plotpolarexpr').value + ',' + $id('plotpolarvarname').value + ',' + $id('plotpolarvarmin').value + ',' + $id('plotpolarvarmax').value;
     UI.insert(UI.focused, tmp);
-    tmp = document.getElementById('plotpolarvarstep').value;
+    tmp = $id('plotpolarvarstep').value;
     if (tmp.length) UI.insert(UI.focused, ',tstep===' + tmp);
     UI.insert(UI.focused, ')');
-    document.getElementById('assistant_plotpolar').style.display = 'none';
+    $id('assistant_plotpolar').style.display = 'none';
   },
   assistant_rand_setdisplay: function () {
-    var form = document.getElementById('assistant_rand');
+    var form = $id('assistant_rand');
     if (form.rand_int.checked) {
-      document.getElementById('chooselawdiv').style.display = 'none';
-      document.getElementById('rand_intdiv').style.display = 'block';
+      $id('chooselawdiv').style.display = 'none';
+      $id('rand_intdiv').style.display = 'block';
     } else {
-      document.getElementById('chooselawdiv').style.display = 'block';
-      document.getElementById('law_arg').style.display = 'none';
-      document.getElementById('rand_intdiv').style.display = 'none';
+      $id('chooselawdiv').style.display = 'block';
+      $id('law_arg').style.display = 'none';
+      $id('rand_intdiv').style.display = 'none';
     }
   },
   assistant_matr_maxrows: 40,
@@ -422,32 +424,32 @@ var UI = {
   open_sheet: function (tableur) {
     UI.funcoff();
     UI.savefocused = UI.focused;
-    document.getElementById('assistant_matr').style.display = 'block';
-    document.getElementById('matr_type_chooser').style.display = 'inline';
-    document.getElementById('matr_stats').style.display = 'none';
+    $id('assistant_matr').style.display = 'block';
+    $id('matr_type_chooser').style.display = 'inline';
+    $id('matr_stats').style.display = 'none';
     UI.assistant_matr_setdisplay();
     UI.is_sheet = tableur;
-    document.getElementById('matr_or_sheet').checked = tableur;
-    document.getElementById('matr_type_chooser').style.display = tableur ? 'none' : 'inline';
+    $id('matr_or_sheet').checked = tableur;
+    $id('matr_type_chooser').style.display = tableur ? 'none' : 'inline';
     if (tableur) {
-      document.getElementById('assistant_matr').matr_formuleshadow.checked = true;
-      document.getElementById('assistant_matr').matr_formule.checked = false;
+      $id('assistant_matr').matr_formuleshadow.checked = true;
+      $id('assistant_matr').matr_formule.checked = false;
     }
     UI.assistant_matr_setdisplay();
     if (tableur) UI.matrix2spreadsheet(); else UI.spreadsheet2matrix(false);
-    var field = document.getElementById('matr_span0_0');
+    var field = $id('matr_span0_0');
     UI.sheet_onfocus(field);
     //UI.set_focus('matr_span0_0');
   },
   sheet_rowadd: function (n) {
-    var field = document.getElementById('matr_nrows');
+    var field = $id('matr_nrows');
     field.value = eval(field.value) + n;
-    var f = document.getElementById('stat_lmax');
+    var f = $id('stat_lmax');
     f.value++;
     UI.assistant_matr_setdisplay();
   },
   sheet_coladd: function (n) {
-    var field = document.getElementById('matr_ncols');
+    var field = $id('matr_ncols');
     field.value = eval(field.value) + n;
     UI.assistant_matr_setdisplay();
   },
@@ -490,7 +492,7 @@ var UI = {
       var C = UI.assistant_matr_maxcols;
       s += '[';
       for (var j = 0; j < C; j++) {
-        var field = document.getElementById('matr_case' + i + '_' + j);
+        var field = $id('matr_case' + i + '_' + j);
         var tmp = '[' + field.value;
         if (tmp.length == 1) tmp += '""';
         s += tmp + ',0,0],';
@@ -514,8 +516,8 @@ var UI = {
       var C = r.length;
       if (C > UI.assistant_matr_maxcols) C = UI.assistant_matr_maxcols;
       for (var j = 0; j < C; j++) {
-        var field = document.getElementById('matr_span' + i + '_' + j);
-        var field2 = document.getElementById('matr_case' + i + '_' + j);
+        var field = $id('matr_span' + i + '_' + j);
+        var field2 = $id('matr_case' + i + '_' + j);
         //console.log(i,j,field,r);
         var tmp = r[j], tmp2;
         if (tmp === undefined) continue;
@@ -544,14 +546,14 @@ var UI = {
       UI.assistant_matr_maxcols = c = 26;
     }
     for (var j = 0; j < c; j++) {
-      document.getElementById('matr_head_' + j).innerHTML = String.fromCharCode(65 + j);
+      $id('matr_head_' + j).innerHTML = String.fromCharCode(65 + j);
     }
     UI.is_sheet = true;
     UI.sheet_recompute('');
     for (var i = 0; i < l; i++) {
       for (var j = 0; j < c; j++) {
         //console.log(i,j);
-        var field = document.getElementById('matr_span' + i + '_' + j);
+        var field = $id('matr_span' + i + '_' + j);
         field.style.display = 'inline';
         field.previousSibling.style.display = 'none';
       }
@@ -564,14 +566,14 @@ var UI = {
       UI.assistant_matr_maxcols = c = 26;
     }
     for (var j = 0; j < c; j++) {
-      document.getElementById('matr_head_' + j).innerHTML = '' + j;
+      $id('matr_head_' + j).innerHTML = '' + j;
     }
     for (var i = 0; i < l; i++) {
       ligne = UI.assistant_matr_source[i];
       for (var j = 0; j < c; j++) {
         var tmp = ligne[j][1];
         if (tmp == '""') tmp = '';
-        var field = document.getElementById('matr_case' + i + '_' + j);
+        var field = $id('matr_case' + i + '_' + j);
         if (evaled) field.value = tmp;
         field.style.display = 'inline';
         field.nextSibling.style.display = 'none';
@@ -588,12 +590,12 @@ var UI = {
     }
     j = eval(s.substr(i + 1, l - i - 1));
     i = eval(s.substr(9, i - 9));
-    document.getElementById('matr_line_' + UI.sheet_i).style.color = "black";
-    document.getElementById('matr_head_' + UI.sheet_j).style.color = "black";
+    $id('matr_line_' + UI.sheet_i).style.color = "black";
+    $id('matr_head_' + UI.sheet_j).style.color = "black";
     UI.sheet_i = i;
     UI.sheet_j = j;
-    document.getElementById('matr_line_' + UI.sheet_i).style.color = "red";
-    document.getElementById('matr_head_' + UI.sheet_j).style.color = "red";
+    $id('matr_line_' + UI.sheet_i).style.color = "red";
+    $id('matr_head_' + UI.sheet_j).style.color = "red";
     field = field.previousSibling;
     field.style.display = 'inline';
     field.focus();
@@ -603,7 +605,7 @@ var UI = {
     field.value = value;
     var s = field.id;
     if (s.length > 9 && s.substr(0, 9) == 'matr_case')
-      document.getElementById('matr_span' + s.substr(9, s.length - 9)).innerHTML = value;
+      $id('matr_span' + s.substr(9, s.length - 9)).innerHTML = value;
   },
   assistant_matr_setmatrix: function (l, c) {
     // Code de creation de la matrice
@@ -611,7 +613,7 @@ var UI = {
       l = 100;
       c = 100;
     }
-    var mydiv = document.getElementById('matr_casediv');
+    var mydiv = $id('matr_casediv');
     mydiv.style.maxHeight = window.innerHeight / 2 + 'px';
     mydiv.style.maxWidth = (window.innerWidth - 50) + 'px';
     mydiv.style.overflow = "auto";
@@ -628,7 +630,7 @@ var UI = {
       s += '<tr id="matr_ligne' + i + '">';
       s += '<td id="matr_line_' + i + '">' + i + '</td>';
       for (var j = 0; j < c; ++j) {
-        var field = document.getElementById('matr_case' + i + '_' + j);
+        var field = $id('matr_case' + i + '_' + j);
         var oldval = '';
         //console.log(i,j,field.value);
         if (field !== null) oldval = field.value;
@@ -645,7 +647,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     s += '</table>';
     //console.log(s);
     mydiv.innerHTML = s;
-    if (document.getElementById('matr_or_sheet').checked) {
+    if ($id('matr_or_sheet').checked) {
       UI.matrix2spreadsheet();
     }
     //console.log(mydiv.innerHTML);
@@ -672,7 +674,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     }
     j = eval(s.substr(i + 1, l - i - 1));
     i = eval(s.substr(9, i - 9));
-    var form = document.getElementById('assistant_matr'), nr = form.matr_nrows.value, nc = form.matr_ncols.value;
+    var form = $id('assistant_matr'), nr = form.matr_nrows.value, nc = form.matr_ncols.value;
     try {
       se = eval(se);
     } catch (err) {
@@ -690,7 +692,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       }
       UI.sheet_recompute('');
       var tmp = 'matr_span' + i + '_' + j; // console.log(tmp);
-      if (focusnext) document.getElementById(tmp).click();
+      if (focusnext) $id(tmp).click();
       return;
     }
     else {
@@ -714,10 +716,10 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
               extend = true;
               form.matr_ncols.value = jend;
             }
-            for (; j_ < jend; ++j_) UI.sheet_set(document.getElementById('matr_case' + i + '_' + j_), ligne[j_ - j]);
+            for (; j_ < jend; ++j_) UI.sheet_set($id('matr_case' + i + '_' + j_), ligne[j_ - j]);
           }
           else
-            UI.sheet_set(document.getElementById('matr_case' + i + '_' + j), ligne);
+            UI.sheet_set($id('matr_case' + i + '_' + j), ligne);
         }
         if (extend) {
           UI.assistant_matr_setdisplay();
@@ -729,7 +731,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
           if (j0 >= nc) j0 = 0;
           UI.sheet_recompute('');
           tmp = 'matr_span' + iend + '_' + j0;
-          if (focusnext) document.getElementById(tmp).click();
+          if (focusnext) $id(tmp).click();
         }
         return;
       }
@@ -737,7 +739,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       var jend = j + l, shift = j;
       if (jend >= UI.assistant_matr_maxncols) jend = UI.assistant_matr_maxncols;
       for (; j < jend; ++j)
-        UI.sheet_set(document.getElementById('matr_case' + i + '_' + j), se[j - shift]);
+        UI.sheet_set($id('matr_case' + i + '_' + j), se[j - shift]);
       UI.sheet_recompute('');
     }
   },
@@ -748,20 +750,20 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     }
     //console.log(test);
     if (test == 0 || test == 1) {
-      document.getElementById('matr').style.display = 'none';
-      document.getElementById('matr_matr').style.display = 'none';
+      $id('matr').style.display = 'none';
+      $id('matr_matr').style.display = 'none';
     }
     else {
-      document.getElementById('matr').style.display = 'block';
-      document.getElementById('matr_matr').style.display = 'block';
+      $id('matr').style.display = 'block';
+      $id('matr_matr').style.display = 'block';
     }
   },
   assistant_rand_ok: function () {
-    document.getElementById('assistant_rand').style.display = 'none';
-    document.getElementById('chooselawdiv').style.display = 'none';
+    $id('assistant_rand').style.display = 'none';
+    $id('chooselawdiv').style.display = 'none';
     UI.focused = UI.savefocused;
-    var nr = document.getElementById('rand_nrows').value;
-    var nc = document.getElementById('rand_ncols').value, tmp;
+    var nr = $id('rand_nrows').value;
+    var nc = $id('rand_ncols').value, tmp;
     if (nc <= 0)
       tmp = 'rand(';
     else {
@@ -770,14 +772,14 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       else
         tmp = 'ranm(' + nr + ',' + nc + ',';
     }
-    var form = document.getElementById('assistant_rand');
+    var form = $id('assistant_rand');
     var entier = form.rand_int.checked;
     if (entier) {
-      var nm = document.getElementById('rand_maxint').value;
+      var nm = $id('rand_maxint').value;
       tmp += nm + ')';
     }
     else {
-      form = document.getElementById('chooselawform');
+      form = $id('chooselawform');
       tmp += form.rand_law.value;
       if (form.rand_law1.style.display != 'none')
         tmp += ',' + form.rand_law1.value;
@@ -789,17 +791,17 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     UI.insert(UI.focused, tmp);
   },
   assistant_matr_ok: function () {
-    var stats = document.getElementById('matr_stats').style.display != 'none';
-    var stat12 = document.getElementById('matr_stat12').style.display != 'none';
-    var stathyp = document.getElementById('matr_testhyp').style.display != 'none';
-    var fluctu = document.getElementById('risque_alpha').style.display != 'none';
-    document.getElementById('assistant_matr').style.display = 'none';
-    document.getElementById('chooselawdiv').style.display = 'none';
-    document.getElementById('risque_alpha').style.display = 'none';
+    var stats = $id('matr_stats').style.display != 'none';
+    var stat12 = $id('matr_stat12').style.display != 'none';
+    var stathyp = $id('matr_testhyp').style.display != 'none';
+    var fluctu = $id('risque_alpha').style.display != 'none';
+    $id('assistant_matr').style.display = 'none';
+    $id('chooselawdiv').style.display = 'none';
+    $id('risque_alpha').style.display = 'none';
     UI.focused = UI.savefocused;
     var tmp;
     if (stats && !stat12 && !stathyp) {
-      var form = document.getElementById('chooselawform');
+      var form = $id('chooselawform');
       tmp = form.rand_law.value;
       if (fluctu) tmp += '_icdf';
       tmp += '(';
@@ -809,23 +811,23 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
         tmp += form.rand_law2.value + ',';
       if (fluctu) {
         var alpha = 0.05;
-        var alphaf = document.getElementById('adequation_alpha');
+        var alphaf = $id('adequation_alpha');
         //console.log(alphaf.value); return;
         if (alphaf.value.length) alpha = eval(alphaf.value);
         tmp = tmp + alpha / 2 + '),\n' + tmp + (1 - alpha / 2) + ');';
       }
       else {
-        var argu = document.getElementById('law_arg');
+        var argu = $id('law_arg');
         tmp += argu.value + ')';
       }
       UI.insert(UI.focused, tmp);
       return;
     }
-    var form = document.getElementById('assistant_matr');
+    var form = $id('assistant_matr');
     var mat = form.matr_name.value;
     if (stats && mat.length == 0) mat = 'm_s';
-    var nrows = document.getElementById('matr_nrows');
-    var ncols = document.getElementById('matr_ncols');
+    var nrows = $id('matr_nrows');
+    var ncols = $id('matr_ncols');
     var maxrows = 40, maxcols = 6;
     if (ncols.value > maxcols) ncols.value = maxcols;
     if (nrows.value > maxrows) nrows.value = maxrows;
@@ -833,7 +835,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     if (form.matr_formule.checked) {
       tmp += 'matrix(' + nrows.value + ',' + ncols.value + ',';
       tmp += '(j,k)->';
-      var expr = document.getElementById('matr_expr').value;
+      var expr = $id('matr_expr').value;
       //console.log(expr);
       if (!form.matr_start0.checked) expr = UI.caseval_noautosimp('subst(' + expr + ',[j,k],[j+1,k+1])');
       tmp += expr;
@@ -845,7 +847,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
         tmp += '[';
         for (var j = 0; j < ncols.value; j++) {
           //console.log(j,tmp);
-          var val = document.getElementById('matr_case' + i + '_' + j).value;
+          var val = $id('matr_case' + i + '_' + j).value;
           if (UI.is_sheet && i < UI.assistant_matr_source.length) {
             var ligne = UI.assistant_matr_source[i];
             if (j < ligne.length) {
@@ -953,12 +955,12 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     UI.insert(UI.focused, tmp);
   },
   assistant_matr_setdisplay: function () {
-    document.getElementById('matr_matr').style.display = 'block';
-    document.getElementById('chooselawdiv').style.display = 'none';
-    var form = document.getElementById('assistant_matr');
+    $id('matr_matr').style.display = 'block';
+    $id('chooselawdiv').style.display = 'none';
+    var form = $id('assistant_matr');
     if (form.matr_nrows.value < 0) form.matr_nrows.value = 0;
     if (form.matr_ncols.value < 0) form.matr_ncols.value = 0;
-    if (document.getElementById('matr_stats').style.display != 'none') {
+    if ($id('matr_stats').style.display != 'none') {
       if (form.matr_nrows.value < 1) form.matr_nrows.value = 1;
       if (form.matr_ncols.value < 1) form.matr_ncols.value = 1;
       if (form.stat_lmax.value >= form.matr_nrows.value)
@@ -977,14 +979,14 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     form.matr_ncols.max = UI.assistant_matr_maxncols;
     form.matr_nrows.max = UI.assistant_matr_maxnrows;
     if (form.matr_formule.checked) {
-      document.getElementById('matr_formulediv').style.display = 'inline';
+      $id('matr_formulediv').style.display = 'inline';
       UI.set_focus('matr_expr');
-      document.getElementById('matr').style.display = 'none';
+      $id('matr').style.display = 'none';
     } else {
-      document.getElementById('matr_formulediv').style.display = 'none';
-      document.getElementById('matr').style.display = 'block';
-      var nrows = document.getElementById('matr_nrows');
-      var ncols = document.getElementById('matr_ncols');
+      $id('matr_formulediv').style.display = 'none';
+      $id('matr').style.display = 'block';
+      var nrows = $id('matr_nrows');
+      var ncols = $id('matr_ncols');
       var maxrows = UI.assistant_matr_maxrows, maxcols = UI.assistant_matr_maxcols;
       //console.log(nrows.value,maxrows,ncols.value,maxcols);
       if (ncols.value < 1) ncols.value = 1;
@@ -995,16 +997,16 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       var matr = [];
       matr.length = maxrows;
       for (var j = 0; j < maxcols; j++) {
-        var tmp = document.getElementById('matr_head_' + j);
+        var tmp = $id('matr_head_' + j);
         if (j < ncols.value) tmp.style.visibility = 'visible'; else tmp.style.visibility = 'hidden';
       }
       for (var i = 0; i < maxrows; i++) {
-        //document.getElementById('matr_ligne'+i).style.visibility='hidden';
-        document.getElementById('matr_ligne' + i).style.display = 'none';
+        //$id('matr_ligne'+i).style.visibility='hidden';
+        $id('matr_ligne' + i).style.display = 'none';
         var ligne = [];
         ligne.length = maxcols;
         for (var j = 0; j < maxcols; j++) {
-          ligne[j] = document.getElementById('matr_case' + i + '_' + j);
+          ligne[j] = $id('matr_case' + i + '_' + j);
           ligne[j].style.display = 'none';
           //console.log(j,ligne[j].parentNode.style.display);
           ligne[j].parentNode.style.display = 'none';
@@ -1013,8 +1015,8 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
         matr[i] = ligne;
       }
       for (var i = 0; i < nrows.value; i++) {
-        //document.getElementById('matr_ligne'+i).style.visibility='visible';
-        document.getElementById('matr_ligne' + i).style.display = 'table-row';
+        //$id('matr_ligne'+i).style.visibility='visible';
+        $id('matr_ligne' + i).style.display = 'table-row';
         if (UI.is_sheet) {
           for (var j = 0; j < ncols.value; j++) {
             var f = matr[i][j];
@@ -1036,40 +1038,40 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
   toggleshift: function () {
     UI.kbdshift = !UI.kbdshift;
     if (UI.kbdshift) {
-      document.getElementById('shift_key').style.backgroundColor = "white";
-      document.getElementById('add_left_par').value = "[";
-      document.getElementById('add_right_par').value = "]";
-      document.getElementById('add_ln').value = "ln";
-      document.getElementById('add_sin').value = "asin";
-      document.getElementById('add_cos').value = "acos";
-      document.getElementById('add_tan').value = "atan";
-      document.getElementById('add_newline').value = "\\n";
-      document.getElementById('add_,').value = "'";
-      document.getElementById('add_:').value = "!";
-      document.getElementById('add_semi').value = "\"";
-      document.getElementById('add-=').value = "_";
-      // document.getElementById('add_infer').value=">";
-      document.getElementById('add_sqrt').value = "^2";
-      document.getElementById('add_/').value = "%";
-      document.getElementById('add_pi').value = "∞";
+      $id('shift_key').style.backgroundColor = "white";
+      $id('add_left_par').value = "[";
+      $id('add_right_par').value = "]";
+      $id('add_ln').value = "ln";
+      $id('add_sin').value = "asin";
+      $id('add_cos').value = "acos";
+      $id('add_tan').value = "atan";
+      $id('add_newline').value = "\\n";
+      $id('add_,').value = "'";
+      $id('add_:').value = "!";
+      $id('add_semi').value = "\"";
+      $id('add-=').value = "_";
+      // $id('add_infer').value=">";
+      $id('add_sqrt').value = "^2";
+      $id('add_/').value = "%";
+      $id('add_pi').value = "∞";
     }
     else {
-      document.getElementById('shift_key').style.backgroundColor = "cyan";
-      document.getElementById('add_left_par').value = "(";
-      document.getElementById('add_right_par').value = ")";
-      document.getElementById('add_ln').value = "exp";
-      document.getElementById('add_sin').value = "sin";
-      document.getElementById('add_cos').value = "cos";
-      document.getElementById('add_tan').value = "tan";
-      document.getElementById('add_newline').value = " ";
-      document.getElementById('add_,').value = ",";
-      document.getElementById('add_:').value = UI.python_mode ? ':' : ':=';
-      document.getElementById('add_semi').value = ";";
-      document.getElementById('add-=').value = "=";
-      // document.getElementById('add_infer').value="<";
-      document.getElementById('add_sqrt').value = "√";
-      document.getElementById('add_/').value = "/";
-      document.getElementById('add_pi').value = "π";
+      $id('shift_key').style.backgroundColor = "cyan";
+      $id('add_left_par').value = "(";
+      $id('add_right_par').value = ")";
+      $id('add_ln').value = "exp";
+      $id('add_sin').value = "sin";
+      $id('add_cos').value = "cos";
+      $id('add_tan').value = "tan";
+      $id('add_newline').value = " ";
+      $id('add_,').value = ",";
+      $id('add_:').value = UI.python_mode ? ':' : ':=';
+      $id('add_semi').value = ";";
+      $id('add-=').value = "=";
+      // $id('add_infer').value="<";
+      $id('add_sqrt').value = "√";
+      $id('add_/').value = "/";
+      $id('add_pi').value = "π";
     }
   },
   codemirror_setoptions: function (cmentree) {
@@ -1168,19 +1170,19 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
   },
   kbdonfuncoff: function () {
     UI.savefocused = UI.focused;
-    document.getElementById('keyboard').style.display = 'inline';
-    document.getElementById('keyboardfunc').style.display = 'none';
+    $id('keyboard').style.display = 'inline';
+    $id('keyboardfunc').style.display = 'none';
   },
   funcoff: function () {
     UI.savefocused = UI.focused;
-    document.getElementById('keyboardfunc').style.display = 'none';
+    $id('keyboardfunc').style.display = 'none';
   },
   restorefrom: function (c) {
     var s = UI.readCookie(c);
-    UI.restoresession(s, document.getElementById('mathoutput'), true, false);
+    UI.restoresession(s, $id('mathoutput'), true, false);
     //console.log(c.substring(6,c.length));
-    document.getElementById('outputfilename').value = c.substring(6, c.length);
-    document.getElementById('loadfile_cookie').innerHTML = '';
+    $id('outputfilename').value = c.substring(6, c.length);
+    $id('loadfile_cookie').innerHTML = '';
   },
   listCookies: function () { // list cookies with name begin == ' xcas__'
     var aString = '';
@@ -1204,7 +1206,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
         aString += "<button onclick=\"UI.restorefrom('" + tmp.substr(1, pos - 1) + "')\">" + tmpname + "</button>\n";
       }
     }
-    aString += "<button onclick=document.getElementById('loadfile_cookie').innerHTML=''>&#x274C;</button>\n"
+    aString += "<button onclick=$id('loadfile_cookie').innerHTML=''>&#x274C;</button>\n"
     //console.log(aString);
     return aString;
   },
@@ -1411,7 +1413,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     if (hashParams.length == 0) return;
     for (var i = 0; i < hashParams.length; i++) {
       var s = hashParams[i];
-      if (s.length) document.getElementById('startup_restore').style.display = 'none';
+      if (s.length) $id('startup_restore').style.display = 'none';
       if (s == 'exec') {
         console.log(s);
         doexec = true;
@@ -1472,7 +1474,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
           UI.langue = -4;
         if (p == 'de')
           UI.langue = -5;
-        var form = document.getElementById('config');
+        var form = $id('config');
         if (UI.langue >= -5 && UI.langue <= -1) {
           form.lang[-UI.langue - 1].checked = true;
           if (UI.langue == -2) UI.langue = 0;
@@ -1484,7 +1486,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
         continue;
       }
       if (p[0] == 'filename') {
-        var out = document.getElementById("outputfilename");
+        var out = $id("outputfilename");
         var s = decodeURIComponent(p[1]);
         out.value = s;
         //console.log(out);
@@ -1499,16 +1501,16 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       }
       if (p[0] == 'codemirror') {
         if (p[1] == '0') {
-          document.getElementById('config').usecm.checked = false;
+          $id('config').usecm.checked = false;
           UI.set_config(false);
         }
         if (p[1] == '1') {
-          document.getElementById('config').usecm.checked = true;
+          $id('config').usecm.checked = true;
           UI.set_config(false);
         }
         continue;
       }
-      var form = document.getElementById('config');
+      var form = $id('config');
       if (p[0] == 'python') {
         if (p[1] == '0') {
           form.python_mode.checked = false;
@@ -1549,20 +1551,20 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
         }
         continue;
       }
-      document.getElementById(p[0]).value = decodeURIComponent(p[1]);
+      $id(p[0]).value = decodeURIComponent(p[1]);
     } // end for (i=...)
     if (doexec) {
       UI.exec(hist, 0);
     }
     if (clearcmd && cmentree && cmentree.setValue) cmentree.setValue('');
     if (hist.firstChild != null) hist.firstChild.scrollIntoView();
-    var cons = document.getElementById('restoresession');
+    var cons = $id('restoresession');
     cons.style.display = 'none';
     //cmentree.focus();
   },
   link: function (start) {
     var s = UI.makelink(start);
-    if (document.getElementById('variables').style.display != 'none') UI.listvars(3);
+    if ($id('variables').style.display != 'none') UI.listvars(3);
     //console.log(s);
     UI.createCookie('xcas_session', s, 365);
     if (s.length > 0) {
@@ -1572,7 +1574,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
         smail = UI.base_url + "xcasfr.html#exec&";
       else
         smail = UI.base_url + "xcasen.html#exec&";
-      var filename = document.getElementById("outputfilename").value;
+      var filename = $id("outputfilename").value;
       var pos = filename.search('@');
       if (pos < 0 || pos >= filename.length)
         filename = UI.from + '@' + filename;
@@ -1596,10 +1598,10 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       //s=encodeURIComponent(s); // does not work innerHTML will add a prefix
       //var sforum=encodeURIComponent('[url]'+s+'[/url]');
       sforum = '[url]' + sforum + '[/url]';
-      document.getElementById('theforumlink').innerHTML = sforum;
+      $id('theforumlink').innerHTML = sforum;
       var copy = "<button title=";
       copy += UI.langue == -1 ? "'Partager cette session sur le forum'" : "'Share this session on the forum'";
-      copy += " class='bouton' onclick='var tmp=document.getElementById(\"theforumlink\"); tmp.style.display=\"inline\";tmp.select();document.execCommand(\"copy\");tmp.style.display=\"none\"; ";
+      copy += " class='bouton' onclick='var tmp=$id(\"theforumlink\"); tmp.style.display=\"inline\";tmp.select();document.execCommand(\"copy\");tmp.style.display=\"none\"; ";
       if (UI.forum_warn) {
         UI.forum_warn = false;
         copy += UI.langue == -1 ? "alert(\"Le lien de la session a été copié dans le presse-papier, vous pouvez le coller dans la page qui va apparaitre\");" : "alert(\"Clipboard contains link to session, you can paste it in the tab that will open\");";
@@ -1607,17 +1609,17 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       copy += "var win=window.open(\"" + UI.forum_url + "\", \"_blank\");'>&#x282A;</button>,";
       //console.log(copy);
       if (window.location.href.substr(0, 4) == 'file' && !UI.detectmob()) {
-        document.getElementById('thelink').innerHTML = '<a href="' + s + '" target="_blank">x2</a>, <a href="' + s2 + '" target="_blank">local</a>,' + copy;//+',<a href="http://xcas.e.ujf-grenoble.fr/XCAS/posting.php?mode=post&f=12&subject=session&message='+encodeURIComponent(sforum)+'" target="_blank">forum</a>,';
+        $id('thelink').innerHTML = '<a href="' + s + '" target="_blank">x2</a>, <a href="' + s2 + '" target="_blank">local</a>,' + copy;//+',<a href="http://xcas.e.ujf-grenoble.fr/XCAS/posting.php?mode=post&f=12&subject=session&message='+encodeURIComponent(sforum)+'" target="_blank">forum</a>,';
       }
       else
-        document.getElementById('thelink').innerHTML = '<a href="' + s + '" target="_blank">x2</a>,' + (copy);
+        $id('thelink').innerHTML = '<a href="' + s + '" target="_blank">x2</a>,' + (copy);
       var mailurl;
       if (UI.from.length > 9 && UI.from.substr(UI.from.length - 9, 9) == "gmail.com")
         mailurl = 'https://mail.google.com/mail/?view=cm&fs=1&tf=1&source=mailto&su=session+Xcas&to=' + UI.mailto;
       else
         mailurl = 'mailto:' + UI.mailto + '?subject=session Xcas';
       mailurl += '&body=Bonjour%0d%0aVeuillez suivre ce lien : <' + encodeURIComponent(smail) + '>';
-      document.getElementById('themailto').innerHTML = '<a href="#" target="_blank">&nbsp;+&nbsp;</a>,<a href="' + mailurl + '" target="_blank"> &#x2709; </a>,';
+      $id('themailto').innerHTML = '<a href="#" target="_blank">&nbsp;+&nbsp;</a>,<a href="' + mailurl + '" target="_blank"> &#x2709; </a>,';
     }
   },
   rewritestring: function (s) {
@@ -1645,7 +1647,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
   makelink: function (start) {
     var s = 'python=';
     if (UI.python_mode) s += '1&'; else s += '0&';
-    var cur = document.getElementById('mathoutput').firstChild;
+    var cur = $id('mathoutput').firstChild;
     var i = 0;
     for (; cur; i++) {
       if (i >= start) {
@@ -1745,22 +1747,22 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     }
   },
   show_menu: function () {
-    if (document.getElementById('keyboardfunc').style.display == 'inline') {
-      document.getElementById('keyboardfunc').style.display = 'none';
+    if ($id('keyboardfunc').style.display == 'inline') {
+      $id('keyboardfunc').style.display = 'none';
     }
     else {
-      document.getElementById('keyboardfunc').style.display = 'inline';
-      document.getElementById('keyboardfunc').scrollIntoView();
-      document.getElementById('keyboard').style.display = 'none';
-      document.getElementById('alpha_keyboard').style.display = 'none';
-      document.getElementById('progbuttons').style.display = 'none';
+      $id('keyboardfunc').style.display = 'inline';
+      $id('keyboardfunc').scrollIntoView();
+      $id('keyboard').style.display = 'none';
+      $id('alpha_keyboard').style.display = 'none';
+      $id('progbuttons').style.display = 'none';
       var tab = ['boucle', 'seq', 'rand', 'series', 'int', 'sum', 'limit', 'plotfunc', 'plotparam',
         'plotpolar', 'plotimplicit', 'plotfield', 'tabvar', 'test', 'prog', 'solve',
         'rsolve', 'diff', 'matr', 'suites', 'arit', 'geo', 'linalg', 'rewrite',
         'graph', 'calculus'];
       var s = tab.length, k;
       for (k = 0; k < s; ++k) {
-        var tmp = document.getElementById('assistant_' + tab[k]);
+        var tmp = $id('assistant_' + tab[k]);
         if (tmp.style.display == 'block') {
           tmp.style.display = 'none';
           UI.focused = UI.savefocused;
@@ -1772,7 +1774,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     }
   },
   show_config: function () {
-    var form = document.getElementById('config');
+    var form = $id('config');
     form.style.display = 'inline';
   },
   editline: false,
@@ -1795,11 +1797,11 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     }
   },
   set_settings: function () {
-    var form = document.getElementById('config');
+    var form = $id('config');
     var hw = window.innerWidth;
     //console.log(hw);
     if (hw >= 700) {
-      var cfg = document.getElementById('curcfg');
+      var cfg = $id('curcfg');
       var s = "";
       s += UI.python_mode ? 'pyth ' : 'xcas ';
       s += form.angle_mode.checked ? 'rad ' : 'deg ';
@@ -1811,7 +1813,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
   },
   set_config_width: function () {
     UI.set_settings();
-    var form = document.getElementById('config');
+    var form = $id('config');
     var hw = window.innerWidth, hh = window.innerHeight;
     if (hw >= 1000) {
       hw = hw - 50;
@@ -1819,16 +1821,16 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     }
     if (hw <= 500) {
       UI.focusaftereval = false;
-      document.getElementById('exportbutton').style.display = 'none';
+      $id('exportbutton').style.display = 'none';
     }
     form.outdiv_width.value = Math.floor(hw / 2);
-    document.getElementById('mathoutput').style.maxWidth = hw + 'px';
+    $id('mathoutput').style.maxWidth = hw + 'px';
     var mh = Math.floor(hh * .55);
-    if (document.getElementById('consolediv').style.display != 'block') mh = Math.floor(hh * .655);
+    if ($id('consolediv').style.display != 'block') mh = Math.floor(hh * .655);
     var mob = UI.detectmob();
     if (UI.editline && mob) mh = Math.floor(hh * .8);
-    //console.log('set_config_width hh',document.getElementById('divoutput').style.maxHeight,mh);
-    document.getElementById('divoutput').style.maxHeight = mh + 'px';
+    //console.log('set_config_width hh',$id('divoutput').style.maxHeight,mh);
+    $id('divoutput').style.maxHeight = mh + 'px';
     var w = form.outdiv_width.value, h;
     // Module.print(hw);Module.print(w);
     if (w > hw - 300) w = hw - 300;
@@ -1847,7 +1849,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     s = 'h1,h2,h3 { display:inline; font-size:1em;}\ninput[type="number"] { width:40px;}\n .outdiv { width:' + w + 'px; max-height: ' + mh + 'px;  overflow: auto;}\n.filenamecss {width:80px;height:20px}\n.historyinput {width:' + hi + 'px;}\n.bouton{vertical-align:center; height:' + (mob ? hb : 29) + 'px;}\n.CodeMirror-scroll {height:auto; max-height:' + cms + 'px;}\n.CodeMirror {border: 1px solid black;  height:auto; min-width:' + hi + 'px;}\n  dt {font-family: monospace; color: #666;}';
     //console.log(mh,cms);// Module.print(s);
     //Module.print(mh,cms);
-    var st = document.getElementById('document_style');
+    var st = $id('document_style');
     st.innerHTML = s;
     var kbd_l = ["add_newline", "add_infer", "add_super", "add_left_par", "add_right_par",
       "add_i", "add_7", "add_8", "add_9", "add_/",
@@ -1880,12 +1882,12 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     if (h < 34) h = 34;
     h = h + "px"; // console.log(hw,w,hh,h);
     for (var i = 0; i < kbd_l.length; i++) {
-      document.getElementById(kbd_l[i]).style.width = w;
-      document.getElementById(kbd_l[i]).style.height = h;
+      $id(kbd_l[i]).style.width = w;
+      $id(kbd_l[i]).style.height = h;
     }
     for (var i = 0; i < kbd_a.length; i++) {
-      document.getElementById(kbd_a[i]).style.width = w;
-      document.getElementById(kbd_a[i]).style.height = h;
+      $id(kbd_a[i]).style.width = w;
+      $id(kbd_a[i]).style.height = h;
     }
     w = Math.floor(hw / 9) - 1;
     if (w < 30) w = 30;
@@ -1894,8 +1896,8 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     if (h < 35) h = 35;
     h = h + "px"; // console.log(hw,w,hh,h);
     for (var i = 0; i < kbd_prog.length; i++) {
-      document.getElementById(kbd_prog[i]).style.width = w;
-      document.getElementById(kbd_prog[i]).style.height = h;
+      $id(kbd_prog[i]).style.width = w;
+      $id(kbd_prog[i]).style.height = h;
     }
     w = Math.floor(hw / 9) - 3;
     if (w < 30) w = 30;
@@ -1904,15 +1906,15 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     if (h < 35) h = 35;
     h = h + "px"; // console.log(hw,w,hh,h);
     for (var i = 0; i < kbd_math.length; i++) {
-      document.getElementById(kbd_math[i]).style.width = w;
-      document.getElementById(kbd_math[i]).style.height = h;
+      $id(kbd_math[i]).style.width = w;
+      $id(kbd_math[i]).style.height = h;
     }
     w = Math.floor(hw / 9) - 3;
     if (w < 30) w = 30;
     w = w + "px";
   },
   config_string: function () {
-    var form = document.getElementById('config');
+    var form = $id('config');
     UI.from = form.from.value;
     UI.mailto = form.to.value;
     //console.log(UI.from);
@@ -1922,7 +1924,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     if (form.fixeddel.checked) UI.fixeddel = true; else UI.fixeddel = false;
     UI.set_config_width();
     var s;
-    var st = document.getElementById('document_style');
+    var st = $id('document_style');
     if (form.online_doc.checked)
       UI.docprefix = UI.base_url + 'giac/doc/' + (UI.langue == -1 ? 'fr/cascmd_fr/' : 'en/cascmd_en/');
     else
@@ -1945,7 +1947,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       }
       UI.withworker = false;
     }
-    if (UI.withworker) document.getElementById('stop_button').style.display = 'inline'; else document.getElementById('stop_button').style.display = 'none';
+    if (UI.withworker) $id('stop_button').style.display = 'inline'; else $id('stop_button').style.display = 'none';
     UI.caseval_noautosimp("autosimplify(" + form.autosimp_level.value + ")");
     //Module.print(st.innerHTML);
     s = 'Digits:=';
@@ -1965,7 +1967,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     return s;
   },
   set_config: function (setcm_mode) { // b==true if we set cmentree
-    var form = document.getElementById('config');
+    var form = $id('config');
     UI.canvas_w = form.canvas_w.value;
     UI.canvas_h = form.canvas_h.value;
     var s = UI.config_string();
@@ -1993,8 +1995,8 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     if (setcm_mode) {
       UI.setoption_mode(cmentree);
     }
-    document.getElementById('add_//').value = UI.python_mode ? '#' : '//';
-    if (!UI.kbdshift) document.getElementById('add_:').value = UI.python_mode ? ':' : ':=';
+    $id('add_//').value = UI.python_mode ? '#' : '//';
+    if (!UI.kbdshift) $id('add_:').value = UI.python_mode ? ':' : ':=';
     if (cmentree.type != 'textarea') cmentree.options.indentUnit = UI.python_mode ? UI.python_indent : 2;
     UI.createCookie('xcas_complex_mode', form.complex_mode.checked ? 1 : -1, 10000);
     UI.createCookie('xcas_with_sqrt', form.sqrt_mode.checked ? 1 : -1, 10000);
@@ -2016,13 +2018,13 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     UI.createCookie('xcas_matrix_textarea', form.matr_textarea.checked ? 1 : -1, 10000);
     UI.assistant_matr_setmatrix(form.matr_cfg_rows.value, form.matr_cfg_cols.value);
     UI.assistant_matr_setdisplay();
-    //document.getElementById('settings').style.backgroundImage = "url('config.png')";
+    //$id('settings').style.backgroundImage = "url('config.png')";
     //document.body.style.backgroundImage = "url('logo.png')";
   },
   savesession: function (i) {
     // console.log('save_session',i);
     var s;
-    filename = document.getElementById("outputfilename").value;
+    filename = $id("outputfilename").value;
     document.title = "Xcas_" + filename;
     if (i == 2) {
       UI.createCookie('xcas__' + filename, UI.makelink(0), 9999);
@@ -2030,23 +2032,23 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       return;
     }
     if (i == 1) {
-      s = document.getElementById("fulldocument").innerHTML;
+      s = $id("fulldocument").innerHTML;
       s = '<html id="fulldocument" manifest="xcas.appcache">' + s + '</html>';
     }
     else {
-      s = document.getElementById("mathoutput").innerHTML;
+      s = $id("mathoutput").innerHTML;
     }
     var blob = new Blob([s], {type: "text/plain;charset=utf-8"});
     if (i == 1) filename += ".html"; else filename += ".xw";
     saveAs(blob, filename);
   },
   show_history123: function () {
-    document.getElementById('history1').style.display = 'inline';
-    //document.getElementById('history2').style.display='block';
-    document.getElementById('history4').style.display = 'block';
-    document.getElementById('startup').style.display = 'none';
-    document.getElementById('startup1').style.display = 'none';
-    document.getElementById('startup2').style.display = 'none';
+    $id('history1').style.display = 'inline';
+    //$id('history2').style.display='block';
+    $id('history4').style.display = 'block';
+    $id('startup').style.display = 'none';
+    $id('startup1').style.display = 'none';
+    $id('startup2').style.display = 'none';
   },
   hide_show: function (tmp) {
     if (tmp.style.display == 'none')
@@ -2065,9 +2067,9 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
         s = e.target.result;
         if (s.length > 7 && s.substr(0, 7) == '<tbody>') {
           UI.show_history123();
-          document.getElementById("mathoutput").innerHTML += s;
+          $id("mathoutput").innerHTML += s;
           if (confirm(UI.langue == -1 ? 'Ex&eacute;cuter les commandes de l\'historique?' : 'Execute history commands?'))
-            UI.exec(document.getElementById('mathoutput'), 0);
+            UI.exec($id('mathoutput'), 0);
           // Module.print(s);
         }
         else alert(UI.langue == -1 ? 'Format de document invalide' : 'Invalid document format');
@@ -2089,7 +2091,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       cur.style.display = 'none';
   },
   show_answers: function (b) {
-    var out = document.getElementById('mathoutput');
+    var out = $id('mathoutput');
     var cur = out.firstChild;
     while (cur) {
       UI.show_level_answers(cur, b);
@@ -2168,7 +2170,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     UI.show_history123();
     UI.caseval_noautosimp('assume(' + name + '=' + value + ')');
     var s = UI.curseurhtml(name, mini, maxi, step, value);
-    var out = document.getElementById('mathoutput');
+    var out = $id('mathoutput');
     //Module.print(s);
     out.innerHTML += s;
     UI.link(0);
@@ -2183,7 +2185,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     var s = field.innerHTML;
     s = '<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n' + s;
     var blob = new Blob([s], {type: "text/plain;charset=utf-8"});
-    filename = document.getElementById("outputfilename").value;
+    filename = $id("outputfilename").value;
     ++UI.svg_counter;
     filename += UI.svg_counter + ".svg";
     saveAs(blob, filename);
@@ -2229,9 +2231,9 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
   eval_cmdline: function () {
     UI.set_config_width();
     var value;
-    document.getElementById('keyboardfunc').style.display = 'none';
-    document.getElementById('keyboard').style.display = 'none';
-    document.getElementById('alpha_keyboard').style.display = 'none';
+    $id('keyboardfunc').style.display = 'none';
+    $id('keyboard').style.display = 'none';
+    $id('alpha_keyboard').style.display = 'none';
     if (cmentree.type != 'textarea') value = cmentree.getValue(); else value = entree.value;
     UI.eval_cmdline1(value, true);
   },
@@ -2293,8 +2295,8 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       f.focus();
       UI.selection = cmentree.value;
     }
-    //document.getElementById('canvas').focus();
-    var mathoutput = document.getElementById('mathoutput');
+    //$id('canvas').focus();
+    var mathoutput = $id('mathoutput');
     var tr = document.createElement("TABLE");
     tr.innerHTML += add;
     mathoutput.appendChild(tr.firstChild);
@@ -2639,9 +2641,9 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       Module.print(n);
       var n3d = n.substr(5, n.length - 5);
       //Module.print(n3d);
-      //Module.canvas=document.getElementById(n);
+      //Module.canvas=$id(n);
       UI.giac_renderer(n3d);
-      //Module.canvas=document.getElementById('canvas');
+      //Module.canvas=$id('canvas');
       return;
     }
     var f = field.firstChild;
@@ -2906,14 +2908,14 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     return r;
   },
   addinput: function (textin, textout, mathmlout) {
-    document.getElementById('startup_restore').style.display = 'none'
+    $id('startup_restore').style.display = 'none'
     //console.log(textin,textout,mathmlout);
     if (mathmlout.length >= 5 && mathmlout.substr(0, 5) == 'gl3d ') {
-      document.getElementById('table_3d').style.display = 'inherit';
+      $id('table_3d').style.display = 'inherit';
     }
     if (textin.length == 0 || (textin.length >= 3 && textin.substr(0, 3) == '///')) return UI.addcomment(textin);
     UI.show_history123();
-    // document.getElementById('mathoutput').style.listStyleType = 'none';
+    // $id('mathoutput').style.listStyleType = 'none';
     var is_svg = mathmlout.substr(1, 4) == '<svg';
     var is_3d = mathmlout.substr(0, 5) == 'gl3d ';
     var is_gr2d = mathmlout.substr(0, 5) == 'gr2d(';
@@ -3164,7 +3166,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     s = s.replace(/\n/g, '\\n');
     //console.log(s);
     var v = eval(s); // s should be an array of strings
-    var f = document.getElementById('listvars');
+    var f = $id('listvars');
     if (!Array.isArray(v)) {
       f.innerHTML = '<br>' + s;
       return;
@@ -3187,11 +3189,11 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     f.innerHTML = '<br>' + s;
   },
   addhelp: function (prefixe, text) {
-    document.getElementById('helptxt').value = text;
+    $id('helptxt').value = text;
     var input = prefixe + text;
     var out = UI.eval(input, input);
     var add = out;
-    var helpoutput = document.getElementById('helpoutput');
+    var helpoutput = $id('helpoutput');
     helpoutput.innerHTML += add;
     UI.scrollatend(helpoutput.parentNode); // focus at end
     if (UI.focusaftereval) UI.focused.focus();
@@ -3247,7 +3249,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       if (found)
         s += '<button class="bouton" onmousedown="event.preventDefault()" onclick="UI.addhelp(\'?\',\'' + cmd + '\')">' + cmd + '</button>';
       else
-        s += '<button class="bouton" onmousedown="event.preventDefault()" onclick="var help=document.getElementById(\'helptxt\');help.value=\'' + cmd + '\'; UI.insert(UI.focused!=help?UI.focused:cmentree,\'' + UI.clean(cmd, true) + '(\')">' + cmd + '</button>';
+        s += '<button class="bouton" onmousedown="event.preventDefault()" onclick="var help=$id(\'helptxt\');help.value=\'' + cmd + '\'; UI.insert(UI.focused!=help?UI.focused:cmentree,\'' + UI.clean(cmd, true) + '(\')">' + cmd + '</button>';
       voiraussi = voiraussi.substr(pos1 + 1, voiraussi.length - pos1 - 1);
     }
     if (found)
@@ -3310,7 +3312,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     }
   },
   set_focus: function (s) {
-    var tmp = document.getElementById(s);
+    var tmp = $id(s);
     UI.focused = tmp;
     UI.selectionne(); // if (!UI.is_touch_device()) tmp.focus();
   },
@@ -3403,7 +3405,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       return;
     } // end if n>0
     if (field == cmentree) {
-      var par = document.getElementById('mathoutput').lastChild;
+      var par = $id('mathoutput').lastChild;
       if (par == null) return;
       UI.move_focus_end(par);
       return;
@@ -3579,7 +3581,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     if (UI.focusaftereval) cmentree.focus();
   },
   restoretrash: function () {
-    var hist = document.getElementById('mathoutput');
+    var hist = $id('mathoutput');
     var cur = hist.firstChild;
     while (cur) {
       //if (cur.style.display=='none') cur.style.display='block';
@@ -3588,7 +3590,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     }
   },
   emptytrash: function () {
-    var hist = document.getElementById('mathoutput');
+    var hist = $id('mathoutput');
     var cur = hist.firstChild;
     while (cur) {
       var nxt = cur.nextSibling;
@@ -3992,7 +3994,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     var v = eval(s);
     if (!Array.isArray(v)) return;
     console.log(v[0], v.length);
-    var canvas = document.getElementById(id);
+    var canvas = $id(id);
     var l = v.length, w = 0, h = 0;
     if (l < 2) return;
     var scale = v[0];
@@ -4053,7 +4055,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     var v = eval(s);
     if (!Array.isArray(v)) return;
     //console.log(v[0]);
-    var canvas = document.getElementById(id);
+    var canvas = $id(id);
     var w = canvas.width, h = canvas.height;
     if (canvas.getContext) {
       var ctx = canvas.getContext('2d');
