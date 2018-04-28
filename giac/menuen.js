@@ -256,7 +256,7 @@
             <menuitem label="gramschmidt: orthonormalization" onclick="UI.insert(UI.focused,'gramschmidt(')"></menuitem>
             <menuitem label="q2a: quad. form -> matrix" onclick="UI.insert(UI.focused,'q2a(')"></menuitem>
         </menu>
-        <menu label="Isom&eacute;tries">
+        <menu label="Isometries">
             <menuitem label="isom: isometry elements" onclick="UI.insert(UI.focused,'isom(')"></menuitem>
             <menuitem label="mkisom: create an isometry" onclick="UI.insert(UI.focused,'mkisom(')"></menuitem>
         </menu>
