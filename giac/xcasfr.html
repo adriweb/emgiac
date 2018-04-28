@@ -109,6 +109,13 @@ div.matrixcell:not(:focus) {
 }
 </style>
 
+  <script>
+      // Redirect to HTTPS page
+      if (location.protocol !== 'https:') {
+          location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+      }
+  </script>
+
 </head>
 
 <body>
