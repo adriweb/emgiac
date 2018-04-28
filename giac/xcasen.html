@@ -136,8 +136,8 @@
     }
   </style>
   <script>
-      // Redirect to HTTPS page
-      if (location.protocol !== 'https:') {
+      // Redirect to HTTPS page if not testing locally
+      if (location.protocol === 'http:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
           location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
       }
   </script>
