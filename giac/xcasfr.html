@@ -2031,7 +2031,7 @@
              onmousedown="event.preventDefault()"
              onClick="UI.savefocused=UI.focused;$id('assistant_rand').style.display='block';UI.assistant_rand_setdisplay();UI.funcoff();"
              title="g&eacute;n&eacute;rer un nombre, une liste ou une matrice al&eacute;atoirement">
-      <input type="button" value="curseur" id="add_curseur" style="height:35px" onclick="UI.addcurseur(String.fromCharCode(UI.paramname),0,-5,5,0.125); UI.paramname++;" title="Ajoute un param&egrave;tre modifiable &agrave; la souris"></button>
+      <input type="button" value="curseur" id="add_curseur" style="height:35px" onclick="UI.addcurseur(String.fromCharCode(UI.paramname),0,-5,5,0.125); UI.paramname++;" title="Ajoute un param&egrave;tre modifiable &agrave; la souris"/>
     </td>
   </tr>
 </table>
@@ -3366,7 +3366,7 @@
   <div id="assistant_tabvarfunc" style="display:none">
     &Eacute;tude de fonction (dans la console) et trac&eacute; de <br>
     <textarea rows=1 cols=3 onclick="UI.focused=this;" style="height:25px;font-size:large"
-              id="tabvarfuncname" title="Nom de fonction" rows=1>f</textarea>(
+              id="tabvarfuncname" title="Nom de fonction">f</textarea>(
     <textarea rows=1 cols=2 onclick="UI.focused=this;" style="height:25px;font-size:large"
               id="tabvarfuncvarname" title="Nom de variable, par exemple x">x</textarea>)
     :=<textarea onclick="UI.focused=this;" style="height:25px;font-size:large"
@@ -3535,8 +3535,8 @@
             <button class="bouton" onclick="UI.erase_all($id('mathoutput'))"
                     title="Placer tout les niveaux de l'historique dans la
                 corbeille">→Corbeille</button>
-            <button class="bouton" onclick="UI.restoretrash()" class="bouton" title="Restaurer les niveaux plac&eacute;s dans la corbeille">Restaure</button>
-            <button class="bouton" onclick="UI.emptytrash()" class="bouton"
+            <button class="bouton" onclick="UI.restoretrash()" title="Restaurer les niveaux plac&eacute;s dans la corbeille">Restaure</button>
+            <button class="bouton" onclick="UI.emptytrash()"
                     title="Vider la corbeille">Vide</button>
             </span>
 </div>
