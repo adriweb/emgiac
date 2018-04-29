@@ -3455,18 +3455,21 @@
 <script src="w3data.js"></script>
 <div w3-include-html="menuen.js"></div>
 <script src="FileSaver.js"></script>
-<script src="codemirror.js"></script>
-<link rel="stylesheet" href="codemirror.css">
-<link rel="stylesheet" href="show-hint.css">
-<script src="search.js"></script>
-<script src="searchcursor.js"></script>
-<script src="jump-to-line.js"></script>
-<script src="dialog.js"></script>
-<link rel="stylesheet" href="dialog.css">
+
+<!-- CodeMirror things -->
+<link rel="stylesheet" href="codemirror/codemirror.css">
+<link rel="stylesheet" href="codemirror/show-hint.css">
+<link rel="stylesheet" href="codemirror/dialog.css">
+<script src="codemirror/codemirror.js"></script>
+<script src="codemirror/search.js"></script>
+<script src="codemirror/searchcursor.js"></script>
+<script src="codemirror/jump-to-line.js"></script>
+<script src="codemirror/dialog.js"></script>
+<script src="codemirror/matchbrackets.js"></script>
+<script src="codemirror/show-hint.js"></script>
+<!-- Custom CodeMirror things -->
 <script src="xcasmode.js"></script>
 <script src="python.js"></script>
-<script src="matchbrackets.js"></script>
-<script src="show-hint.js"></script>
 <style type="text/css">
   .CodeMirror {
     border: 1px solid black;
@@ -3478,7 +3481,9 @@
     color: #666;
   }
 </style>
+
 <script src="xcas.js"></script>
+
 <script type='text/javascript'>
     // remove existing codemirror field
     prog = $id('prog');
