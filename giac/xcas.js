@@ -1846,7 +1846,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     //mh=form.outdiv_height.value;
     var cms = mh - 2 * hb; // codemirror scrollbar max height
     if (UI.focused == cmentree) cms = Math.floor(hw * .67);
-    s = 'h1,h2,h3 { display:inline; font-size:1em;}\ninput[type="number"] { width:40px;}\n .outdiv { width:' + w + 'px; max-height: ' + mh + 'px;  overflow: auto;}\n.filenamecss {width:80px;height:20px}\n.historyinput {width:' + hi + 'px;}\n.bouton{vertical-align:center; height:' + (mob ? hb : 29) + 'px;}\n.CodeMirror-scroll {height:auto; max-height:' + cms + 'px;}\n.CodeMirror {border: 1px solid black;  height:auto; min-width:' + hi + 'px;}\n  dt {font-family: monospace; color: #666;}';
+    s = 'h1,h2,h3 { display:inline; font-size:1em;}\ninput[type="number"] { width:40px;}\n .outdiv { width:' + w + 'px; max-height: ' + mh + 'px;  overflow: auto;}\n.filenamecss {width:80px;height:20px}\n#mathoutput tbody {margin-bottom: 10px;display: inherit;}\n.historymovebtn {height: 18px;width: 28px;line-height: 0 !important;}\n.historyinput {width:' + hi + 'px; min-height: 28px !important; font-size: 16px !important; font-family: Menlo, Monaco, Consolas, "Courier New", monospace !important; }\n.bouton{vertical-align:center; height:' + (mob ? hb : 29) + 'px;}\n.CodeMirror-scroll {height:auto; max-height:' + cms + 'px;}\n.CodeMirror {border: 1px solid black;  height:auto; min-width:' + hi + 'px;}\n  dt {font-family: monospace; color: #666;}';
     //console.log(mh,cms);// Module.print(s);
     //Module.print(mh,cms);
     var st = $id('document_style');
@@ -2117,20 +2117,20 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     var s = '<tr onmouseenter="UI.switch_buttons(this,true)" onmouseleave="if (!UI.fixeddel) UI.switch_buttons(this,false)">';
     // s += '<td>&bull;</td>'; // f=f.nextSibling in switch_buttons
     if (newline) {
-      s += '<td><button style="width:20px;height:28px;" onclick="UI.moveup(this)" title="';
+      s += '<td style="display: inline-grid"><button class="btn btn-default" onclick="UI.moveup(this)" title="';
       s += UI.langue == -1 ? 'd&eacute;placer vers le haut' : 'move level up';
-      s += '">↑</button><br><button style="width:20px;height:28px;" onclick="UI.movedown(this)" title="';
+      s += '">↑</button><br><button class="btn btn-default historymovebtn" onclick="UI.movedown(this)" title="';
       s += UI.langue == -1 ? 'd&eacute;placer vers la bas' : 'move level down';
       s += '">↓</button></td><td></td>';
     }
     else {
-      s += '<td><button style="width:20px;height:16px;" onclick="UI.moveup(this)" title="';
+      s += '<td style="display: inline-grid"><button class="btn btn-default historymovebtn" onclick="UI.moveup(this)" title="';
       s += UI.langue == -1 ? 'd&eacute;placer vers le haut' : 'move level up';
-      s += '">↑</button><button style="width:20px;height:16px;" onclick="UI.movedown(this)" title="';
+      s += '">↑</button><button class="btn btn-default historymovebtn" onclick="UI.movedown(this)" title="';
       s += UI.langue == -1 ? 'd&eacute;placer vers la bas' : 'move level down';
-      s += '">↓</button></td><td><button style="width:20px;height:16px;" onclick="for (var i=0;i<5;i++) UI.moveup(this)" title="';
+      s += '">↓</button></td><td style="display: inline-grid"><button class="btn btn-default historymovebtn" onclick="for (var i=0;i<5;i++) UI.moveup(this)" title="';
       s += UI.langue == -1 ? 'd&eacute;placer de 5 vers le haut' : 'move level 5 times up';
-      s += '">↑↑</button><button style="width:20px;height:16px;" onclick="for (var i=0;i<5;i++) UI.movedown(this)" title="';
+      s += '">↑↑</button><button class="btn btn-default historymovebtn" onclick="for (var i=0;i<5;i++) UI.movedown(this)" title="';
       s += UI.langue == -1 ? 'd&eacute;placer de 5 vers la bas' : 'move level 5 times down';
       s += '">↓↓</button></td>';
     }
@@ -2921,13 +2921,14 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     var is_gr2d = mathmlout.substr(0, 5) == 'gr2d(';
     var s = UI.move_buttons(!UI.qa);
     var delbut = false;
+    var td_css = 'style="left: 4px;position: relative;"';
     if (textin.length && textin.charCodeAt(0) == 63)
-      s += '<td colspan="2">' + UI.renderhelp(textout, textin.substr(1, textin.length - 1)) + '</td><td>';
+      s += '<td '+td_css+' colspan="2">' + UI.renderhelp(textout, textin.substr(1, textin.length - 1)) + '</td><td>';
     else {
       if (UI.qa)
-        s += '<td>';
+        s += '<td '+td_css+' >';
       else
-        s += '<td colspan=2>';
+        s += '<td colspan=2 '+td_css+' >';
       s += '<textarea class="historyinput" ';
       if (is_svg && UI.qa)
         s += 'rows=8 style="font-size:large"';
