@@ -3994,7 +3994,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
   pixon_draw: function (id, s) {
     var v = eval(s);
     if (!Array.isArray(v)) return;
-    console.log(v[0], v.length);
+    //console.log(v[0], v.length);
     var canvas = $id(id);
     var l = v.length, w = 0, h = 0;
     if (l < 2) return;
@@ -4002,9 +4002,13 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     for (var k = 1; k < l; k++) {
       var cur = v[k];
       var x = cur[0], y = cur[1];
-      if (cur.length == 4) {
+      if (cur.length==3 && typeof cur[2]!="number")
+	x+=100;
+      if (cur.length==4) {
         var tmp = cur[3];
-        if (tmp > 0) y += tmp; else x -= tmp;
+	if (typeof tmp=="number"){
+          if (tmp > 0) y += tmp; else x -= tmp;
+	} else x+=100;
       }
       //console.log(cur,x,y);
       if (x > w) w = x;
@@ -4024,11 +4028,23 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
         // cur[0]=x, cur[1]=y, cur[2]=color, cur[3]=w if +, h if -
         var x = cur[0] * scale;
         var y = cur[1] * scale;
+	if (cl>2 && typeof cur[2]=="string"){
+	  console.log(cur[2]);
+	  ctx.font = '16px serif';
+	  ctx.fillStyle = 'black';
+	  ctx.fillText(cur[2],x,y,100);
+	  continue;
+	}
         ctx.fillStyle = (cl > 2) ? UI.turtle_color(cur[2]) : 'black';
         if (cl < 4) {
           ctx.fillRect(x, y, scale, scale);
           continue;
         }
+	if (typeof cur[3]=="string"){
+	  ctx.font = '16px serif';
+	  ctx.fillText(cur[3],x,y,100);
+	  continue;
+	}
         var h = cur[3] * scale, w = scale;
         if (h < 0) {
           w = -h;
