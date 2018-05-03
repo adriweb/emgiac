@@ -26,4 +26,4 @@ cp      input_lexer.ll input_lexer.cc sym2poly.cc gausspol.cc threaded.cc \
   TmpFGLM.H TmpLESystemSolver.H \
   path.h lexer.h \
   input_lexer.h input_parser.h aspen_translate.h \
-  ~/emgiac/giac
+  /shared/emgiac/giac
