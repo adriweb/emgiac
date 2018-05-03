@@ -2619,12 +2619,16 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       if (out[0] == '"')
         s = 'text ' + out;
       else {
-        if (UI.prettyprint) {
-          if (UI.usemathjax)
-            s = UI.caseval_noautosimp('latex(quote(' + out + '))');
-          else
-            s = UI.caseval_noautosimp('mathml(quote(' + out + '),1)');
-        } else s = out;
+	if (out.substr(0, 10) == 'GIAC_ERROR')
+	  s=' '+out+' ';
+	else {
+          if (UI.prettyprint ) {
+            if (UI.usemathjax)
+              s = UI.caseval_noautosimp('latex(quote(' + out + '))');
+            else
+              s = UI.caseval_noautosimp('mathml(quote(' + out + '),1)');
+          } else s = out;
+	}
       }
     }
     s = UI.addinput(textin, out, s);
