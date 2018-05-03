@@ -4006,13 +4006,18 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     for (var k = 1; k < l; k++) {
       var cur = v[k];
       var x = cur[0], y = cur[1];
-      if (cur.length==3 && typeof cur[2]!="number")
+      if (cur.length==3 && typeof cur[2]!="number"){
 	x+=100;
+	y+=16;
+      }
       if (cur.length==4) {
         var tmp = cur[3];
 	if (typeof tmp=="number"){
           if (tmp > 0) y += tmp; else x -= tmp;
-	} else x+=100;
+	} else {
+	  x+=100;
+	  y+=16;
+	}
       }
       //console.log(cur,x,y);
       if (x > w) w = x;
@@ -4036,7 +4041,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
 	  console.log(cur[2]);
 	  ctx.font = '16px serif';
 	  ctx.fillStyle = 'black';
-	  ctx.fillText(cur[2],x,y,100);
+	  ctx.fillText(cur[2],x,y+16,100);
 	  continue;
 	}
         ctx.fillStyle = (cl > 2) ? UI.turtle_color(cur[2]) : 'black';
@@ -4046,7 +4051,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
         }
 	if (typeof cur[3]=="string"){
 	  ctx.font = '16px serif';
-	  ctx.fillText(cur[3],x,y,100);
+	  ctx.fillText(cur[3],x,y+16,100);
 	  continue;
 	}
         var h = cur[3] * scale, w = scale;
