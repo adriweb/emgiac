@@ -50,7 +50,7 @@ td p{margin:0px;}
 .part{margin:2ex auto;text-align:center}
 .lstlisting{font-family:monospace;white-space:pre;margin-right:auto;margin-left:0pt;text-align:left}
 </style>
-<script language="javascript"> 
+<script language="javascript">
     var ua = navigator.userAgent.toLowerCase();
     if (ua.indexOf('firefox') === -1 && ua.indexOf('safari') === -1) {
         var script = document.createElement("script");
@@ -9547,19 +9547,9 @@ Module['onRuntimeInitialized']=function(){ console.log('UI is ready'); Module.re
   }
   var script = document.createElement("script");
   script.type = "text/javascript";
-  var webAssemblyAvailable = false;
-  if (Boolean(window.chrome)){
-    if (!UI.detectmob()) webAssemblyAvailable =  window.location.href.substr(0,4)!='file';
-  }
-  else {
-    var ua = window.navigator.userAgent;
-    var old_ie = ua.indexOf('MSIE ');
-    var new_ie = ua.indexOf('Trident/');
-    if (!UI.detectmob() && old_ie<=-1 && new_ie<=-1)
-      webAssemblyAvailable =!!window.WebAssembly;
-  }
+  var webAssemblyAvailable = !!window.WebAssembly;
   if (webAssemblyAvailable){
-`<    var ck=UI.readCookie('xcas_wasm');
+    var ck=UI.readCookie('xcas_wasm');
     if (ck)
       webAssemblyAvailable=(ck=='1');
   }
