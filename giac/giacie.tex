@@ -67,12 +67,10 @@ var Module = { preRun: [], postRun: []};
    }
  };
  window.onload = function(e){
-  var ua = window.navigator.userAgent;
-  var old_ie = ua.indexOf('MSIE ');
-  var new_ie = ua.indexOf('Trident/');
-  if ((old_ie > -1) || (new_ie > -1) || window.chrome){
-     UI.usemathjax=true;
-     alert("Your browser does not support MathML, using MathJax for 2d rendering. Consider switching to Firefox for better rendering and faster results");
+  var ua = navigator.userAgent.toLowerCase();
+  if (ua.indexOf('firefox') === -1 && ua.indexOf('safari') === -1) {
+    UI.usemathjax=true;
+    alert("Your browser does not support MathML, using MathJax for 2d rendering. Consider switching to Firefox or Safari for better rendering and faster results");
   }
   if (UI.usemathjax){
     var script = document.createElement("script");
@@ -154,12 +152,10 @@ var Module = { preRun: [], postRun: []};
    }
  };
  window.onload = function(e){
-  var ua = window.navigator.userAgent;
-  var old_ie = ua.indexOf('MSIE ');
-  var new_ie = ua.indexOf('Trident/');
-  if ((old_ie > -1) || (new_ie > -1) || window.chrome){
-     UI.usemathjax=true;
-     alert("Your browser does not support MathML, using MathJax for 2d rendering. Consider switching to Firefox for better results");
+  var ua = navigator.userAgent.toLowerCase();
+  if (ua.indexOf('firefox') === -1 && ua.indexOf('safari') === -1) {
+    UI.usemathjax=true;
+    alert("Your browser does not support MathML, using MathJax for 2d rendering. Consider switching to Firefox or Safari for better rendering and faster results");
   }
   if (UI.usemathjax){
     var script = document.createElement("script");

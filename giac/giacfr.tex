@@ -12,17 +12,13 @@
 \ifhevea 
 \newcommand\giacmathjax{
 \usepackage[auto]{mathjax}
-\renewcommand{\jax@meta}{\begin{rawhtml}<script language="javascript"> 
-var ua = window.navigator.userAgent;  
-var old_ie = ua.indexOf('MSIE ');  
-var new_ie = ua.indexOf('Trident/');  
-if ((old_ie > -1) || (new_ie > -1) || Boolean(window.chrome)){
- (function () {
-  var script = document.createElement("script");
-  script.type = "text/javascript";
-  script.src  = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML";
-  document.getElementsByTagName("head")[0].appendChild(script);
-})();
+\renewcommand{\jax@meta}{\begin{rawhtml}<script language="javascript">
+var ua = navigator.userAgent.toLowerCase();
+if (ua.indexOf('firefox') === -1 && ua.indexOf('safari') === -1) {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML";
+    document.getElementsByTagName("head")[0].appendChild(script);
 }
 </script>
 \end{rawhtml}}
@@ -408,14 +404,10 @@ Module['onRuntimeInitialized']=function(){ console.log('UI is ready'); Module.re
    }
  };
  window.onload = function(e){
-   var isFirefox = typeof InstallTrigger !== 'undefined';   // Firefox 1.0+
-   var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
-  var ua = window.navigator.userAgent;
-  var old_ie = ua.indexOf('MSIE ');
-  var new_ie = ua.indexOf('Trident/');
-  if ((!isFirefox && !isSafari) || (old_ie > -1) || (new_ie > -1) || window.chrome){
-     UI.usemathjax=true;
-     alert("Votre navigateur ne supporte MathML, on utilise MathJax pour l'affichage 2d.  Les calculs seraient plus rapides et les resultats seraient mieux affiches avec Firefox.");
+  var ua = navigator.userAgent.toLowerCase();
+  if (ua.indexOf('firefox') === -1 && ua.indexOf('safari') === -1) {
+    UI.usemathjax=true;
+    alert("Votre navigateur ne supporte MathML, on utilise MathJax pour l'affichage 2d.  Les calculs seraient plus rapides et les resultats seraient mieux affiches avec Firefox ou Safari.");
   }
   if (UI.usemathjax){
     var script = document.createElement("script");
