@@ -33,7 +33,7 @@ if ((old_ie > -1) || (new_ie > -1) || Boolean(window.chrome)){
 }
 {\loadgiaccontrol
 \loadgiacscriptstart
-\loadgiacscript{"file:///usr/share/giac/doc/"}
+\loadgiacscript["file:///usr/share/giac/doc/"]
 \loadgiacscriptend
 } 
 \newenvironment{giacjshere}[1]["max-height: 500px; overflow:auto"]
@@ -41,7 +41,7 @@ if ((old_ie > -1) || (new_ie > -1) || Boolean(window.chrome)){
 }
 {\loadgiaccontrol
 \loadgiacscriptstart
-\loadgiacscript{""}
+\loadgiacscript[""]
 \loadgiacscriptend
 } 
 \newenvironment{giacparijs}[1]["max-height: 500px; overflow:auto"]
@@ -61,7 +61,7 @@ if ((old_ie > -1) || (new_ie > -1) || Boolean(window.chrome)){
 {
 \loadgiaccontrol
 \loadgiacscriptstart
-\loadgiacscript{"https://www-fourier.ujf-grenoble.fr/~parisse/"}
+\loadgiacscript["https://www-fourier.ujf-grenoble.fr/~parisse/"]
 \loadgiacscriptend
 } 
 \newenvironment{giacparijsonline}[1]["max-height: 500px; overflow:auto"]
@@ -309,7 +309,7 @@ Module['onRuntimeInitialized']=function(){ console.log('UI is ready'); Module.re
    //UI.render_canvas(nextSibling);  
   },
   giaceval:function(text){
-     if (!Module.ready){ window.setTimeout(UI.giaceval,100,text); return "Not ready";}
+     if (!Module.ready){ window.setTimeout(UI.giaceval,100,text); return " Not ready ";}
      var dogiaceval=Module.cwrap('caseval',  'string', ['string']);
      return dogiaceval(text);
   },
