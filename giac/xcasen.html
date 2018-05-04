@@ -3564,6 +3564,7 @@
                 if (Module.htmlcheck) {
                     // These replacements are necessary if you render to raw HTML
                     text = '' + text;
+                    console.log(text);
                     text = text.replace(/&/g, "&amp;");
                     text = text.replace(/</g, "&lt;");
                     text = text.replace(/>/g, "&gt;");
