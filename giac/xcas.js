@@ -2056,10 +2056,21 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     else
       tmp.style.display = 'none'
   },
+  remove_extension: function(name){
+    var s=name.length,i;
+    for (i=s-1;i>=0;--i){
+      if (name[i]=='.')
+	break;
+    }
+    if (i>0)
+      return name.substr(0,i);
+    return name;
+  },
   loadfile: function (oFiles) {
     var nFiles = oFiles.length;
     for (var nFileId = 0; nFileId < nFiles; nFileId++) {
-      // Module.print(oFiles[nFileId].name);
+      console.log('load',oFiles[nFileId].name);
+      $id('outputfilename').innerHTML=UI.remove_extension(oFiles[nFileId].name);
       var reader = new FileReader();
       reader.readAsText(oFiles[nFileId]);
       var s;
