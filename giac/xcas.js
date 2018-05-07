@@ -2840,6 +2840,15 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     }
     return s;
   },
+  not_empty:function(txt){
+    var s=txt.length;
+    // console.log(s);
+    for (var i=0;i<s;++i){
+      if (txt[i]!=' ')
+	return true;
+    }
+    return false;
+  },
   prepare_cm: function (txt, h, cm) {
     var pos = txt.selectionStart;
     var i, s = txt.value, l = 0, c = 0;
@@ -2875,7 +2884,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
         // Enter inserts \n except on empty line (two Enter without indent reevals)
         var start = cm.getCursor('from');
         var end = cm.getCursor('to');
-        if (end.line != start.line || end.ch != start.ch || ((start.line > 0 || start.ch > 0) && cm.getLine(end.line).length > 0)) {
+        if (end.line != start.line || end.ch != start.ch || ((start.line > 0 || start.ch > 0) && UI.not_empty(cm.getLine(end.line)))) {
           UI.insert(cm, '\n');
           return;
         }
