@@ -3580,6 +3580,7 @@
                     element.innerHTML += text; // element.value += text + "\n";
                     element.scrollTop = 99999; // focus on bottom
                 } else htmlbuffer += text;
+              element.scrollIntoView();
             };
         })(),
         printErr: function (text) {
