@@ -2057,14 +2057,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       tmp.style.display = 'none'
   },
   remove_extension: function(name){
-    var s=name.length,i;
-    for (i=s-1;i>=0;--i){
-      if (name[i]=='.')
-	break;
-    }
-    if (i>0)
-      return name.substr(0,i);
-    return name;
+    return name.split('.')[0];
   },
   loadfile: function (oFiles) {
     var nFiles = oFiles.length;
