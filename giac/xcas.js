@@ -3200,15 +3200,14 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     s = "";
     for (i = 0; i < l; i += 2) {
       var name = v[i];
-      var value = v[i + 1], nl = value.length;
-      nl = Math.floor(nl / 10);
-      if (nl > 5) nl = 5;
+      var value = v[i + 1], nl=UI.count_newline(value)+1;
+      if (nl>5) nl=5;
       s += '<button class="bouton" onclick="UI.insert(UI.focused,\'' + name + '\')">' + name + '</button>';
       //console.log(value);
       if (value.length >= 6 && value.substr(0, 6) == "\n<math")
         s += value;
       else
-        s += '<textarea readonly cols=10 ' + 'style="height:' + (20 + 16 * nl) + 'px; font-size:large">' + value + "</textarea>";
+        s += '<textarea readonly cols=30 ' + 'style="height:' + (20 + 16 * nl) + 'px; font-size:large">' + value + "</textarea>";
     }
     //console.log(s);
     f.innerHTML = '<br>' + s;
