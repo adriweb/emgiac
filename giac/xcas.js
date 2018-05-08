@@ -1101,7 +1101,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
           if (txt == "for" || txt == "while" || txt == "if" || txt == "pour" || txt == "tantque" || txt == "si" || txt == "def" || txt == "fonction" || txt == "function")
             tst = true;
         }
-        if (tst && (end.line != start.line || end.ch != start.ch || ((start.line > 0 || start.ch > 0) && cm.getLine(end.line).length > 0)))
+        if (tst && (end.line != start.line || end.ch != start.ch || ((start.line > 0 || start.ch > 0) && UI.not_empty(cm.getLine(end.line)))))
           UI.insert(cm, '\n');
         else
         //UI.set_editline(cmentree,false);
