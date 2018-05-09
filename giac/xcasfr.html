@@ -465,11 +465,9 @@
         </span>
 <button id="loadbutton_cookie" class="bouton" title="Cliquer ici pour charger une session sauvegard&eacute;e" onclick="$id('loadfile_cookie').innerHTML=UI.listCookies();">Charge</button>
 <span id="loadfile_cookie"></span>
-<button id="loadbutton_file" class="bouton" title="Cliquer ici pour ajouter &agrave; la session courante le contenu d'une session sauvegard&eacute;e" onclick='$id("loadfile").reset();$id("loadfile").style.display="block";'>Charger</button>
-<form id="loadfile" style="display:none">
-  <input id="loadfileinput" accept=".xw" class="bouton" type="file" title="Parcourir" onchange="UI.loadfile(this.files);$id('loadfile').style.display='none'">
-  <input type="submit" class="bouton" value="&#x2705;" style="display:none">
-  <input type="text" class="bouton" value="&#x274C;" title="Annuler" onclick="form.style.display='none'">
+<form id="loadbutton_file" style="display:none">
+  <label for="loadfileinput">Charger</label>
+  <input id="loadfileinput" accept=".xw" type="file" title="Cliquer ici pour charger une session sauvegard&eacute;e" onchange="UI.loadfile(this.files);this.value=''">
 </form>
 <span id="help" style="display:none">
         <ul>
