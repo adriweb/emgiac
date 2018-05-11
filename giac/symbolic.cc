@@ -407,15 +407,14 @@ namespace giac {
       if (pui.type==_SYMB || pui.type==_FRAC || pui.type==_CPLX){
 	add_print(s,arg,contextptr);
 	if (argpar) s +=')';
+#ifdef GIAC_HAS_STO_38
+	s += '^';
+#else
 	if (python_compat(contextptr))
 	  s += "**";
-	else {
-#ifdef GIAC_HAS_STO_38
-	  s += '^';
-#else
+	else 
 	  s += __pow.s;
 #endif
-	}
 	s += '(';
 	add_print(s,pui,contextptr);
 	s += ')';
@@ -427,7 +426,10 @@ namespace giac {
 #ifdef GIAC_HAS_STO_38
 	s += '^';
 #else
-	s += __pow.s;
+	if (python_compat(contextptr))
+	  s += "**";
+	else
+	  s += __pow.s;
 #endif
 	return add_print(s,pui,contextptr);
       }
@@ -681,8 +683,32 @@ namespace giac {
     gen e;
     if (quotearg)
       e=feuillev.front();
-    else
-      e=feuillev.front().eval(level,contextptr);
+    else {
+      gen * feuillevfront=&feuillev.front();
+      // avoid self-modifying code in multi-assign
+      if (feuilleback.type==_VECT && feuillevfront->type==_VECT &&feuilleback._VECTptr->size()==feuillevfront->_VECTptr->size()){
+	gen tmp;
+	e =gen(*feuillevfront->_VECTptr,feuillevfront->subtype);
+	iterateur it=e._VECTptr->begin(),itend=e._VECTptr->end();
+	for (;it!=itend;++it){
+	  if (it->in_eval(level,tmp,contextptr))
+	    *it=tmp;
+	  else {
+	    if (it->type==_VECT)
+	      *it=gen(*it->_VECTptr,tmp.subtype);
+	  }
+	}
+      }
+      else {
+	// e=feuillev.front().eval(level,contextptr);
+	if (!feuillevfront->in_eval(level,e,contextptr)){
+	  if (feuillevfront->type==_VECT) // avoid self-modifying code
+	    e=gen(*feuillevfront->_VECTptr,feuillevfront->subtype);
+	  else
+	    e=*feuillevfront;
+	}
+      }
+    }
     if (b)
       showpoint=true;
     if (e.type==_SYMB && e._SYMBptr->sommet==at_pnt && e._SYMBptr->feuille.type==_VECT && e._SYMBptr->feuille._VECTptr->size()==2 && (contextptr?!contextptr->previous:!protection_level) )

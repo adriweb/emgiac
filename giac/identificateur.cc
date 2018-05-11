@@ -790,6 +790,8 @@ namespace giac {
       tmp.subtype=_GLOBAL__EVAL;
       break;
     case _VECT:
+      if (lidnt(tmp).empty())
+	return g;
       tmp=apply(tmp,globalize);
       break;
     case _SYMB:
@@ -1076,12 +1078,21 @@ namespace giac {
       if (storcl_38!=NULL && !No38Lookup && abs_calc_mode(contextptr)==38 && storcl_38(evaled,NULL,id_name,undef,false,contextptr, NULL, true)) 
 	return true;
       const context * cur=contextptr;
+      int pythoncompat=python_compat(contextptr)?2:0;
       for (;cur->previous;cur=cur->previous){
 	sym_tab::const_iterator it=cur->tabptr->find(id_name);
 	if (it!=cur->tabptr->end()){
 	  if (!level || !it->second.in_eval(level,evaled,contextptr->globalcontextptr))
 	    evaled=it->second;
 	  return true;
+	}
+	if (pythoncompat){
+	  --pythoncompat;
+	  if (!pythoncompat){
+	    while (cur->previous) 
+	      cur=cur->previous;
+	    break;
+	  }
 	}
       }
       // now at global level

@@ -287,19 +287,27 @@ namespace giac {
 
 
   gen remove_at_pnt(const gen & e){
-    if (e.type==_VECT && e.subtype==_GGB__VECT){
+    int t=e.type;
+    if (t==_VECT && e.subtype==_GGB__VECT){
       if (e._VECTptr->size()==2)
 	return e._VECTptr->front()+cst_i*e._VECTptr->back();
       if (e._VECTptr->size()==3)
 	return change_subtype(e,_POINT__VECT);
     }
-    if (e.type==_SYMB && e._SYMBptr->sommet==at_pnt){
-      gen & f = e._SYMBptr->feuille;
+    if (t==_SYMB && e._SYMBptr->sommet==at_pnt){
+      const gen & f = e._SYMBptr->feuille;
+#if 1
+      if (f.type==_VECT){
+	const vecteur & v = *f._VECTptr;
+	if (!v.empty())
+	  return v.front();
+      }
+#else
       if (f.type==_VECT){
 	vecteur & v = *f._VECTptr;
+	/*
 	int s=int(v.size());
 	if (s){
-	  /*
 	    if (s>1 && v[1].type==_VECT){
 	    gen & v1=v[1];
 	    if (v1.type==_VECT && v1._VECTptr->size()>1){
@@ -320,6 +328,7 @@ namespace giac {
 	  return v.front();
 	}
       }
+#endif
       return gensizeerr("Bad pnt argument");
     }
     return e;
@@ -2300,7 +2309,7 @@ namespace giac {
     S+=']';
   }
 
-  int pixon_size=2; // global size, used in all sessions
+  int pixon_size=1; // global size, used in all sessions
   // pixel (i,j,[color])
   gen _pixon(const gen & a,GIAC_CONTEXT){
     gen args(a);
@@ -5023,28 +5032,55 @@ namespace giac {
       identificateur tt=*v[1]._IDNTptr;
       gen vparameq(v[0]);
 #if 1
+      bool numereq=false,approxafter=false;
       if (v.size()>6 && !is_undef(v[6])){
-	v[0]=vparameq=v[6];
 	if (is_constant_wrt(vparameq,v[1],contextptr))
 	  v[1]=t__IDNT_e;
 	v[2]=minus_inf;
 	v[3]=plus_inf;
+	if (has_num_coeff(v[6]))
+	  approxafter=true;
+	v[0]=vparameq=exact(v[6],contextptr);
 	tt=*v[1]._IDNTptr;
+	numereq=true;
+	if (has_num_coeff(p))
+	  approxafter=true;
       }
 #endif
-      gen tangeant(derive(vparameq,tt,contextptr));
-      if (is_undef(tangeant))
-	return tangeant;
       gen t_found=v[2];
 #ifndef NO_STDEXCEPT
       try {
 #endif
-	gen eq=scalar_product(tangeant,p-v[0],contextptr);
-	if (is_undef(eq)) return eq;
-	if (is_inf(v[2]) || is_inf(v[3]))
-	  eq=exact(eq,contextptr);
-	// should expand and assume that tt is real
-	rewrite_with_t_real(eq,v[1],contextptr);
+	gen eq;
+	if (numereq){
+	  gen xy,d,x,y,mx,my,d1,x1,y1;
+	  gen tmp=_fxnd(vparameq,contextptr);
+	  if (tmp.type!=_VECT)
+	    numereq=false;
+	  else {
+	    xy=tmp._VECTptr->front(); d=tmp._VECTptr->back();
+	    d1=derive(d,tt,contextptr);
+	    if (is_zero(im(d1,contextptr))){
+	      reim(xy,x,y,contextptr);
+	      reim(exact(p,contextptr),mx,my,contextptr);
+	      x1=derive(x,tt,contextptr);
+	      y1=derive(y,tt,contextptr);
+	      eq=_numer(d*((x1*d-d1*x)*mx+(y1*d-d1*y)*my)+(x*x+y*y)*d1-d*(x1*x+y1*y),contextptr);
+	    }
+	    else numereq=false;
+	  }
+	}
+	if (!numereq){
+	  gen tangeant(derive(vparameq,tt,contextptr));
+	  if (is_undef(tangeant))
+	    return tangeant;
+	  eq=scalar_product(tangeant,p-v[0],contextptr);
+	  if (is_undef(eq)) return eq;
+	  if (is_inf(v[2]) || is_inf(v[3]))
+	    eq=exact(eq,contextptr);
+	  // should expand and assume that tt is real
+	  rewrite_with_t_real(eq,v[1],contextptr);
+	}
 	vecteur sol;
 	if (has_num_coeff(eq)){
 	  gen rep=re(p,contextptr);
@@ -5064,8 +5100,13 @@ namespace giac {
 	    sol=gen2vecteur(in_fsolve(eqv,contextptr));
 	  }
 	}
-	else
-	  sol=solve(eq,v[1],0,contextptr);
+	else {
+	  if (approxafter && lvarxwithinv(eq,tt,contextptr).size()<2) {
+	    sol=gen2vecteur(_proot(makesequence(evalf(eq,1,contextptr),tt),contextptr));//eq=evalf(eq,1,contextptr);
+	  }
+	  else
+	    sol=solve(eq,v[1],0,contextptr);
+	}
 	if (calc_mode(contextptr)==1 && sol.empty())
 	  return undef;
 	sol.push_back(v[3]);
@@ -10426,8 +10467,10 @@ namespace giac {
     if ( (a.type!=_VECT) || (a._VECTptr->size()<2))
       return default_color(contextptr);
     gen c=a._VECTptr->back(),b;
-    if (a._VECTptr->size()==3 && c.type==_INT_ && a._VECTptr->front().type==_INT_ && (*a._VECTptr)[1].type==_INT_){
-      return 256*(256*a._VECTptr->front()+(*a._VECTptr)[1])+c;
+    if (a._VECTptr->size()==3 && c.type==_INT_ && (b=a._VECTptr->front()).type==_INT_ && (*a._VECTptr)[1].type==_INT_){
+      if (c.val==0 && b.val==0)
+	return 256*(*a._VECTptr)[1];
+      return 256*(256*giacmax(b.val,1)+(*a._VECTptr)[1])+c;
     }
     if (a._VECTptr->size()>2)
       b=vecteur(a._VECTptr->begin(),a._VECTptr->end()-1);

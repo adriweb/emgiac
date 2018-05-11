@@ -1445,7 +1445,8 @@ extern "C" void Sleep(unsigned int miliSecond);
 
   int array_start(GIAC_CONTEXT){
     if (contextptr && contextptr->globalptr){
-      return (!contextptr->globalptr->_python_compat_ && (contextptr->globalptr->_xcas_mode_ || absint(contextptr->globalptr->_calc_mode_)==38))?1:0;
+      bool hp38=absint(contextptr->globalptr->_calc_mode_)==38;
+      return (!contextptr->globalptr->_python_compat_ && (contextptr->globalptr->_xcas_mode_ || hp38))?1:0;
     }
     return (!_python_compat_ && (_xcas_mode_ || absint(_calc_mode_)==38))?1:0;
   }
@@ -3860,7 +3861,13 @@ extern "C" void Sleep(unsigned int miliSecond);
 		     _all_trig_sol_(false),
 #ifdef WITH_MYOSTREAM
 		     _ntl_on_(true),
-		     _lexer_close_parenthesis_(true),_rpn_mode_(false),_try_parse_i_(true),_specialtexprint_double_(false),_atan_tan_no_floor_(false),_keep_acosh_asinh_(false),_keep_algext_(false),_python_compat_(false),_angle_mode_(0), _bounded_function_no_(0), _series_flags_(0x3),_step_infolevel_(0),_default_color_(FL_BLACK), _epsilon_(1e-12), _proba_epsilon_(1e-15),  _show_axes_(1),_spread_Row_ (-1), _spread_Col_ (-1),_logptr_(&my_CERR),_prog_eval_level_val(1), _eval_level(DEFAULT_EVAL_LEVEL), _rand_seed(123457),_last_evaled_function_name_(0),_currently_scanned_(""),_last_evaled_argptr_(0),_max_sum_sqrt_(3),_max_sum_add_(100000),_total_time_(0),_evaled_table_(0),_extra_ptr_(0),_series_variable_name_('h'),_series_default_order_(5),
+		     _lexer_close_parenthesis_(true),_rpn_mode_(false),_try_parse_i_(true),_specialtexprint_double_(false),_atan_tan_no_floor_(false),_keep_acosh_asinh_(false),_keep_algext_(false),_python_compat_(false),_angle_mode_(0), _bounded_function_no_(0), _series_flags_(0x3),_step_infolevel_(0),_default_color_(FL_BLACK), _epsilon_(1e-12), _proba_epsilon_(1e-15),  _show_axes_(1),_spread_Row_ (-1), _spread_Col_ (-1),_logptr_(&my_CERR),_prog_eval_level_val(1), _eval_level(DEFAULT_EVAL_LEVEL), _rand_seed(123457),_last_evaled_function_name_(0),_currently_scanned_(""),_last_evaled_argptr_(0),_max_sum_sqrt_(3),
+#ifdef GIAC_HAS_STO_38 // Prime sum(x^2,x,0,100000) crash on hardware	
+		     _max_sum_add_(10000),
+#else
+		     _max_sum_add_(100000),
+#endif
+		     _total_time_(0),_evaled_table_(0),_extra_ptr_(0),_series_variable_name_('h'),_series_default_order_(5),
 #else
 		     _ntl_on_(true),
 		     _lexer_close_parenthesis_(true),_rpn_mode_(false),_try_parse_i_(true),_specialtexprint_double_(false),_atan_tan_no_floor_(false),_keep_acosh_asinh_(false),_keep_algext_(false),_python_compat_(false),_angle_mode_(0), _bounded_function_no_(0), _series_flags_(0x3),_step_infolevel_(0),_default_color_(FL_BLACK), _epsilon_(1e-12), _proba_epsilon_(1e-15),  _show_axes_(1),_spread_Row_ (-1), _spread_Col_ (-1), 
@@ -3869,7 +3876,13 @@ extern "C" void Sleep(unsigned int miliSecond);
 #else
 		     _logptr_(&CERR), 
 #endif
-		     _prog_eval_level_val(1), _eval_level(DEFAULT_EVAL_LEVEL), _rand_seed(123457),_last_evaled_function_name_(0),_currently_scanned_(""),_last_evaled_argptr_(0),_max_sum_sqrt_(3),_max_sum_add_(100000),_total_time_(0),_evaled_table_(0),_extra_ptr_(0),_series_variable_name_('h'),_series_default_order_(5)
+		     _prog_eval_level_val(1), _eval_level(DEFAULT_EVAL_LEVEL), _rand_seed(123457),_last_evaled_function_name_(0),_currently_scanned_(""),_last_evaled_argptr_(0),_max_sum_sqrt_(3),
+#ifdef GIAC_HAS_STO_38 // Prime sum(x^2,x,0,100000) crash on hardware	
+		     _max_sum_add_(10000),
+#else
+		     _max_sum_add_(100000),
+#endif
+		     _total_time_(0),_evaled_table_(0),_extra_ptr_(0),_series_variable_name_('h'),_series_default_order_(5)
 #endif
   { 
     _pl._i_sqrt_minus1_=1;
@@ -5681,6 +5694,13 @@ unsigned int ConvertUTF8toUTF16 (
 	instring=!instring;
       if (instring)
 	continue;
+      if (curch==',' && pos<int(cur.size()-1)){
+	char nextch=cur[pos+1];
+	if (nextch=='}' || nextch==']' || nextch==')'){
+	  cur.erase(cur.begin()+pos);
+	  continue;
+	}
+      }
       if (curch=='}' && prevch=='{'){
 	cur=cur.substr(0,pos-1)+"table()"+cur.substr(pos+1,cur.size()-pos-1);
 	continue;
@@ -5690,8 +5710,15 @@ unsigned int ConvertUTF8toUTF16 (
 	continue;
       }
       if (curch==':' && pos<int(cur.size())-1 && cur[pos+1]!='=' && cur[pos+1]!=';'){
-	int posif=cur.find("if ");
-	if (posif>=0 && posif<pos){
+	int posif=cur.find("if "),curpos,cursize=int(cur.size()),count=0;
+	// check is : for slicing?
+	for (curpos=pos+1;curpos<cursize;++curpos){
+	  if (cur[curpos]=='[')
+	    ++count;
+	  if (cur[curpos]==']')
+	    --count;
+	}
+	if (count==0 && posif>=0 && posif<pos){
 	  cur[pos]=')';
 	  cur.insert(cur.begin()+posif+3,'(');
 	  continue;
@@ -5762,29 +5789,86 @@ unsigned int ConvertUTF8toUTF16 (
 
   static void python_import(string & cur,int cs,int posturtle,int poscmath,int posmath,int posnumpy,GIAC_CONTEXT){
     if (posnumpy>=0 && posnumpy<cs){
+      static bool alertnum=true;
       // add python numpy shortcuts
-      cur += "mat:=matrix;arange:=range;resize:=redim;shape:=dim;conjugate:=conj;full:=matrix;eye:=idn;ones(n,c):=matrix(n,c,1);reshape(m,n,c):=matrix(n,c,flatten(m));";
-      alert("mat:=matrix;arange:=range;resize:=redim;shape:=dim;conjugate:=conj;full:=matrix;eye:=idn;ones(n,c):=matrix(n,c,1);reshape(m,n,c):=matrix(n,c,flatten(m));",contextptr);
+      cur += "mat:=matrix:;arange:=range:;resize:=redim:;shape:=dim:;conjugate:=conj:;full:=matrix:;eye:=idn:;ones(n,c):=matrix(n,c,1):;reshape(m,n,c):=matrix(n,c,flatten(m)):;";
+      if (alertnum){
+	alertnum=false;
+	alert("mat:=matrix;arange:=range;resize:=redim;shape:=dim;conjugate:=conj;full:=matrix;eye:=idn;ones(n,c):=matrix(n,c,1);reshape(m,n,c):=matrix(n,c,flatten(m));",contextptr);
+      }
       return;
     }
     if (posturtle>=0 && posturtle<cs){
       // add python turtle shortcuts
-      cur += "pu:=penup;up:=penup; pd:=pendown;down:=pendown; fd:=forward;bk:=backward; rt:=right; lt:=left; pos:=position; seth:=heading;setheading:=heading; reset:=efface;";
-      alert("pu:=penup;up:=penup; pd:=pendown;down:=pendown; fd:=forward;bk:=backward; rt:=right; lt:=left; pos:=position; seth:=heading;setheading:=heading; reset:=efface",contextptr);
+      static bool alertturtle=true;      
+      cur += "pu:=penup:;up:=penup:; pd:=pendown:;down:=pendown:; fd:=forward:;bk:=backward:; rt:=right:; lt:=left:; pos:=position:; seth:=heading:;setheading:=heading:; reset:=efface:;";
+      if (alertturtle){
+	alertturtle=false;
+	alert("pu:=penup;up:=penup; pd:=pendown;down:=pendown; fd:=forward;bk:=backward; rt:=right; lt:=left; pos:=position; seth:=heading;setheading:=heading; reset:=efface",contextptr);
+      }
       return;
     }
     if (poscmath>=0 && poscmath<cs){
       // add python cmath shortcuts
-      alert(gettext("Assigning phase, j, J and rect."),contextptr);
-      cur += "phase:=arg;j:=i;J:=i;rect(r,theta):=r*exp(i*theta);";
+      static bool alertcmath=true;      
+      if (alertcmath){
+	alertcmath=false;
+	alert(gettext("Assigning phase, j, J and rect."),contextptr);
+      }
+      cur += "phase:=arg:;j:=i:;J:=i:;rect(r,theta):=r*exp(i*theta):;";
       return;
     }
     if (posmath>=0 && posmath<cs){
       // add python math shortcuts
-      alert(gettext("Assigning log2, expm1 (imprecise), fabs, fmod, modf, radians and degrees. Not supported: copysign."),contextptr);
-      cur += "log2(x):=logb(x,2);expm1(x):=exp(x)-1;fabs:=abs;fmod(a,b):=a-floor(a/b)*b;modf(x):={ local y:=floor(x); return x-y,y;};radians(x):=x/180*pi;degrees(x):=x/pi*180;";
+      static bool alertmath=true;      
+      if (alertmath){
+	alertmath=false;
+	alert(gettext("Assigning log2, expm1 (imprecise), fabs, fmod, modf, radians and degrees. Not supported: copysign."),contextptr);
+      }
+      cur += "log2(x):=logb(x,2):;expm1(x):=exp(x)-1:;fabs:=abs:;fmod(a,b):=a-floor(a/b)*b:;function modf(x) local y; y:=floor(x); return x-y,y; ffunction:;radians(x):=x/180*pi:;degrees(x):=x/pi*180";
       // todo copysign, isinf, isnan, isfinite, frexp, ldexp
     }
+  }
+
+  string replace_deuxpoints_egal(const string & s){
+    string res;
+    bool instring=false;
+    for (size_t i=0;i<s.size();++i){
+      char ch=s[i];
+      if (i==0 || s[i-1]!='\\'){
+	if (ch=='\''){
+	  res +='"';
+	  instring=!instring;
+	  continue;
+	}
+	if (instring){
+	  if (ch=='"')
+	    res +="\"\"";
+	  else
+	    res += ch;
+	  continue;
+	}
+	if (ch=='"'){
+	  res +='"';
+	  instring=!instring;
+	  continue;
+	}
+      }
+      switch (ch){
+      case ':':
+	res +="-/-";
+	break;
+      case '{':
+	res += "{/";
+	break;
+      case '}':
+	res += "/}";
+	break;
+      default:
+	res += ch;
+      }
+    }
+    return res;
   }
 
   // detect Python like syntax: 
@@ -5801,9 +5885,9 @@ unsigned int ConvertUTF8toUTF16 (
   // if ...: -> if ... then [fi]
   // else: -> else [nothing in stack]
   // elif ...: -> elif ... then [nothing in stack]
-  // ? support for try except
+  // try: ... except: ...
   std::string python2xcas(const std::string & s_orig,GIAC_CONTEXT){
-    if (xcas_mode(contextptr)>0)
+    if (xcas_mode(contextptr)>0 && abs_calc_mode(contextptr)!=38)
       return s_orig;
     // quick check for python-like syntax: search line ending with :
     int first=0,sss=s_orig.size();
@@ -5889,7 +5973,39 @@ unsigned int ConvertUTF8toUTF16 (
     string s,cur; 
     if (pythoncompat) pythonmode=true;
     for (;res.size();){
-      int pos=res.find('\n');
+      int pos=-1;
+      bool cherche=true;
+      for (;cherche;){
+	pos=res.find('\n',pos+1);
+	if (pos<0 || pos>=int(res.size()))
+	  break;
+	cherche=false;
+	char ch=0;
+	// check if we should skip to next newline, look at previous non space
+	for (int pos2=0;pos2<pos;++pos2){
+	  ch=res[pos2];
+	  if (ch=='#')
+	    break;
+	}
+	if (ch=='#')
+	  break;
+	for (int pos2=pos-1;pos2>=0;--pos2){
+	  ch=res[pos2];
+	  if (ch!=' ' && ch!=9){
+	    if (ch=='{' || ch=='[' || ch==',' || ch=='-' || ch=='+' ||  ch=='/')
+	      cherche=true;
+	    break;
+	  }
+	}
+	for (size_t pos2=pos+1;pos2<res.size();++pos2){
+	  ch=res[pos2];
+	  if (ch!=' ' && ch!=9){
+	    if (ch==']' || ch=='}' || ch==')')
+	      cherche=true;
+	    break;
+	  }
+	}
+      }
       if (pos<0 || pos>=int(res.size())){
 	cur=res; res="";
       }
@@ -5917,21 +6033,26 @@ unsigned int ConvertUTF8toUTF16 (
 	    if (ch==';')
 	      ++c3;
 	  }
-	  if (p<cs && c1 && c1>=c2 && c3==0){
-	    // table initialization, replace {} by table( ) 
-	    cur=cur.substr(0,pos)+"table("+cur.substr(pos+1,p-pos-1)+")"+cur.substr(p+1,cs-pos-1);
+	  if (p<cs && c1 && c3==0){
+	    // table initialization, replace {} by table( ) , 
+	    // cur=cur.substr(0,pos)+"table("+cur.substr(pos+1,p-pos-1)+")"+cur.substr(p+1,cs-pos-1);
+	    cur=cur.substr(0,pos)+"{/"+replace_deuxpoints_egal(cur.substr(pos+1,p-1-pos))+"/}"+cur.substr(p+1,cs-pos-1);
 	  }
 	}
 	if (!instring && pythoncompat &&
 	    ch=='\'' && pos<cur.size()-2 && cur[pos+1]!='\\' && (pos==0 || (cur[pos-1]!='\\' && cur[pos-1]!='\''))){ // workaround for '' string delimiters
-	  alert("// Python compatibility, please use \"...\" for strings",contextptr);
-	  int p=pos,q,beg; // skip spaces
+	  static bool alertstring=true;
+	  if (alertstring){
+	    alert("// Python compatibility, please use \"...\" for strings",contextptr);
+	    alertstring=false;
+	  }
+	  int p=pos,q=pos+1,beg; // skip spaces
 	  for (p++;p<int(cur.size());++p)
 	    if (cur[p]!=' ') 
 	      break;
 	  if (p!=cur.size()){
 	    // find matching ' 
-	    beg=q=p;
+	    beg=q;
 	    for (;p<int(cur.size());++p)
 	      if (cur[p]=='\'') 
 		break;
@@ -6045,9 +6166,17 @@ unsigned int ConvertUTF8toUTF16 (
 	  s = s+cur+'\n';
 	  continue;
 	}
+	bool instr=false;
 	for (p=pos;p>0;--p){
+	  if (instr){
+	    if (cur[p]=='"' && cur[p-1]!='\\')
+	      instr=false;
+	    continue;
+	  }
 	  if (cur[p]==':' && cur[p+1]!=';')
 	    break;
+	  if (cur[p]=='"' && cur[p-1]!='\\')
+	    instr=true;	  
 	}
 	if (p>0){
 	  int cs=int(cur.size()),q=4;
@@ -6074,7 +6203,7 @@ unsigned int ConvertUTF8toUTF16 (
 	  progpos=cur.find("else");
 	  if (p && progpos>=0 && progpos<cs && instruction_at(cur,progpos,4)){
 	    pythonmode=true;
-	    cur=cur.substr(0,p)+cur.substr(p+1,pos-p)+" fi";
+	    cur=cur.substr(0,p)+' '+cur.substr(p+1,pos-p)+" fi";
 	    convert_python(cur,contextptr);
 	    p=0;
 	  }
@@ -6104,7 +6233,7 @@ unsigned int ConvertUTF8toUTF16 (
 	  break;
       }
       if (cur[pos]==':'){
-	// detect else or elif
+	// detect else or elif or except
 	int progpos=cur.find("else");
 	if (progpos>=0 && progpos<cs && instruction_at(cur,progpos,4)){
 	  pythonmode=true;
@@ -6125,6 +6254,28 @@ unsigned int ConvertUTF8toUTF16 (
 	    }
 	  }
 	  s += cur.substr(0,pos)+"\n";
+	  continue;
+	}
+	progpos=cur.find("except");
+	if (progpos>=0 && progpos<cs && instruction_at(cur,progpos,6)){
+	  pythonmode=true;
+	  if (stack.size()>1){ 
+	    int indent=stack[stack.size()-1].decal;
+	    if (ws<indent){
+	      // remove last \n and add explicit endbloc delimiters from stack
+	      int ss=s.size();
+	      bool nl= ss && s[ss-1]=='\n';
+	      if (nl)
+		s=s.substr(0,ss-1);
+	      while (stack.size()>1 && stack[stack.size()-1].decal>ws){
+		s += ' '+stack.back().endbloc+';';
+		stack.pop_back();
+	      }
+	      if (nl)
+		s += '\n';
+	    }
+	  }
+	  s += cur.substr(0,progpos)+"then\n";
 	  continue;
 	}
 	progpos=cur.find("elif");
@@ -6184,6 +6335,15 @@ unsigned int ConvertUTF8toUTF16 (
 	  stack.push_back(int_string(ws,"fi"));
 	  continue;
 	}
+	progpos=cur.find("try");
+	if (progpos>=0 && progpos<cs && instruction_at(cur,progpos,3)){
+	  pythonmode=true;
+	  cur=cur.substr(0,progpos);
+	  convert_python(cur,contextptr);
+	  s += cur +"IFERR\n";
+	  stack.push_back(int_string(ws,"end"));
+	  continue;
+	}
 	progpos=cur.find("for");
 	if (progpos>=0 && progpos<cs && instruction_at(cur,progpos,3)){
 	  pythonmode=true;
@@ -6209,13 +6369,15 @@ unsigned int ConvertUTF8toUTF16 (
 	progpos=cur.find("def");
 	if (progpos>=0 && progpos<cs && instruction_at(cur,progpos,3)){
 	  pythonmode=true;
+	  python_compat(1,contextptr); 
+	  pythoncompat=true;
 	  // should remove possible returned type, between -> ... and :
 	  string entete=cur.substr(progpos+3,pos-progpos-3);
 	  int posfleche=entete.find("->");
 	  if (posfleche>0 || posfleche<entete.size())
 	    entete=entete.substr(0,posfleche);
 	  s += cur.substr(0,progpos)+"function"+entete+"\n";
-	  stack.push_back(int_string(ws,"ffunction"));
+	  stack.push_back(int_string(ws,"ffunction:")); // ; added later
 	  continue;
 	}
 	// no match found, return s
@@ -6223,7 +6385,8 @@ unsigned int ConvertUTF8toUTF16 (
       }
       else {
 	// normal line add ; at end
-	if (pythonmode && !res.empty() && pos>=0 && cur[pos]!=';' && cur[pos]!=',' && cur[pos]!='{' && cur[pos]!='(' && cur[pos]!='[')
+	char curpos=cur[pos];
+	if (pythonmode && !res.empty() && pos>=0 && curpos!=';' && curpos!=',' && curpos!='{' && curpos!='(' && curpos!='[' && curpos!=':' && curpos!='+' && curpos!='-' && curpos!='*' && curpos!='/' && curpos!='%')
 	  cur = cur +';';
 	if (pythonmode)
 	  convert_python(cur,contextptr);

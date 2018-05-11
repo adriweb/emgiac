@@ -407,8 +407,10 @@ AN	[0-9a-zA-Z_~ ?\200-\355\357-\376]
 "%%%%("                 index_status(yyextra)=0; (*yylval) = _CURVE__VECT; return T_VECT_DISPATCH; 
 "%%%%)"                 index_status(yyextra)=1; return T_VECT_END;
     /* gen delimiters */
-"{"                     index_status(yyextra)=0; if (rpn_mode(yyextra)||calc_mode(yyextra)==1) { (*yylval)=0; return T_VECT_DISPATCH; } if (xcas_mode(yyextra)==3 || abs_calc_mode(yyextra)==38){ (*yylval) = _LIST__VECT;  return T_VECT_DISPATCH; } if (xcas_mode(yyextra) > 0 ){ (*yylval)=_SET__VECT; return T_VECT_DISPATCH; } else return T_BLOC_BEGIN;
-"}"                     index_status(yyextra)=1; if (rpn_mode(yyextra) || calc_mode(yyextra)==1) return T_VECT_END; if (xcas_mode(yyextra)==3 || abs_calc_mode(yyextra)==38) return T_VECT_END; if (xcas_mode(yyextra) > 0) return T_VECT_END; else return T_BLOC_END;
+"{/"                     index_status(yyextra)=0; (*yylval)=_TABLE__VECT;return T_VECT_DISPATCH; 
+"/}"                     index_status(yyextra)=1;  return T_VECT_END;
+"{"                     index_status(yyextra)=0;  if (rpn_mode(yyextra)||calc_mode(yyextra)==1) { (*yylval)=0; return T_VECT_DISPATCH; } if (xcas_mode(yyextra)==3 || abs_calc_mode(yyextra)==38){ (*yylval) = _LIST__VECT;  return T_VECT_DISPATCH; } if (xcas_mode(yyextra) > 0 ){ (*yylval)=_SET__VECT; return T_VECT_DISPATCH; } else return T_BLOC_BEGIN;
+"}"                     index_status(yyextra)=1; if (rpn_mode(yyextra) || calc_mode(yyextra)==1 || python_compat(yyextra)) return T_VECT_END; if (xcas_mode(yyextra)==3 || abs_calc_mode(yyextra)==38) return T_VECT_END; if (xcas_mode(yyextra) > 0) return T_VECT_END; else return T_BLOC_END;
 "%{"                    index_status(yyextra)=0;  (*yylval)=_SET__VECT; return T_VECT_DISPATCH;
 "%}"                    index_status(yyextra)=1; return T_VECT_END;
 "%%{"                   index_status(yyextra)=0; return T_ROOTOF_BEGIN;
@@ -423,6 +425,7 @@ AN	[0-9a-zA-Z_~ ?\200-\355\357-\376]
 "-<"                    (*yylval) = gen(at_couleur,2); index_status(yyextra)=0; return T_INTERVAL;
 "=="			index_status(yyextra)=0; (*yylval)=gen(at_same,2); return T_TEST_EQUAL;
 "==="			index_status(yyextra)=0; (*yylval)=gen(at_equal,2); return T_EQUAL;
+"-/-"			index_status(yyextra)=0; (*yylval)=gen(at_deuxpoints,2); return T_DEUXPOINTS;
 "'=='"                  index_status(yyextra)=0; (*yylval)=gen(at_same,2); return T_QUOTED_BINARY;
 "_equal"                  index_status(yyextra)=0; (*yylval)=gen(at_same,2); return T_QUOTED_BINARY;
 "!="			index_status(yyextra)=0; (*yylval)=gen(at_different,2); return T_TEST_EQUAL;
@@ -619,8 +622,9 @@ AN	[0-9a-zA-Z_~ ?\200-\355\357-\376]
 "tan"                  (*yylval) = gen(at_atan,1); index_status(yyextra)=1; return T_UNARY_OP;
 "'minus'"                  index_status(yyextra)=0; (*yylval)=gen(at_minus,2); return T_QUOTED_BINARY;
 "_minus"                  index_status(yyextra)=0; (*yylval)=gen(at_minus,2); return T_QUOTED_BINARY;
-"not"                 (*yylval) = gen(at_not,1); if (xcas_mode(yyextra)) return T_NOT;  index_status(yyextra)=0; return T_UNARY_OP;
+"not"                 (*yylval) = gen(at_not,1); if (xcas_mode(yyextra) || python_compat(yyextra)) return T_NOT;  index_status(yyextra)=0; return T_UNARY_OP;
 "NOT"                 (*yylval) = gen(at_not,1); return T_NOT;  
+"not in"                 (*yylval) = gen(at_not,1); return T_IN;  
 "neg"		(*yylval) = gen(at_neg,1); index_status(yyextra)=0; return T_UNARY_OP;
 "'not'"                  index_status(yyextra)=0; (*yylval)=gen(at_not,1); return T_QUOTED_BINARY;
 "_not"                  index_status(yyextra)=0; (*yylval)=gen(at_not,1); return T_QUOTED_BINARY;

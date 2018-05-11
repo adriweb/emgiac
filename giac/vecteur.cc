@@ -10089,6 +10089,9 @@ namespace giac {
   // least divisor element of A if b is random
   // returns 0 if no invertible found, -1 if det==0, 1 otherwise
   int padic_linsolve(const matrice & A,const vecteur & b,vecteur & res,gen & p,gen & det_mod_p,gen & h2,unsigned reconstruct,int maxtry){
+#ifdef GIAC_HAS_STO_38
+    return 0;
+#endif
     // first find p such that a mod p is invertible
     // find a bound on the num/den of x
     // let c=(a mod p)^(-1)

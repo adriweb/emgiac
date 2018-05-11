@@ -298,8 +298,15 @@ namespace giac {
   }
   gen _not(const gen & args,GIAC_CONTEXT){
     if ( args.type==_STRNG && args.subtype==-1) return  args;
-    if (args.type==_VECT || args.type==_MAP)
+    if (args.type==_VECT || args.type==_MAP){
+      if (python_compat(contextptr)){
+	if (args.type==_VECT && args._VECTptr->empty())
+	  return 1;
+	if (args.type==_MAP && args._MAPptr->empty())
+	  return 1;
+      }
       return apply(args,_not,contextptr);
+    }
     return !equaltosame(args);
   }
   static const char _not_s []="not";
@@ -1977,11 +1984,11 @@ namespace giac {
 	gen kk;
 	if (angle_radian(contextptr)) 
 	  kk=normal(rdiv(e,cst_pi,contextptr),contextptr);
-  else if(angle_degree(contextptr))
+	else if(angle_degree(contextptr))
 	  kk=normal(rdiv(e,180,contextptr),contextptr);
-  //grad
+	//grad
 	else
-    kk = normal(rdiv(e, 200, contextptr), contextptr);
+	  kk = normal(rdiv(e, 200, contextptr), contextptr);
 	if (is_assumed_integer(kk,contextptr))
 	  return zero;
 	int n,d;
@@ -2000,13 +2007,22 @@ namespace giac {
 	    sqrt5=sqrt(sqrt5,contextptr);
 	    return n<=2?sqrt5:-sqrt5;
 	  }
+	  if (d%2==0 && n<d/2 && n>d/4){
+	    n = d/2-n; gen res;
+	    if (angle_radian(contextptr)) 
+	      res=symb_tan((n%d)*inv(d,contextptr)*cst_pi);
+	    else if(angle_degree(contextptr))
+	      res= symb_tan(rdiv((n%d)*180,d,contextptr));
+	    else // grad
+	      res= symb_tan(rdiv((n%d)*200,d,contextptr));
+	    return inv(res,contextptr);
+	  }
 	  if (angle_radian(contextptr)) 
 	    return symb_tan((n%d)*inv(d,contextptr)*cst_pi);
-    else if(angle_degree(contextptr))
+	  else if(angle_degree(contextptr))
 	    return symb_tan(rdiv((n%d)*180,d,contextptr));
-    //grad
-	  else
-      return symb_tan(rdiv((n%d)*200,d,contextptr));
+	  else // grad
+	    return symb_tan(rdiv((n%d)*200,d,contextptr));
 	}
       }
     }
@@ -3991,11 +4007,22 @@ namespace giac {
       return sto(v,destination,in_place,contextptr);
     }
     if (b.type==_FUNC){
+      if (b==at_of){ // shortcut for python_compat(0 or 1): of:=1 or 0
+	if (a==0) {// index start 0 -> enable python compat
+	  python_compat(1,contextptr);
+	  return string2gen("[] index start 0",false);
+	}
+	if (a==1) { // index start 1 -> disable python compat
+	  python_compat(0,contextptr);
+	  return string2gen("[] index start 1",false);
+	}
+      }
       string errmsg=b.print(contextptr)+ gettext(" is a reserved word, sto not allowed:");
       if (abs_calc_mode(contextptr)!=38)
 	*logptr(contextptr) << errmsg << endl;
       return makevecteur(string2gen(errmsg,false),a);
     }
+    if (a==b) return a;
     return gentypeerr(gettext("sto ")+b.print(contextptr)+ gettext(" not allowed!"));
   }
   symbolic symb_sto(const gen & a,gen & b,bool in_place){
@@ -5388,6 +5415,15 @@ namespace giac {
     vecteur & v=*args._VECTptr;
     if (v.size()!=2)
       return gensizeerr(contextptr);
+    static bool alert_array_start=true;
+    if (alert_array_start && contextptr->globalptr->_python_compat_){
+      alert_array_start=false;
+#ifdef GIAC_HAS_STO_38
+      alert(gettext("Python compatibility enabled. List index will start at 0, run of:=1 to disable Python compatibility."),contextptr);
+#else
+      *logptr(contextptr) << gettext("Python compatibility enabled. List index will start at 0, run python_compat(0) to disable Python compatibility.") << endl;
+#endif
+    }
     if (storcl_38){
       if (v.front().type==_IDNT){
 	gen value;
@@ -5912,7 +5948,101 @@ namespace giac {
   // symbolic symb_irem(const gen & a,const gen & b){    return symbolic(at_irem,makevecteur(a,b));  }
   gen _normalmod(const gen & g,GIAC_CONTEXT);
   gen _irem(const gen & args,GIAC_CONTEXT){
-    if ( args.type==_STRNG && args.subtype==-1) return  args;
+    if (args.type==_STRNG && args.subtype==-1) return  args;
+    if (args.type==_VECT && args._VECTptr->size()>1 && args._VECTptr->front().type==_STRNG){
+      vecteur v=*args._VECTptr;
+      const char * fmt=v.front()._STRNGptr->c_str();
+      char buf[256];
+      size_t s=v.size();
+      if (s==2){
+	switch (v[1].type){
+	case _INT_:
+	  sprintf(buf,fmt,v[1].val);
+	  break;
+	case _DOUBLE_:
+	  sprintf(buf,fmt,v[1]._DOUBLE_val);
+	  break;
+	case _STRNG:
+	  sprintf(buf,fmt,v[1]._STRNGptr->c_str());
+	  break;
+	default:
+	  return gentypeerr(contextptr);
+	}
+	return string2gen(buf,false);
+      }
+      if (s==3){
+	unsigned t=(v[1].type<< _DECALAGE) | v[2].type;
+	switch (t){
+	case _INT___INT_:
+	  sprintf(buf,fmt,v[1].val,v[2].val);
+	  break;
+	case _INT___DOUBLE_:
+	  sprintf(buf,fmt,v[1].val,v[2]._DOUBLE_val);
+	  break;
+	case _INT___STRNG:
+	  sprintf(buf,fmt,v[1].val,v[2]._STRNGptr->c_str());
+	  break;
+	case _DOUBLE___INT_:
+	  sprintf(buf,fmt,v[1]._DOUBLE_val,v[2].val);
+	  break;
+	case _DOUBLE___DOUBLE_:
+	  sprintf(buf,fmt,v[1]._DOUBLE_val,v[2]._DOUBLE_val);
+	  break;
+	case _DOUBLE___STRNG:
+	  sprintf(buf,fmt,v[1]._DOUBLE_val,v[2]._STRNGptr->c_str());
+	  break;
+	case _STRNG__INT_:
+	  sprintf(buf,fmt,v[1]._STRNGptr->c_str(),v[2].val);
+	  break;
+	case _STRNG__DOUBLE_:
+	  sprintf(buf,fmt,v[1]._STRNGptr->c_str(),v[2]._DOUBLE_val);
+	  break;
+	case _STRNG__STRNG:
+	  sprintf(buf,fmt,v[1]._STRNGptr->c_str(),v[2]._STRNGptr->c_str());
+	  break;
+	default:
+	  return gentypeerr(contextptr);
+	}
+	return string2gen(buf,false);
+      }
+      if (s==4){
+	gen v1=evalf_double(v[1],1,contextptr);
+	if (v1.type!=_DOUBLE_ && v1.type!=_STRNG) return gentypeerr(contextptr);
+	gen v2=evalf_double(v[2],1,contextptr);
+	if (v2.type!=_DOUBLE_ && v2.type!=_STRNG) return gentypeerr(contextptr);
+	gen v3=evalf_double(v[3],1,contextptr);
+	if (v3.type!=_DOUBLE_ && v3.type!=_STRNG) return gentypeerr(contextptr);
+	if (v1.type==_DOUBLE_){
+	  if (v2.type==_DOUBLE_){
+	    if (v3.type==_DOUBLE_)
+	      sprintf(buf,fmt,v1._DOUBLE_val,v2._DOUBLE_val,v3._DOUBLE_val);
+	    else
+	      sprintf(buf,fmt,v1._DOUBLE_val,v2._DOUBLE_val,v3._STRNGptr->c_str());
+	  }
+	  else {
+	    if (v3.type==_DOUBLE_)
+	      sprintf(buf,fmt,v1._DOUBLE_val,v2._STRNGptr->c_str(),v3._DOUBLE_val);
+	    else
+	      sprintf(buf,fmt,v1._DOUBLE_val,v2._STRNGptr->c_str(),v3._STRNGptr->c_str());	    
+	  }
+	} else {
+	  if (v2.type==_DOUBLE_){
+	    if (v3.type==_DOUBLE_)
+	      sprintf(buf,fmt,v1._STRNGptr->c_str(),v2._DOUBLE_val,v3._DOUBLE_val);
+	    else
+	      sprintf(buf,fmt,v1._STRNGptr->c_str(),v2._DOUBLE_val,v3._STRNGptr->c_str());
+	  }
+	  else {
+	    if (v3.type==_DOUBLE_)
+	      sprintf(buf,fmt,v1._STRNGptr->c_str(),v2._STRNGptr->c_str(),v3._DOUBLE_val);
+	    else
+	      sprintf(buf,fmt,v1._STRNGptr->c_str(),v2._STRNGptr->c_str(),v3._STRNGptr->c_str());	    
+	  }
+	}
+	return string2gen(buf,false);	
+      }
+      return gendimerr(contextptr);
+    }
     if (!check_2d_vecteur(args)) return gensizeerr(contextptr);
     if (ckmatrix(args))
       return apply(args._VECTptr->front(),args._VECTptr->back(),irem);
@@ -6068,8 +6198,13 @@ namespace giac {
   static define_unary_function_eval (__iquorem,&giac::_iquorem,_iquorem_s);
   define_unary_function_ptr5( at_iquorem ,alias_at_iquorem,&__iquorem,0,true);
 
+  gen _divmod(const gen & args,GIAC_CONTEXT){
+    gen res=_iquorem(args,contextptr);
+    if (res.type==_VECT) res.subtype=_SEQ__VECT;
+    return res;
+  }
   static const char _divmod_s []="divmod";
-  static define_unary_function_eval (__divmod,&giac::_iquorem,_divmod_s);
+  static define_unary_function_eval (__divmod,&giac::_divmod,_divmod_s);
   define_unary_function_ptr5( at_divmod ,alias_at_divmod,&__divmod,0,true);
 
   static symbolic symb_quorem(const gen & a,const gen & b){    return symbolic(at_quorem,makevecteur(a,b));  }
@@ -7046,6 +7181,11 @@ namespace giac {
 
   gen _eval(const gen & a,GIAC_CONTEXT){
     if ( a.type==_STRNG && a.subtype==-1) return  a;
+    if (python_compat(contextptr)){
+      gen b=eval(a,1,contextptr);
+      if (b.type==_STRNG)
+	return _expr(b,contextptr);
+    }
     if (is_equal(a) &&a._SYMBptr->feuille.type==_VECT && a._SYMBptr->feuille._VECTptr->size()==2){
       vecteur & v(*a._SYMBptr->feuille._VECTptr);
       return symbolic(at_equal,gen(makevecteur(eval(v.front(),eval_level(contextptr),contextptr),eval(v.back(),eval_level(contextptr),contextptr)),_SEQ__VECT));

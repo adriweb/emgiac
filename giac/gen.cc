@@ -566,11 +566,16 @@ namespace giac {
 #ifdef COMPILE_FOR_STABILITY
     control_c();
 #endif
+#ifdef SMARTPTR64
+    * ((ulonglong * ) this)=0;
+#endif
     val=(int)i;
     //    longlong temp=val;
     if (val==i && val!=1<<31){
+#ifndef SMARTPTR64
       type=_INT_;
       subtype=0;
+#endif
     }
     else {
 #ifdef SMARTPTR64
@@ -598,11 +603,16 @@ namespace giac {
 #ifdef COMPILE_FOR_STABILITY
     control_c();
 #endif
+#ifdef SMARTPTR64
+    * ((ulonglong * ) this)=0;
+#endif
     val=(int)i;
     //    longlong temp=val;
     if (val==i && val!=1<<31){
+#ifndef SMARTPTR64
       type=_INT_;
       subtype=0;
+#endif
     }
     else {
 #ifdef SMARTPTR64
@@ -650,11 +660,16 @@ namespace giac {
 #ifdef COMPILE_FOR_STABILITY
     control_c();
 #endif
+#ifdef SMARTPTR64
+    * ((ulonglong * ) this)=0;
+#endif
     val=(int)i;
     //    longlong temp=val;
     if (val==i && val!=1<<31){
+#ifndef SMARTPTR64
       type=_INT_;
       subtype=0;
+#endif
     }
     else {
 #ifdef SMARTPTR64
@@ -683,11 +698,16 @@ namespace giac {
 #ifdef COMPILE_FOR_STABILITY
     control_c();
 #endif
+#ifdef SMARTPTR64
+    * ((ulonglong * ) this)=0;
+#endif
     val=i;
     //    longlong temp=val;
     if (val==i && val!=1<<31){
+#ifndef SMARTPTR64
       type=_INT_;
       subtype=0;
+#endif
     }
     else {
       bool signe=(i<0);
@@ -727,7 +747,11 @@ namespace giac {
   gen::gen(const mpz_t & m) { 
     if (int(mpz_sizeinbase(m,2))>MPZ_MAXLOG2){
       type=0;
+#if 1
+      *this=undef;
+#else
       *this=mpz_sgn(m)==-1?minus_inf:plus_inf;
+#endif
       return;
     }
 #ifdef COMPILE_FOR_STABILITY
@@ -1016,7 +1040,11 @@ namespace giac {
     else {
       if (l>MPZ_MAXLOG2){
 	type=0;
+#if 1
+	*this=undef;
+#else
 	*this=(mpz_sgn(mptr->z)==-1)?minus_inf:plus_inf;
+#endif
 	delete mptr;
 	return;
       }
@@ -1050,7 +1078,11 @@ namespace giac {
     else {
       if (l>MPZ_MAXLOG2){
 	g.type=0;
+#if 1
+	g=undef;
+#else
 	g=(mpz_sgn(mptr->z)==-1)?minus_inf:plus_inf;
+#endif
 	return false;
       }
 #ifdef SMARTPTR64
@@ -1073,7 +1105,11 @@ namespace giac {
     else {
       if (l>MPZ_MAXLOG2){
 	type=0;
+#if 1
+	*this=undef;
+#else
 	*this=(mpz_sgn(z.ptr)==-1)?minus_inf:plus_inf;
+#endif
 	return;
       }
 #ifdef SMARTPTR64
@@ -2009,6 +2045,11 @@ namespace giac {
       makespreadsheetmatrice(*g._VECTptr,contextptr);
       spread_eval(*g._VECTptr,contextptr);
       return false;
+    }
+    if (g.subtype==_TABLE__VECT){
+      eval_VECT(g,evaled,g.subtype,level,contextptr);
+      evaled=_table(evaled,contextptr);
+      return true;
     }
     if (g.subtype==_FOLDER__VECT || g.subtype==_RGBA__VECT)
       return false;
@@ -7553,7 +7594,7 @@ namespace giac {
     case _DOUBLE___ZINT:
       return a._DOUBLE_val/mpz_get_d(*b._ZINTptr);
       // _CPLX__DOUBLE_, _DOUBLE___CPLX, _CPLX__CPLX, _ZINT__CPLX, _INT___CPLX
-    case _VECT__INT_: case _VECT__ZINT: case _VECT__DOUBLE_: case _VECT__FLOAT_: case _VECT__CPLX: 
+    case _VECT__INT_: case _VECT__ZINT: case _VECT__DOUBLE_: case _VECT__FLOAT_: case _VECT__CPLX: case _VECT__FRAC:
     case _VECT__SYMB: case _VECT__IDNT: case _VECT__POLY: case _VECT__EXT:
       if (a.subtype==_VECTOR__VECT)
 	return a*inv(b,contextptr);
@@ -8925,6 +8966,8 @@ namespace giac {
 	  int S=1;
 	  if (type==_STRNG) S=int(_STRNGptr->size());
 	  if (type==_VECT) S=int(_VECTptr->size());
+	  if (debut>=S)
+	    return (type==_STRNG)?string2gen("",false):gen(vecteur(0),subtype);
 	  if (debut<0) debut+=S;
 	  if (fin<0) fin+=S;
 	  fin=giacmin(fin,S-1);

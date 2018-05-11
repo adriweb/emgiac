@@ -535,8 +535,38 @@ namespace giac {
   static define_unary_function_eval (__suppress,&_suppress,_suppress_s);
   define_unary_function_ptr5( at_suppress ,alias_at_suppress,&__suppress,0,true);
 
+#ifdef GIAC_HAS_STO_38
+  const int pixel_lines=1; // 320; // calculator screen 307K
+  const int pixel_cols=1; // 240;
+#else
+  const int pixel_lines=1024;
+  const int pixel_cols=768;
+#endif
+  int pixel_buffer[pixel_lines][pixel_cols]; 
+  void clear_pixel_buffer(){
+    for (int i=0;i<pixel_lines;++i){
+      int * ptr=pixel_buffer[i];
+      int * ptrend = ptr+pixel_cols;
+      for (;ptr<ptrend;++ptr){
+	*ptr=int(FL_WHITE);
+      }
+    }
+  }
+  static gen & pixel_v(){
+    static gen * ptr=0;
+    if (ptr==0){
+      clear_pixel_buffer();
+      ptr=new gen(makevecteur(0));
+    }
+    return *ptr;
+  }
   gen _clear(const gen & args,GIAC_CONTEXT){
     if ( args.type==_STRNG && args.subtype==-1) return  args;
+    if (args.type==_VECT && args._VECTptr->empty()){
+      clear_pixel_buffer();
+      pixel_v()._VECTptr->clear();
+      return 1;
+    }
     gen g=eval(args,1,contextptr);
     if (g.type==_STRNG) 
       g=string2gen("",false);
@@ -552,6 +582,13 @@ namespace giac {
   static const char _clear_s []="clear";
   static define_unary_function_eval (__clear,&_clear,_clear_s);
   define_unary_function_ptr5( at_clear ,alias_at_clear,&__clear,_QUOTE_ARGUMENTS,true);
+
+  gen _show_pixels(const gen & args,GIAC_CONTEXT){
+    return pixel_v();
+  }
+  static const char _show_pixels_s []="show_pixels";
+  static define_unary_function_eval (__show_pixels,&_show_pixels,_show_pixels_s);
+  define_unary_function_ptr5( at_show_pixels ,alias_at_show_pixels,&__show_pixels,0,true);
 
   gen _insert(const gen & args,GIAC_CONTEXT){
     if ( args.type==_STRNG && args.subtype==-1) return  args;
@@ -587,16 +624,28 @@ namespace giac {
 
   gen _pop(const gen & args,GIAC_CONTEXT){
     if ( args.type==_STRNG && args.subtype==-1) return  args;
-    if (args.type==_VECT && args.subtype==_SEQ__VECT && args._VECTptr->size()==2 && args._VECTptr->back().type==_INT_){
-      int pos=args._VECTptr->back().val;
-      gen g=args._VECTptr->front();
-      if (pos>=0 && g.type==_VECT && g._VECTptr->size()>pos){
-	gen res=(*g._VECTptr)[pos];
-	g._VECTptr->erase(g._VECTptr->begin()+pos);
-	return res;
+    if (args.type==_VECT && args.subtype==_SEQ__VECT && args._VECTptr->size()==2 ){
+      if (args._VECTptr->front().type==_MAP){
+	const gen & m=args._VECTptr->front();
+	const gen & indice=args._VECTptr->back();
+	gen_map::iterator it=m._MAPptr->find(indice),itend=m._MAPptr->end();
+	if (it==itend)
+	  return gensizeerr(gettext("Bad index")+indice.print(contextptr));
+	m._MAPptr->erase(it);
+	return 1;
+      }
+      if (args._VECTptr->back().type==_INT_){
+	int pos=args._VECTptr->back().val;
+	gen g=args._VECTptr->front();
+	if (pos>=0 && g.type==_VECT && g._VECTptr->size()>pos){
+	  gen res=(*g._VECTptr)[pos];
+	  g._VECTptr->erase(g._VECTptr->begin()+pos);
+	  return res;
+	}
       }
     }
-    if (args.type!=_VECT || args._VECTptr->empty()) return gensizeerr(contextptr);
+    if (args.type!=_VECT || args._VECTptr->empty()) 
+      return gensizeerr(contextptr);
     gen res=args._VECTptr->back();
     args._VECTptr->pop_back();
     return res;
@@ -5730,7 +5779,7 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
   }
   static const char _caseval_s []="caseval";
   static define_unary_function_eval (__caseval,&_caseval,_caseval_s);
-  define_unary_function_ptr5( at_caseval ,alias_at_caseval,&__caseval,0,true);
+  define_unary_function_ptr5( at_caseval ,alias_at_caseval,&__caseval,_QUOTE_ARGUMENTS,true);
 
   gen scalarproduct(const vecteur & a,const vecteur & b,GIAC_CONTEXT){
     vecteur::const_iterator ita=a.begin(), itaend=a.end();
@@ -6443,32 +6492,43 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
   gen _find(const gen & args,GIAC_CONTEXT){
     if ( args.type==_STRNG && args.subtype==-1) return  args;
     vecteur v = gen2vecteur(args);
-    if (v.size()!=2)
+    if (v.size()!=2 && v.size()!=3)
       return gensizeerr(contextptr);
     const gen a=v.front();
-    int shift=array_start(contextptr); //xcas_mode(contextptr)>0 || abs_calc_mode(contextptr)==38;
-    if (a.type==_STRNG){
-      if (v.back().type!=_STRNG)
+    int pos=0;
+    if (v.size()==3){
+      if (v[2].type!=_INT_)
 	return gensizeerr(contextptr);
-      const string s=*v.back()._STRNGptr;
+      pos=v[2].val;
+    }
+    int shift=array_start(contextptr); //xcas_mode(contextptr)>0 || abs_calc_mode(contextptr)==38;
+    bool py=python_compat(contextptr);
+    if (a.type==_STRNG && v[1].type!=_VECT){
+      if (v[1].type!=_STRNG)
+	return gensizeerr(contextptr);
+      const string s=*v[1]._STRNGptr;
       vecteur res;
-      int pos=0;
       for (;;++pos){
-	pos=int(s.find(*a._STRNGptr,pos));
+	pos=int(a._STRNGptr->find(s,pos));
+	if (py)
+	  return pos;
 	if (pos<0 || pos>=int(s.size()))
 	  break;
 	res.push_back(pos+shift);
       }
       return res;
     }
-    if (v.back().type!=_VECT)
+    if (v[1].type!=_VECT)
       return gensizeerr(contextptr);
-    const vecteur & w =*v.back()._VECTptr;
+    const vecteur & w =*v[1]._VECTptr;
     int s=int(w.size());
     vecteur res;
-    for (int i=0;i<s;++i){
-      if (a==w[i])
+    for (int i=pos;i<s;++i){
+      if (a==w[i]){
+	if (py)
+	  return i;
 	res.push_back(i+shift);
+      }
     }
     return res;
   }
@@ -6745,6 +6805,20 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
     return has_op(g,*at_rootof)?evalf(g,1,contextptr):g;
   }
 
+  gen try_limit_undef(const gen & f,const identificateur & x,const gen & x0,int direction,GIAC_CONTEXT){
+    gen res;
+#ifdef NO_STDEXCEPT
+    res=limit(f,x,x0,direction,contextptr);
+#else
+    try {
+      res=limit(f,x,x0,direction,contextptr);
+    } catch (std::runtime_error & err){
+      res=undef;
+    }
+#endif    
+    return res;
+  }
+
   int step_param_(const gen & f,const gen & g,const gen & t,gen & tmin,gen&tmax,vecteur & poi,vecteur & tvi,bool printtvi,bool exactlegende,GIAC_CONTEXT){
     if (t.type!=_IDNT)
       return 0;
@@ -6842,17 +6916,17 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
       *it=recursive_normal(*it,contextptr);
       if (in_domain(df,t,*it,contextptr) && is_greater(*it,tmin,contextptr) && is_greater(tmax,*it,contextptr)){
 	crit.push_back(*it);
-	gen fx=limit(f,xid,*it,0,contextptr);
+	gen fx=try_limit_undef(f,xid,*it,0,contextptr);
 	fx=recursive_normal(fx,contextptr);
-	gen gx=limit(g,xid,*it,0,contextptr);
+	gen gx=try_limit_undef(g,xid,*it,0,contextptr);
 	gx=recursive_normal(gx,contextptr);
 	gen ax,ay;
 	bool singp=equalposcomp(*cx._VECTptr,*it) && equalposcomp(*cy._VECTptr,*it);
 	if (singp){
 	  // singular point, find tangent (and kind?)
-	  /* ax=limit(f2,xid,*it,0,contextptr);
+	  /* ax=try_limit_undef(f2,xid,*it,0,contextptr);
 	  ax=recursive_normal(ax,contextptr);
-	  ay=limit(g2,xid,*it,0,contextptr);
+	  ay=try_limit_undef(g2,xid,*it,0,contextptr);
 	  ay=recursive_normal(ay,contextptr); */
 	  int ordre=5;
 	  vecteur vx,vy;
@@ -6894,8 +6968,8 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
 	  gprintf(" \n",vecteur(0),1,contextptr);
 	}
 	else {
-	  ax=limit(f1,xid,*it,0,contextptr);
-	  ay=limit(g1,xid,*it,0,contextptr);
+	  ax=try_limit_undef(f1,xid,*it,0,contextptr);
+	  ay=try_limit_undef(g1,xid,*it,0,contextptr);
 	  ax=recursive_normal(ax,contextptr);
 	  ay=recursive_normal(ay,contextptr);
 	}
@@ -6950,10 +7024,10 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
 	if (is_greater(*it,tmax,contextptr))
 	  tmax=*it;	
       }
-      gen fx=limit(f,xid,*it,0,contextptr);
+      gen fx=try_limit_undef(f,xid,*it,0,contextptr);
       fx=recursive_normal(fx,contextptr);
       if (!is_inf(fx) && !lidnt(evalf(fx,1,contextptr)).empty()) continue;
-      gen fy=limit(g,xid,*it,0,contextptr);
+      gen fy=try_limit_undef(g,xid,*it,0,contextptr);
       fy=recursive_normal(fy,contextptr);
       if (!is_inf(fy) && !lidnt(evalf(fy,1,contextptr)).empty()) continue;
       if (is_inf(fx)){
@@ -6969,7 +7043,7 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
 	    poi.push_back(dr);
 	  continue;
 	}
-	gen a=limit(g/f,xid,*it,0,contextptr);
+	gen a=try_limit_undef(g/f,xid,*it,0,contextptr);
 	a=recursive_normal(a,contextptr);
 	if (is_undef(a)) continue;
 	if (is_inf(a)){
@@ -6982,7 +7056,7 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
 	  gprintf(gettext("Horizontal parabolic asymptote at %gen"),vecteur(1,*it),1,contextptr);
 	  continue;
 	}
-	gen b=limit(g-a*f,xid,*it,0,contextptr);
+	gen b=try_limit_undef(g-a*f,xid,*it,0,contextptr);
 	b=recursive_normal(b,contextptr);
 	if (is_undef(b)) continue;
 	if (is_inf(b)){
@@ -7045,43 +7119,43 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
     }
     gen nextt=tvx.front();
     vecteur tvit=makevecteur(t,nextt);
-    gen x=limit(f,xid,nextt,1,contextptr);
-    if (!is_inf(x) && is_greater(xmin,x,contextptr))
+    gen x=try_limit_undef(f,xid,nextt,1,contextptr);
+    if (!has_inf_or_undef(x) && is_greater(xmin,x,contextptr))
       xmin=x;
-    if (!is_inf(x) && is_greater(x,xmax,contextptr))
+    if (!has_inf_or_undef(x) && is_greater(x,xmax,contextptr))
       xmax=x;
-    gen y=limit(g,xid,nextt,1,contextptr);
-    if (!is_inf(y) && is_greater(ymin,y,contextptr))
+    gen y=try_limit_undef(g,xid,nextt,1,contextptr);
+    if (!has_inf_or_undef(y) && is_greater(ymin,y,contextptr))
       ymin=y;
-    if (!is_inf(y) && is_greater(y,ymax,contextptr))
+    if (!has_inf_or_undef(y) && is_greater(y,ymax,contextptr))
       ymax=y;
     vecteur tvif=makevecteur(symb_equal(x__IDNT_e,f),x);
     vecteur tvig=makevecteur(symb_equal(y__IDNT_e,g),y);
     gen nothing=string2gen(" ",false);
-    vecteur tvidf=makevecteur(symb_equal(symbolic(at_derive,x__IDNT_e),f1),limit(f1,xid,nextt,1,contextptr));
-    vecteur tvidg=makevecteur(symb_equal(symbolic(at_derive,y__IDNT_e),g1),limit(g1,xid,nextt,1,contextptr));
-    vecteur tviconv=makevecteur(symbolic(at_derive,x__IDNT_e)*symbolic(at_derive,symbolic(at_derive,y__IDNT_e))-symbolic(at_derive,y__IDNT_e)*symbolic(at_derive,symbolic(at_derive,x__IDNT_e)),limit(conv,xid,nextt,1,contextptr));
+    vecteur tvidf=makevecteur(symb_equal(symbolic(at_derive,x__IDNT_e),f1),try_limit_undef(f1,xid,nextt,1,contextptr));
+    vecteur tvidg=makevecteur(symb_equal(symbolic(at_derive,y__IDNT_e),g1),try_limit_undef(g1,xid,nextt,1,contextptr));
+    vecteur tviconv=makevecteur(symbolic(at_derive,x__IDNT_e)*symbolic(at_derive,symbolic(at_derive,y__IDNT_e))-symbolic(at_derive,y__IDNT_e)*symbolic(at_derive,symbolic(at_derive,x__IDNT_e)),try_limit_undef(conv,xid,nextt,1,contextptr));
     int tvs=int(tvx.size());
     for (int i=1;i<tvs;++i){
       gen curt=nextt,dfx,dgx,convt;
       nextt=tvx[i];
       tvit.push_back(nothing);
       if (is_inf(nextt) && is_inf(curt)){
-	dfx=limit(f1,xid,0,0,contextptr);
-	dgx=limit(g1,xid,0,0,contextptr);
-	convt=limit(conv,xid,0,0,contextptr);	
+	dfx=try_limit_undef(f1,xid,0,0,contextptr);
+	dgx=try_limit_undef(g1,xid,0,0,contextptr);
+	convt=try_limit_undef(conv,xid,0,0,contextptr);	
       }
       else {
 	if (curt==minus_inf){
-	  dfx=limit(f1,xid,nextt-1,0,contextptr);
-	  dgx=limit(g1,xid,nextt-1,0,contextptr);
-	  convt=limit(conv,xid,nextt-1,0,contextptr);
+	  dfx=try_limit_undef(f1,xid,nextt-1,0,contextptr);
+	  dgx=try_limit_undef(g1,xid,nextt-1,0,contextptr);
+	  convt=try_limit_undef(conv,xid,nextt-1,0,contextptr);
 	}
 	else {
 	  if (nextt==plus_inf){
-	    dfx=limit(f1,xid,curt+1,0,contextptr);
-	    dgx=limit(g1,xid,curt+1,0,contextptr);
-	    convt=limit(conv,xid,curt+1,0,contextptr);
+	    dfx=try_limit_undef(f1,xid,curt+1,0,contextptr);
+	    dgx=try_limit_undef(g1,xid,curt+1,0,contextptr);
+	    convt=try_limit_undef(conv,xid,curt+1,0,contextptr);
 	  }
 	  else {
 	    gen milieut=(curt+nextt)/2;
@@ -7093,9 +7167,9 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
 		milieut=exact((cd+nd)/2,contextptr);
 	      }
 	    }
-	    dfx=limit(f1,xid,milieut,0,contextptr);
-	    dgx=limit(g1,xid,milieut,0,contextptr);
-	    convt=limit(conv,xid,(curt+nextt)/2,0,contextptr);
+	    dfx=try_limit_undef(f1,xid,milieut,0,contextptr);
+	    dgx=try_limit_undef(g1,xid,milieut,0,contextptr);
+	    convt=try_limit_undef(conv,xid,(curt+nextt)/2,0,contextptr);
 	  }
 	}
       }
@@ -7140,17 +7214,17 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
 	tvidg.push_back(string2gen("-",false));
       }
       if (i<tvs-1 && equalposcomp(sing,nextt)){
-	x=limit(f,xid,nextt,-1,contextptr);
+	x=try_limit_undef(f,xid,nextt,-1,contextptr);
 	x=recursive_normal(x,contextptr);
-	if (!is_inf(x) && is_greater(xmin,x,contextptr))
+	if (!has_inf_or_undef(x) && is_greater(xmin,x,contextptr))
 	  xmin=x;
-	if (!is_inf(x) && is_greater(x,xmax,contextptr))
+	if (!has_inf_or_undef(x) && is_greater(x,xmax,contextptr))
 	  xmax=x;
-	y=limit(g,xid,nextt,-1,contextptr);
+	y=try_limit_undef(g,xid,nextt,-1,contextptr);
 	y=recursive_normal(y,contextptr);
-	if (!is_inf(y) && is_greater(ymin,y,contextptr))
+	if (!has_inf_or_undef(y) && is_greater(ymin,y,contextptr))
 	  ymin=y;
-	if (!is_inf(y) && is_greater(y,ymax,contextptr))
+	if (!has_inf_or_undef(y) && is_greater(y,ymax,contextptr))
 	  ymax=y;
 	tvit.push_back(nextt);
 	tvif.push_back(x);
@@ -7158,17 +7232,17 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
 	tvidf.push_back(nothing);
 	tvidg.push_back(nothing);
 	tviconv.push_back(nothing);
-	gen x=limit(f,xid,nextt,1,contextptr);
+	gen x=try_limit_undef(f,xid,nextt,1,contextptr);
 	x=recursive_normal(x,contextptr);
-	if (!is_inf(x) && is_greater(xmin,x,contextptr))
+	if (!has_inf_or_undef(x) && is_greater(xmin,x,contextptr))
 	  xmin=x;
-	if (!is_inf(x) && is_greater(x,xmax,contextptr))
+	if (!has_inf_or_undef(x) && is_greater(x,xmax,contextptr))
 	  xmax=x;
-	y=limit(g,xid,nextt,1,contextptr);
+	y=try_limit_undef(g,xid,nextt,1,contextptr);
 	y=recursive_normal(y,contextptr);
-	if (!is_inf(y) && is_greater(ymin,y,contextptr))
+	if (!has_inf_or_undef(y) && is_greater(ymin,y,contextptr))
 	  ymin=y;
-	if (!is_inf(y) && is_greater(y,ymax,contextptr))
+	if (!has_inf_or_undef(y) && is_greater(y,ymax,contextptr))
 	  ymax=y;
 	tvit.push_back(nextt);
 	tvif.push_back(x);
@@ -7178,30 +7252,30 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
 	tviconv.push_back(nothing);
       }
       else {
-	gen x=limit(f,xid,nextt,-1,contextptr);
+	gen x=try_limit_undef(f,xid,nextt,-1,contextptr);
 	x=recursive_normal(x,contextptr);
-	if (!is_inf(x) && is_greater(xmin,x,contextptr))
+	if (!has_inf_or_undef(x) && is_greater(xmin,x,contextptr))
 	  xmin=x;
-	if (!is_inf(x) && is_greater(x,xmax,contextptr))
+	if (!has_inf_or_undef(x) && is_greater(x,xmax,contextptr))
 	  xmax=x;
-	y=limit(g,xid,nextt,-1,contextptr);
+	y=try_limit_undef(g,xid,nextt,-1,contextptr);
 	y=recursive_normal(y,contextptr);
-	if (!is_inf(y) && is_greater(ymin,y,contextptr))
+	if (!has_inf_or_undef(y) && is_greater(ymin,y,contextptr))
 	  ymin=y;
-	if (!is_inf(y) && is_greater(y,ymax,contextptr))
+	if (!has_inf_or_undef(y) && is_greater(y,ymax,contextptr))
 	  ymax=y;
 	tvit.push_back(nextt);
 	tvif.push_back(x);
 	tvig.push_back(y);
-	y=limit(f1,xid,nextt,-1,contextptr);
+	y=try_limit_undef(f1,xid,nextt,-1,contextptr);
 	y=recursive_normal(y,contextptr);
 	tvidf.push_back(crunch_rootof(y,contextptr));
-	y=limit(g1,xid,nextt,-1,contextptr);
+	y=try_limit_undef(g1,xid,nextt,-1,contextptr);
 	y=recursive_normal(y,contextptr);
 	tvidg.push_back(crunch_rootof(y,contextptr));
 	if (equalposcomp(infl,nextt)) y=0;
 	else {
-	  y=limit(conv,xid,nextt,-1,contextptr);
+	  y=try_limit_undef(conv,xid,nextt,-1,contextptr);
 	  y=recursive_normal(y,contextptr);
 	}
 	tviconv.push_back(crunch_rootof(y,contextptr));
@@ -7370,7 +7444,7 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
 	*it=re(evalf(*it,1,contextptr),contextptr);
       if (in_domain(df,x,*it,contextptr) && is_greater(*it,xmin,contextptr) && is_greater(xmax,*it,contextptr)){
 	crit.push_back(*it);
-	gen fx=limit(f,xid,*it,0,contextptr);
+	gen fx=try_limit_undef(f,xid,*it,0,contextptr);
 	fx=recursive_normal(fx,contextptr);
 	if (!is_undef(fx) && !is_inf(fx)){
 	  if (1 || exactlegende)
@@ -7396,7 +7470,7 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
     }
     it=crit.begin();itend=crit.end();
     for (;it!=itend;++it){
-      if (!is_inf(*it)){ 
+      if (!has_inf_or_undef(*it)){ 
 	if (is_greater(xmin,*it,contextptr))
 	  xmin=*it;
 	if (is_greater(*it,xmax,contextptr))
@@ -7406,12 +7480,12 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
     it=sing.begin();itend=sing.end();
     for (;it!=itend;++it){
       gen equ;
-      if (!is_inf(*it)){ // vertical
+      if (!has_inf_or_undef(*it)){ // vertical
 	if (is_greater(xmin,*it,contextptr))
 	  xmin=*it;
 	if (is_greater(*it,xmax,contextptr))
 	  xmax=*it;
-	gen l=limit(f,xid,*it,1,contextptr);
+	gen l=try_limit_undef(f,xid,*it,1,contextptr);
 	l=recursive_normal(l,contextptr);
 	if (is_inf(l)){
 	  equ=symb_equal(x__IDNT_e,*it);
@@ -7427,7 +7501,7 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
 	}
 	continue;
       }
-      gen l=limit(f,xid,*it,0,contextptr);
+      gen l=try_limit_undef(f,xid,*it,0,contextptr);
       l=recursive_normal(l,contextptr);
       if (is_undef(l)) continue;
       if (!is_inf(l)){
@@ -7448,7 +7522,7 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
 	}
 	continue;
       }
-      gen a=limit(f/x,xid,*it,0,contextptr);
+      gen a=try_limit_undef(f/x,xid,*it,0,contextptr);
       a=recursive_normal(a,contextptr);
       if (is_undef(a)) continue;
       if (is_inf(a)){
@@ -7463,7 +7537,7 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
 	gprintf(gettext("Horizontal parabolic asymptote at %gen"),vecteur(1,*it),1,contextptr);
 	continue;
       }
-      gen b=limit(f-a*x,xid,*it,0,contextptr);
+      gen b=try_limit_undef(f-a*x,xid,*it,0,contextptr);
       b=recursive_normal(b,contextptr);
       if (is_undef(b)) continue;
       // avoid bounded_function
@@ -7529,18 +7603,18 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
     if (!lop(nextx,at_rootof).empty())
       nextx=re(evalf(nextx,1,contextptr),contextptr);
     vecteur tvix=makevecteur(x,nextx);
-    gen y=limit(f,xid,nextx,1,contextptr),ymin(plus_inf),ymax(minus_inf);
-    if (!is_inf(y) && is_greater(ymin,y,contextptr))
+    gen y=try_limit_undef(f,xid,nextx,1,contextptr),ymin(plus_inf),ymax(minus_inf);
+    if (!has_inf_or_undef(y) && is_greater(ymin,y,contextptr))
       ymin=y;
-    if (!is_inf(y) && is_greater(y,ymax,contextptr))
+    if (!has_inf_or_undef(y) && is_greater(y,ymax,contextptr))
       ymax=y;
     gen yof=y__IDNT_e; // symb_of(y__IDNT_e,x); // 
     vecteur tvif=makevecteur(symb_equal(yof,f),y);
     gen nothing=string2gen(" ",false);
-    vecteur tvidf=makevecteur(symb_equal(symbolic(at_derive,yof),f1),limit(f1,xid,nextx,1,contextptr));
+    vecteur tvidf=makevecteur(symb_equal(symbolic(at_derive,yof),f1),try_limit_undef(f1,xid,nextx,1,contextptr));
     vecteur tvidf2;
     if (do_inflex)
-      tvidf2=makevecteur(symbolic(at_derive,symbolic(at_derive,yof)),limit(f2,xid,nextx,1,contextptr));
+      tvidf2=makevecteur(symbolic(at_derive,symbolic(at_derive,yof)),try_limit_undef(f2,xid,nextx,1,contextptr));
     int tvs=int(tvx.size());
     for (int i=1;i<tvs;++i){
       gen curx=nextx,dfx,df2;
@@ -7549,18 +7623,18 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
 	nextx=re(evalf(nextx,1,contextptr),contextptr);
       tvix.push_back(nothing);
       if (is_inf(nextx) && is_inf(curx)){
-	dfx=limit(f1,xid,0,0,contextptr);
-	if (do_inflex) df2=limit(f2,xid,0,0,contextptr);
+	dfx=try_limit_undef(f1,xid,0,0,contextptr);
+	if (do_inflex) df2=try_limit_undef(f2,xid,0,0,contextptr);
       }
       else {
 	if (curx==minus_inf){
-	  dfx=limit(f1,xid,nextx-1,0,contextptr);
-	  if (do_inflex) df2=limit(f2,xid,nextx-1,0,contextptr);
+	  dfx=try_limit_undef(f1,xid,nextx-1,0,contextptr);
+	  if (do_inflex) df2=try_limit_undef(f2,xid,nextx-1,0,contextptr);
 	}
 	else {
 	  if (nextx==plus_inf){
-	    dfx=limit(f1,xid,curx+1,0,contextptr);
-	    if (do_inflex) df2=limit(f2,xid,curx+1,0,contextptr);
+	    dfx=try_limit_undef(f1,xid,curx+1,0,contextptr);
+	    if (do_inflex) df2=try_limit_undef(f2,xid,curx+1,0,contextptr);
 	  }
 	  else {
 	    gen m=(curx+nextx)/2;
@@ -7573,8 +7647,8 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
 	      }
 	    }
 	    if (in_domain(df,x,m,contextptr)){
-	      dfx=limit(f1,xid,m,0,contextptr);
-	      if (do_inflex) df2=limit(f2,xid,m,0,contextptr);
+	      dfx=try_limit_undef(f1,xid,m,0,contextptr);
+	      if (do_inflex) df2=try_limit_undef(f2,xid,m,0,contextptr);
 	    }
 	    else dfx=df2=undef;
 	  }
@@ -7619,21 +7693,21 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
 	}
       }
       if (i<tvs-1 && equalposcomp(sing,nextx)){
-	y=limit(f,xid,nextx,-1,contextptr);
+	y=try_limit_undef(f,xid,nextx,-1,contextptr);
 	y=recursive_normal(y,contextptr);
-	if (!is_inf(y) && is_greater(ymin,y,contextptr))
+	if (!has_inf_or_undef(y) && is_greater(ymin,y,contextptr))
 	  ymin=y;
-	if (!is_inf(y) && is_greater(y,ymax,contextptr))
+	if (!has_inf_or_undef(y) && is_greater(y,ymax,contextptr))
 	  ymax=y;
 	tvix.push_back(nextx);
 	tvif.push_back(crunch_rootof(y,contextptr));
 	tvidf.push_back(string2gen("||",false));
 	if (do_inflex) tvidf2.push_back(string2gen("||",false));
-	y=limit(f,xid,nextx,1,contextptr);
+	y=try_limit_undef(f,xid,nextx,1,contextptr);
 	y=recursive_normal(y,contextptr);
-	if (!is_inf(y) && is_greater(ymin,y,contextptr))
+	if (!has_inf_or_undef(y) && is_greater(ymin,y,contextptr))
 	  ymin=y;
-	if (!is_inf(y) && is_greater(y,ymax,contextptr))
+	if (!has_inf_or_undef(y) && is_greater(y,ymax,contextptr))
 	  ymax=y;
 	tvix.push_back(nextx);
 	tvif.push_back(crunch_rootof(y,contextptr));
@@ -7641,25 +7715,25 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
 	if (do_inflex) tvidf2.push_back(string2gen("||",false));
       }
       else {
-	y=limit(f,xid,nextx,-1,contextptr); 
-	if (0 && !is_inf(nextx) && !is_zero(recursive_normal(y-limit(f,xid,nextx,1,contextptr),contextptr))) // should not happen
+	y=try_limit_undef(f,xid,nextx,-1,contextptr); 
+	if (0 && !is_inf(nextx) && !is_zero(recursive_normal(y-try_limit_undef(f,xid,nextx,1,contextptr),contextptr))) // should not happen
 	  y=undef;
 	y=recursive_normal(y,contextptr);
-	if (!is_inf(y) && is_greater(ymin,y,contextptr))
+	if (!has_inf_or_undef(y) && is_greater(ymin,y,contextptr))
 	  ymin=y;
-	if (!is_inf(y) && is_greater(y,ymax,contextptr))
+	if (!has_inf_or_undef(y) && is_greater(y,ymax,contextptr))
 	  ymax=y;
 	tvix.push_back(nextx);
 	tvif.push_back(crunch_rootof(y,contextptr));
-	y=limit(f1,xid,nextx,-1,contextptr); 
+	y=try_limit_undef(f1,xid,nextx,-1,contextptr); 
 	// additional check for same bidirectional limit
 	gen ysecond;
-	if (!is_inf(nextx) && !is_zero(recursive_normal(y-(ysecond=limit(f1,xid,nextx,1,contextptr)),contextptr)))
+	if (!is_inf(nextx) && !is_zero(recursive_normal(y-(ysecond=try_limit_undef(f1,xid,nextx,1,contextptr)),contextptr)))
 	  y=makevecteur(y,ysecond);
 	y=recursive_normal(y,contextptr);
 	tvidf.push_back(crunch_rootof(y,contextptr));
 	if (do_inflex){
-	  y=limit(f2,xid,nextx,0,contextptr);
+	  y=try_limit_undef(f2,xid,nextx,0,contextptr);
 	  y=recursive_normal(y,contextptr);
 	  tvidf2.push_back(crunch_rootof(y,contextptr));
 	}
@@ -8161,28 +8235,93 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
   static define_unary_function_eval (__python_list,&_python_list,_python_list_s);
   define_unary_function_ptr5( at_python_list ,alias_at_python_list,&__python_list,0,true);
 
-  static vecteur & pixel_v(){
-    static vecteur * ptr=new vecteur();
-    return *ptr;
-  }
   gen _set_pixel(const gen & a_,GIAC_CONTEXT){
     gen a(a_);
     if (a.type==_STRNG && a.subtype==-1) return  a;
     if (a.type==_VECT && a._VECTptr->empty())
       return pixel_v();
     if (is_integral(a)){
-      pixel_v().clear();
+      pixel_v()._VECTptr->clear();
       if (a==0) a=vecteur(0);
       return _pixon(a,contextptr);
     }
     else {
-      pixel_v().push_back(_pixon(a,contextptr));
+      if (a.type!=_VECT || !is_integer_vecteur(*a._VECTptr))
+	return 0;
+      pixel_v()._VECTptr->push_back(_pixon(a,contextptr));
+      const vecteur & v=*a._VECTptr;
+      size_t vs=v.size();
+      if (vs>=2){
+	const gen & x=v.front();
+	const gen & y=v[1];
+	if (x.type==_INT_ && x.val>=0 && x.val < pixel_cols && y.type==_INT_ && y.val>=0 && y.val<pixel_lines){
+	  pixel_buffer[y.val][x.val]=vs==2?int(FL_BLACK):v[2].val;
+	}
+      }
     }
-    return 1;
+    return pixel_v();
   }
   static const char _set_pixel_s []="set_pixel";
   static define_unary_function_eval (__set_pixel,&_set_pixel,_set_pixel_s);
   define_unary_function_ptr5( at_set_pixel ,alias_at_set_pixel,&__set_pixel,0,true);
+
+  gen _draw_string(const gen & a_,GIAC_CONTEXT){
+    gen a(a_);
+    if (a.type==_STRNG && a.subtype==-1) return  a;
+    if (a.type!=_VECT)
+      return gensizeerr(contextptr);
+    vecteur v(*a._VECTptr);
+    if (v.size()!=3 && v.size()!=4)
+      return gendimerr(contextptr);
+    if (v[0].type!=_STRNG || !is_integral(v[1]) || !is_integral(v[2]))
+      return gensizeerr(contextptr);
+    gen s=v[0];
+    v.erase(v.begin());
+    v.push_back(s);
+    pixel_v()._VECTptr->push_back(_pixon(gen(v,_SEQ__VECT),contextptr));
+    return pixel_v();
+  }
+  static const char _draw_string_s []="draw_string";
+  static define_unary_function_eval (__draw_string,&_draw_string,_draw_string_s);
+  define_unary_function_ptr5( at_draw_string ,alias_at_draw_string,&__draw_string,0,true);
+
+  gen _get_pixel(const gen & a_,GIAC_CONTEXT){
+    gen a(a_);
+    if (a.type==_STRNG && a.subtype==-1) return  a;
+    if (a.type!=_VECT || a._VECTptr->size()!=2)
+      return gensizeerr(contextptr);
+    gen x=a._VECTptr->front(),y=a._VECTptr->back();
+    if (x.type==_INT_ && x.val>=0 && x.val<pixel_cols && y.type==_INT_ && y.val>=0 && y.val<pixel_lines)
+      return pixel_buffer[y.val][x.val];
+    const vecteur v= *pixel_v()._VECTptr;
+    for (size_t i=0;i<v.size();++i){
+      const gen & vi_=v[i];
+      const gen * vi=&vi_;
+      if (vi_.type==_SYMB && vi_._SYMBptr->sommet==at_pnt){
+	const gen & f=vi_._SYMBptr->feuille;
+	if (f.type==_VECT){
+	  const vecteur & w=*f._VECTptr;
+	  if (!w.empty())
+	    vi=&v.front();
+	}
+      }
+      if (vi->is_symb_of_sommet(at_pixon)){
+	const gen & f=vi->_SYMBptr->feuille;
+	if (f.type==_VECT){
+	  const vecteur & w=*f._VECTptr;
+	  int ws=w.size();
+	  if (ws>=2 && w.front()==x && w[1]==y){
+	    if (ws>=3) return w[2];
+	    return int(FL_BLACK);
+	  }
+	} 
+      }
+    }
+    return int(FL_WHITE);
+  }
+  static const char _get_pixel_s []="get_pixel";
+  static define_unary_function_eval (__get_pixel,&_get_pixel,_get_pixel_s);
+  define_unary_function_ptr5( at_get_pixel ,alias_at_get_pixel,&__get_pixel,0,true);
 
 #ifdef EMCC_FETCH
   // with emscripten 1.37.28, it does not work
