@@ -467,6 +467,21 @@ extern "C" void Sleep(unsigned int miliSecond);
       _decimal_digits_=b;
   }
 
+  static int _minchar_for_quote_as_string_=1; 
+
+  int & minchar_for_quote_as_string(GIAC_CONTEXT){
+    if (contextptr && contextptr->globalptr )
+      return contextptr->globalptr->_minchar_for_quote_as_string_;
+    else
+      return _minchar_for_quote_as_string_;
+  }
+  void minchar_for_quote_as_string(int b,GIAC_CONTEXT){
+    if (contextptr && contextptr->globalptr )
+      contextptr->globalptr->_minchar_for_quote_as_string_=b;
+    else
+      _minchar_for_quote_as_string_=b;
+  }
+
   static int _xcas_mode_=0; 
   int & xcas_mode(GIAC_CONTEXT){
     if (contextptr && contextptr->globalptr )
@@ -3410,6 +3425,7 @@ extern "C" void Sleep(unsigned int miliSecond);
      ptr->globalptr->_calc_mode_=_calc_mode_;
 #endif
      ptr->globalptr->_decimal_digits_=_decimal_digits_;
+     ptr->globalptr->_minchar_for_quote_as_string_=_minchar_for_quote_as_string_;
      ptr->globalptr->_scientific_format_=_scientific_format_;
      ptr->globalptr->_integer_format_=_integer_format_;
      ptr->globalptr->_integer_mode_=_integer_mode_;
@@ -3850,7 +3866,7 @@ extern "C" void Sleep(unsigned int miliSecond);
 
 
   global::global() : _xcas_mode_(0), 
-		     _calc_mode_(0),_decimal_digits_(12),
+		     _calc_mode_(0),_decimal_digits_(12),_minchar_for_quote_as_string_(1),
 		     _scientific_format_(0), _integer_format_(0), _latex_format_(0), 
 #ifdef BCD
 		     _bcd_decpoint_('.'|('E'<<16)|(' '<<24)),_bcd_mantissa_(12+(15<<8)), _bcd_flags_(0),_bcd_printdouble_(false),
@@ -3910,6 +3926,7 @@ extern "C" void Sleep(unsigned int miliSecond);
      _xcas_mode_=g._xcas_mode_;
      _calc_mode_=g._calc_mode_;
      _decimal_digits_=g._decimal_digits_;
+     _minchar_for_quote_as_string_=g._minchar_for_quote_as_string_;
      _scientific_format_=g._scientific_format_;
      _integer_format_=g._integer_format_;
      _integer_mode_=g._integer_mode_;
@@ -5787,11 +5804,15 @@ unsigned int ConvertUTF8toUTF16 (
     return res+line;
   }
 
-  static void python_import(string & cur,int cs,int posturtle,int poscmath,int posmath,int posnumpy,GIAC_CONTEXT){
+  static void python_import(string & cur,int cs,int posturtle,int poscmath,int posmath,int posnumpy,int posmatplotlib,GIAC_CONTEXT){
+    if (posmatplotlib>=0 && posmatplotlib<cs){
+      cur += "np:=numpy:;xlim(a,b):=gl_x=a..b:;ylim(a,b):=gl_y=a..b:;show:=DispG:;";
+      posnumpy=posmatplotlib;
+    }
     if (posnumpy>=0 && posnumpy<cs){
       static bool alertnum=true;
       // add python numpy shortcuts
-      cur += "mat:=matrix:;arange:=range:;resize:=redim:;shape:=dim:;conjugate:=conj:;full:=matrix:;eye:=idn:;ones(n,c):=matrix(n,c,1):;reshape(m,n,c):=matrix(n,c,flatten(m)):;";
+      cur += "mat:=matrix:;arange:=range:;resize:=redim:;shape:=dim:;conjugate:=conj:;full:=matrix:;eye:=idn:;ones(n,c):=matrix(n,c,1):;reshape(m,n,c):=matrix(n,c,flatten(m));";
       if (alertnum){
 	alertnum=false;
 	alert("mat:=matrix;arange:=range;resize:=redim;shape:=dim;conjugate:=conj;full:=matrix;eye:=idn;ones(n,c):=matrix(n,c,1);reshape(m,n,c):=matrix(n,c,flatten(m));",contextptr);
@@ -5816,7 +5837,7 @@ unsigned int ConvertUTF8toUTF16 (
 	alert(gettext("Assigning phase, j, J and rect."),contextptr);
       }
       cur += "phase:=arg:;j:=i:;J:=i:;rect(r,theta):=r*exp(i*theta):;";
-      return;
+      posmath=poscmath;
     }
     if (posmath>=0 && posmath<cs){
       // add python math shortcuts
@@ -6062,6 +6083,8 @@ unsigned int ConvertUTF8toUTF16 (
 	      bool str=!isalpha(cur[q]) || !isalphan(cur[p]);
 	      if (p && cur[p]=='.' && cur[p-1]>'9')
 		str=true;
+	      if (p-q>=minchar_for_quote_as_string(contextptr))
+		str=true;
 	      for (;!str && q<p;++q){
 		char ch=cur[q];
 		if (ch=='"' || ch==' ')
@@ -6111,9 +6134,12 @@ unsigned int ConvertUTF8toUTF16 (
 	    int poscmath=cur.find("cmath");
 	    int posmath=cur.find("math");
 	    int posnumpy=cur.find("numpy");
+	    int posmatplotlib=cur.find("matplotlib");
+	    if (posmatplotlib<0 || posmatplotlib>=cur.size())
+	      posmatplotlib=cur.find("pylab");
 	    int cs=int(cur.size());
 	    cur=cur.substr(0,pos);
-	    python_import(cur,cs,posturtle,poscmath,posmath,posnumpy,contextptr);
+	    python_import(cur,cs,posturtle,poscmath,posmath,posnumpy,posmatplotlib,contextptr);
 	    pythonmode=true;
 	    break;
 	  }
@@ -6125,13 +6151,16 @@ unsigned int ConvertUTF8toUTF16 (
 	  int poscmath=cur.find("cmath");
 	  int posmath=cur.find("math");
 	  int posnumpy=cur.find("numpy");
+	  int posmatplotlib=cur.find("matplotlib");
+	  if (posmatplotlib<0 || posmatplotlib>=cur.size())
+	    posmatplotlib=cur.find("pylab");
 	  int cs=int(cur.size());
 	  int posi=cur.find(" as ");
 	  if (posi>pos+5 && posi<int(cur.size()))
 	    cur=cur.substr(posi+4,cur.size()-posi-4)+":="+cur.substr(7,posi-7)+';';
 	  else
 	    cur=cur.substr(pos+7,cur.size()-pos-7);
-	  python_import(cur,cs,posturtle,poscmath,posmath,posnumpy,contextptr);
+	  python_import(cur,cs,posturtle,poscmath,posmath,posnumpy,posmatplotlib,contextptr);
 	  pythonmode=true;
 	  break;	    
 	}
