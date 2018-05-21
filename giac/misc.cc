@@ -8264,12 +8264,29 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
   define_unary_function_ptr5( at_python_list ,alias_at_python_list,&__python_list,0,true);
 
   gen _set_pixel(const gen & a_,GIAC_CONTEXT){
-#ifdef GIAC_HAS_STO_38
-    static gen PIXEL(identificateur("PIXEL_P"));
-    return _of(makesequence(PIXEL,a_),contextptr);
-#else
     gen a(a_);
     if (a.type==_STRNG && a.subtype==-1) return  a;
+#ifdef GIAC_HAS_STO_38
+    if (a.type!=_VECT || a._VECTptr->size()<2)
+      return gentypeerr(contextptr);
+    const vecteur & v=*a._VECTptr;
+    size_t vs=v.size();
+    if (vs>=2){
+      gen x=v.front();
+      gen y=v[1];
+      if (x.type==_DOUBLE_)
+	x=int(x._DOUBLE_val+.5);
+      if (y.type==_DOUBLE_)
+	y=int(y._DOUBLE_val+.5);
+      if (x.type==_INT_ &&  y.type==_INT_ ){
+	aspen_set_pixel(x.val,y.val,vs==2?0:v[2].val);
+	return 1;
+      }
+    }
+    return gensizeerr(contextptr);
+    //static gen PIXEL(identificateur("PIXON_P"));
+    //return _of(makesequence(PIXEL,a_),contextptr);
+#else
     if (a.type==_VECT && a._VECTptr->empty())
       return pixel_v();
     if (is_integral(a)){
@@ -8365,6 +8382,16 @@ static define_unary_function_eval (__os_version,&_os_version,_os_version_s);
   static const char _get_pixel_s []="get_pixel";
   static define_unary_function_eval (__get_pixel,&_get_pixel,_get_pixel_s);
   define_unary_function_ptr5( at_get_pixel ,alias_at_get_pixel,&__get_pixel,0,true);
+
+  gen _dtype(const gen & args,GIAC_CONTEXT){
+    gen g(args);
+    while (g.type==_VECT && !g._VECTptr->empty())
+      g=g._VECTptr->front();
+    return change_subtype(g.type,_INT_TYPE);
+  }
+  static const char _dtype_s []="dtype";
+  static define_unary_function_eval (__dtype,&_dtype,_dtype_s);
+  define_unary_function_ptr5( at_dtype ,alias_at_dtype,&__dtype,0,true);
 
 #ifdef EMCC_FETCH
   // with emscripten 1.37.28, it does not work

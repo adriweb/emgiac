@@ -186,6 +186,7 @@ namespace giac {
   gen _SUB(const gen & args,GIAC_CONTEXT);
   gen _RANDMAT(const gen & args,GIAC_CONTEXT);
   gen _REDIM(const gen & args,GIAC_CONTEXT);
+  extern const unary_function_ptr * const  at_redim;
   gen _REPLACE(const gen & args,GIAC_CONTEXT);
   gen _EIGENVAL(const gen & args,GIAC_CONTEXT);
   gen _EIGENVV(const gen & args,GIAC_CONTEXT);
@@ -257,6 +258,9 @@ namespace giac {
   extern const unary_function_ptr * const  at_svl;
   extern const unary_function_ptr * const  at_swapcol;
   extern const unary_function_ptr * const  at_swaprow;
+  extern const unary_function_ptr * const  at_mantissa;
+  extern const unary_function_ptr * const  at_ldexp;
+  extern const unary_function_ptr * const  at_frexp;
 
   int is_known_name_home_38(const char * idname);
   // 1 and 2 app or program variable, 3 home variable

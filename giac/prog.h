@@ -1008,6 +1008,19 @@ namespace giac {
 
   extern const unary_function_ptr * const  at_index ;
   gen _index(const gen & args,GIAC_CONTEXT);
+  extern const unary_function_ptr * const  at_extend ;
+  extern const unary_function_ptr * const  at_python_compat ;
+  extern const unary_function_ptr * const  at_randint ;
+  extern const unary_function_ptr * const  at_choice ;
+  extern const unary_function_ptr * const  at_randrange ;
+  extern const unary_function_ptr * const  at_giac_assert ;
+  extern const unary_function_ptr * const  at_heapify ;
+  extern const unary_function_ptr * const  at_heappop ;
+  extern const unary_function_ptr * const  at_heappush ;
+  extern const unary_function_ptr * const  at_giac_bool ;
+  extern const unary_function_ptr * const  at_shuffle ;
+  extern const unary_function_ptr * const  at_giac_bin ;
+  extern const unary_function_ptr * const  at_giac_hex ;
 
 #ifndef NO_NAMESPACE_GIAC
 } // namespace giac
