@@ -51,6 +51,11 @@ using namespace std;
 #include "solve.h"
 #include "csturm.h"
 #include "sparse.h"
+#ifdef GIAC_HAS_STO_38
+inline bool is_graphe(const gen &g,std::string &disp_out,GIAC_CONTEXT){ return false; }
+#else
+#include "graphtheory.h"
+#endif
 #include "giacintl.h"
 #ifdef RTOS_THREADX
 extern "C" uint32_t mainThreadStack[];
@@ -13491,6 +13496,11 @@ namespace giac {
       else
 	return _SYMBptr->print(contextptr);
     case _VECT:
+      if (subtype==_GRAPH__VECT){
+	string s;
+	if (is_graphe(*this,s,contextptr))
+	  return s;
+      }
       return print_VECT(*_VECTptr,subtype,contextptr);
     case _POLY:
       return _POLYptr->print() ;

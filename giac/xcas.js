@@ -1,6 +1,7 @@
 function $id(id) { return document.getElementById(id); }
 
 var UI = {
+  Datestart:Date.now(),
   mailto: '',
   from: '',
   ready: false,
@@ -8,6 +9,7 @@ var UI = {
   docprefix: "https://www-fourier.ujf-grenoble.fr/%7eparisse/giac/doc/fr/cascmd_fr/",
   base_url: "https://www-fourier.ujf-grenoble.fr/%7eparisse/",
   forum_url: "http://xcas.e.ujf-grenoble.fr/XCAS/posting.php?mode=post&f=12&subject=session",
+  //forum_url: "http://xcas.univ-grenoble-alpes.fr/forum/posting.php?mode=post&f=12&subject=session",
   forum_warn: true,
   focused: entree,
   savefocused: entree,
@@ -46,14 +48,14 @@ var UI = {
   assistant_close: function () {
     var t = UI.assistant_list;
     var s = t.length;
-    for (var i=0; i<s; i++) {
+    for (var i = 0; i < s; i++) {
       $id('assistant_' + t[i]).style.display = 'none';
     }
   },
   assistant_ok: function () {
     var t = UI.assistant_list;
     var s = t.length;
-    for (var i=0; i<s; i++) {
+    for (var i = 0; i < s; i++) {
       var tmp = $id('assistant_' + t[i]);
       if (tmp.style.display == 'block') {
         tmp = 'UI.assistant_' + t[i] + '_ok()';
@@ -463,7 +465,7 @@ var UI = {
     if (s === undefined) return;
     if (s.length < 12 || s.substr(0, 9) != 'matr_case') return;
     var l = s.length, i, j, err;
-    for (i=8; i<l; ++i) {
+    for (i = 8; i < l; ++i) {
       if (s[i] == '_') break;
     }
     j = eval(s.substr(i + 1, l - i - 1));
@@ -488,10 +490,10 @@ var UI = {
     var R = UI.assistant_matr_maxrows;
     if (!UI.is_sheet || R == 0) return;
     var s = 'spreadsheet[';
-    for (var i=0; i<R; i++) {
+    for (var i = 0; i < R; i++) {
       var C = UI.assistant_matr_maxcols;
       s += '[';
-      for (var j=0; j<C; j++) {
+      for (var j = 0; j < C; j++) {
         var field = $id('matr_case' + i + '_' + j);
         var tmp = '[' + field.value;
         if (tmp.length == 1) tmp += '""';
@@ -511,11 +513,11 @@ var UI = {
     //console.log(s);
     if (R > s.length) R = s.length;
     // dispatch to UI
-    for (var i=0; i<R; i++) {
+    for (var i = 0; i < R; i++) {
       var r = s[i];
       var C = r.length;
       if (C > UI.assistant_matr_maxcols) C = UI.assistant_matr_maxcols;
-      for (var j=0; j<C; j++) {
+      for (var j = 0; j < C; j++) {
         var field = $id('matr_span' + i + '_' + j);
         var field2 = $id('matr_case' + i + '_' + j);
         //console.log(i,j,field,r);
@@ -545,13 +547,13 @@ var UI = {
     if (c > 26) {
       UI.assistant_matr_maxcols = c = 26;
     }
-    for (var j=0; j<c; j++) {
+    for (var j = 0; j < c; j++) {
       $id('matr_head_' + j).innerHTML = String.fromCharCode(65 + j);
     }
     UI.is_sheet = true;
     UI.sheet_recompute('');
-    for (var i=0; i<l; i++) {
-      for (var j=0; j<c; j++) {
+    for (var i = 0; i < l; i++) {
+      for (var j = 0; j < c; j++) {
         //console.log(i,j);
         var field = $id('matr_span' + i + '_' + j);
         field.style.display = 'inline';
@@ -565,12 +567,12 @@ var UI = {
     if (c > 26) {
       UI.assistant_matr_maxcols = c = 26;
     }
-    for (var j=0; j<c; j++) {
+    for (var j = 0; j < c; j++) {
       $id('matr_head_' + j).innerHTML = '' + j;
     }
-    for (var i=0; i<l; i++) {
+    for (var i = 0; i < l; i++) {
       ligne = UI.assistant_matr_source[i];
-      for (var j=0; j<c; j++) {
+      for (var j = 0; j < c; j++) {
         var tmp = ligne[j][1];
         if (tmp == '""') tmp = '';
         var field = $id('matr_case' + i + '_' + j);
@@ -585,7 +587,7 @@ var UI = {
     //console.log(field.id,field.previousSibling.id);
     s = field.id;
     var l = s.length, i, j, err;
-    for (i=8; i<l; ++i) {
+    for (i = 8; i < l; ++i) {
       if (s[i] == '_') break;
     }
     j = eval(s.substr(i + 1, l - i - 1));
@@ -621,15 +623,15 @@ var UI = {
     UI.assistant_matr_maxcols = c;
     var s = '<table>\n';
     var h = '<tr><th id="matr_head">@</th>';
-    for (var j=0; j<c; ++j) {
+    for (var j = 0; j < c; ++j) {
       h += '<th id="matr_head_' + j + '" style="text-align:center">' + j + '</th>';
     }
     h += '</tr>\n';
     s += h;
-    for (var i=0; i<l; ++i) {
+    for (var i = 0; i < l; ++i) {
       s += '<tr id="matr_ligne' + i + '">';
       s += '<td id="matr_line_' + i + '">' + i + '</td>';
-      for (var j=0; j<c; ++j) {
+      for (var j = 0; j < c; ++j) {
         var field = $id('matr_case' + i + '_' + j);
         var oldval = '';
         //console.log(i,j,field.value);
@@ -669,7 +671,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     //console.log(se);
     s = field.id;
     var l = s.length, i, j, err;
-    for (i=8; i<l; ++i) {
+    for (i = 8; i < l; ++i) {
       if (s[i] == '_') break;
     }
     j = eval(s.substr(i + 1, l - i - 1));
@@ -745,7 +747,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
   },
   adequation: function (form) {
     var test;
-    for (test=0; test<7; ++test) {
+    for (test = 0; test < 7; ++test) {
       if (form.adequation[test].checked) break;
     }
     //console.log(test);
@@ -843,9 +845,9 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     }
     else {
       tmp += '[';
-      for (var i=0; i<nrows.value; i++) {
+      for (var i = 0; i < nrows.value; i++) {
         tmp += '[';
-        for (var j=0; j<ncols.value; j++) {
+        for (var j = 0; j < ncols.value; j++) {
           //console.log(j,tmp);
           var val = $id('matr_case' + i + '_' + j).value;
           if (UI.is_sheet && i < UI.assistant_matr_source.length) {
@@ -885,10 +887,10 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
           alpha = form.adequation_alpha.value;
         if (form.adequation_sigma.value.length)
           sigma = form.adequation_sigma.value;
-        for (test=0; test<7; ++test) {
+        for (test = 0; test < 7; ++test) {
           if (form.adequation[test].checked) break;
         }
-        for (hyp=0; hyp<3; ++hyp) {
+        for (hyp = 0; hyp < 3; ++hyp) {
           if (form.adequation_alt[hyp].checked) break;
         }
         if (test == 3) tmp += 'chisquaret(';
@@ -996,16 +998,16 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       //console.log("matr",nrows.value,ncols.value);
       var matr = [];
       matr.length = maxrows;
-      for (var j=0; j<maxcols; j++) {
+      for (var j = 0; j < maxcols; j++) {
         var tmp = $id('matr_head_' + j);
         if (j < ncols.value) tmp.style.visibility = 'visible'; else tmp.style.visibility = 'hidden';
       }
-      for (var i=0; i<maxrows; i++) {
+      for (var i = 0; i < maxrows; i++) {
         //$id('matr_ligne'+i).style.visibility='hidden';
         $id('matr_ligne' + i).style.display = 'none';
         var ligne = [];
         ligne.length = maxcols;
-        for (var j=0; j<maxcols; j++) {
+        for (var j = 0; j < maxcols; j++) {
           ligne[j] = $id('matr_case' + i + '_' + j);
           ligne[j].style.display = 'none';
           //console.log(j,ligne[j].parentNode.style.display);
@@ -1014,11 +1016,11 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
         }
         matr[i] = ligne;
       }
-      for (var i=0; i<nrows.value; i++) {
+      for (var i = 0; i < nrows.value; i++) {
         //$id('matr_ligne'+i).style.visibility='visible';
         $id('matr_ligne' + i).style.display = 'table-row';
         if (UI.is_sheet) {
-          for (var j=0; j<ncols.value; j++) {
+          for (var j = 0; j < ncols.value; j++) {
             var f = matr[i][j];
             // console.log(i,j,f.innerHTML);
             f.nextSibling.style.display = 'inline';
@@ -1026,7 +1028,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
           }
         }
         else {
-          for (var j=0; j<ncols.value; j++) {
+          for (var j = 0; j < ncols.value; j++) {
             matr[i][j].style.display = 'inline';
             matr[i][j].parentNode.style.display = '';
           }
@@ -1090,10 +1092,10 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
           var txt = cm.getLine(end.line);
           //console.log(txt);
           var l = txt.length, i, j;
-          for (i=0; i<l; i++) {
+          for (i = 0; i < l; i++) {
             if (txt[i] != ' ') break;
           }
-          for (j=i; j<l; j++) {
+          for (j = i; j < l; j++) {
             if (txt[j] == ' ') break;
           }
           txt = txt.substr(i, j - i);
@@ -1197,7 +1199,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       }
     }
     var theCookies = document.cookie.split(';');
-    for (var i=0; i<theCookies.length; i++) {
+    for (var i = 0; i < theCookies.length; i++) {
       // console.log(i,theCookies[i].substr(0,7));
       var tmp = theCookies[i];
       var pos = tmp.search('=');
@@ -1227,7 +1229,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     }
     var nameEQ = name + "=";
     var ca = document.cookie.split(';');
-    for (var i=0; i<ca.length; i++) {
+    for (var i = 0; i < ca.length; i++) {
       var c = ca[i];
       while (c.charAt(0) == ' ') c = c.substring(1, c.length);
       if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
@@ -1411,7 +1413,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     var clearcmd = true;
     var hashParams = chaine.split('&');
     if (hashParams.length == 0) return;
-    for (var i=0; i<hashParams.length; i++) {
+    for (var i = 0; i < hashParams.length; i++) {
       var s = hashParams[i];
       if (s.length) $id('startup_restore').style.display = 'none';
       if (s == 'exec') {
@@ -1597,7 +1599,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       }
       //s=encodeURIComponent(s); // does not work innerHTML will add a prefix
       //var sforum=encodeURIComponent('[url]'+s+'[/url]');
-      sforum = '[url]' + sforum + '[/url]';
+      sforum = '[url=' + sforum + ']session Xcas[/url]';
       $id('theforumlink').innerHTML = sforum;
       var copy = "<button title=";
       copy += UI.langue == -1 ? "'Partager cette session sur le forum'" : "'Share this session on the forum'";
@@ -1626,7 +1628,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     var res, i, l, ch;
     l = s.length;
     res = '';
-    for (i=0; i<l; ++i) {
+    for (i = 0; i < l; ++i) {
       ch = s[i];
       if (ch == '&') {
         res += "%26";
@@ -1761,7 +1763,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
         'rsolve', 'diff', 'matr', 'suites', 'arit', 'geo', 'linalg', 'rewrite',
         'graph', 'calculus'];
       var s = tab.length, k;
-      for (k=0; k<s; ++k) {
+      for (k = 0; k < s; ++k) {
         var tmp = $id('assistant_' + tab[k]);
         if (tmp.style.display == 'block') {
           tmp.style.display = 'none';
@@ -1846,7 +1848,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     //mh=form.outdiv_height.value;
     var cms = mh - 2 * hb; // codemirror scrollbar max height
     if (UI.focused == cmentree) cms = Math.floor(hw * .67);
-    s = 'h1,h2,h3 { display:inline; font-size:1em;}\ninput[type="number"] { width:40px;}\n .outdiv { width:' + w + 'px; max-height: ' + mh + 'px;  overflow: auto;}\n.filenamecss {width:80px;height:20px}\n#mathoutput tbody {margin-bottom: 10px;display: inherit;}\n.historymovebtn {height: 18px;width: 28px;line-height: 0 !important;}\n.historyinput {width:' + hi + 'px; min-height: 28px !important; font-size: 16px !important; font-family: Menlo, Monaco, Consolas, "Courier New", monospace !important; }\n.bouton{vertical-align:center; height:' + (mob ? hb : 29) + 'px;}\n.CodeMirror-scroll {height:auto; max-height:' + cms + 'px;}\n.CodeMirror {border: 1px solid black;  height:auto; min-width:' + hi + 'px;}\n  dt {font-family: monospace; color: #666;}';
+    s = 'h1,h2,h3 { display:inline; font-size:1em;}\ninput[type="number"] { width:40px;}\n .outdiv { width:' + w + 'px; max-height: ' + mh + 'px;  overflow: auto;}\n.filenamecss {width:80px;height:20px}\n.historyinput {width:' + hi + 'px;}\n.bouton{vertical-align:center; height:' + (mob ? hb : 29) + 'px;}\n.CodeMirror-scroll {height:auto; max-height:' + cms + 'px;}\n.CodeMirror {border: 1px solid black;  height:auto; min-width:' + hi + 'px;}\n  dt {font-family: monospace; color: #666;}';
     //console.log(mh,cms);// Module.print(s);
     //Module.print(mh,cms);
     var st = $id('document_style');
@@ -1881,11 +1883,11 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     h = Math.floor(hh / 20);
     if (h < 34) h = 34;
     h = h + "px"; // console.log(hw,w,hh,h);
-    for (var i=0; i<kbd_l.length; i++) {
+    for (var i = 0; i < kbd_l.length; i++) {
       $id(kbd_l[i]).style.width = w;
       $id(kbd_l[i]).style.height = h;
     }
-    for (var i=0; i<kbd_a.length; i++) {
+    for (var i = 0; i < kbd_a.length; i++) {
       $id(kbd_a[i]).style.width = w;
       $id(kbd_a[i]).style.height = h;
     }
@@ -1895,7 +1897,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     h = Math.floor(hh / 20);
     if (h < 35) h = 35;
     h = h + "px"; // console.log(hw,w,hh,h);
-    for (var i=0; i<kbd_prog.length; i++) {
+    for (var i = 0; i < kbd_prog.length; i++) {
       $id(kbd_prog[i]).style.width = w;
       $id(kbd_prog[i]).style.height = h;
     }
@@ -1905,7 +1907,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     h = Math.floor(hh / 20);
     if (h < 35) h = 35;
     h = h + "px"; // console.log(hw,w,hh,h);
-    for (var i=0; i<kbd_math.length; i++) {
+    for (var i = 0; i < kbd_math.length; i++) {
       $id(kbd_math[i]).style.width = w;
       $id(kbd_math[i]).style.height = h;
     }
@@ -1976,7 +1978,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     form.style.display = 'none';
     if (UI.focusaftereval) UI.focused.focus();
     var test;
-    for (test=0; test<5; ++test) {
+    for (test = 0; test < 5; ++test) {
       if (form.lang[test].checked) break;
     }
     test++;
@@ -2057,11 +2059,18 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       tmp.style.display = 'none'
   },
   remove_extension: function(name){
-    return name.split('.')[0];
+    var s=name.length,i;
+    for (i=s-1;i>=0;--i){
+      if (name[i]=='.')
+	break;
+    }
+    if (i>0)
+      return name.substr(0,i);
+    return name;
   },
   loadfile: function (oFiles) {
     var nFiles = oFiles.length;
-    for (var nFileId=0; nFileId<nFiles; nFileId++) {
+    for (var nFileId = 0; nFileId < nFiles; nFileId++) {
       console.log('load',oFiles[nFileId].name);
       $id('outputfilename').innerHTML=UI.remove_extension(oFiles[nFileId].name);
       var reader = new FileReader();
@@ -2121,20 +2130,20 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     var s = '<tr onmouseenter="UI.switch_buttons(this,true)" onmouseleave="if (!UI.fixeddel) UI.switch_buttons(this,false)">';
     // s += '<td>&bull;</td>'; // f=f.nextSibling in switch_buttons
     if (newline) {
-      s += '<td style="display: inline-grid"><button class="btn btn-default" onclick="UI.moveup(this)" title="';
+      s += '<td><button style="width:20px;height:28px;" onclick="UI.moveup(this)" title="';
       s += UI.langue == -1 ? 'd&eacute;placer vers le haut' : 'move level up';
-      s += '">↑</button><br><button class="btn btn-default historymovebtn" onclick="UI.movedown(this)" title="';
+      s += '">↑</button><br><button style="width:20px;height:28px;" onclick="UI.movedown(this)" title="';
       s += UI.langue == -1 ? 'd&eacute;placer vers la bas' : 'move level down';
       s += '">↓</button></td><td></td>';
     }
     else {
-      s += '<td style="display: inline-grid"><button class="btn btn-default historymovebtn" onclick="UI.moveup(this)" title="';
+      s += '<td><button style="width:20px;height:16px;" onclick="UI.moveup(this)" title="';
       s += UI.langue == -1 ? 'd&eacute;placer vers le haut' : 'move level up';
-      s += '">↑</button><button class="btn btn-default historymovebtn" onclick="UI.movedown(this)" title="';
+      s += '">↑</button><button style="width:20px;height:16px;" onclick="UI.movedown(this)" title="';
       s += UI.langue == -1 ? 'd&eacute;placer vers la bas' : 'move level down';
-      s += '">↓</button></td><td style="display: inline-grid"><button class="btn btn-default historymovebtn" onclick="for (var i=0;i<5;i++) UI.moveup(this)" title="';
+      s += '">↓</button></td><td><button style="width:20px;height:16px;" onclick="for (var i=0;i<5;i++) UI.moveup(this)" title="';
       s += UI.langue == -1 ? 'd&eacute;placer de 5 vers le haut' : 'move level 5 times up';
-      s += '">↑↑</button><button class="btn btn-default historymovebtn" onclick="for (var i=0;i<5;i++) UI.movedown(this)" title="';
+      s += '">↑↑</button><button style="width:20px;height:16px;" onclick="for (var i=0;i<5;i++) UI.movedown(this)" title="';
       s += UI.langue == -1 ? 'd&eacute;placer de 5 vers la bas' : 'move level 5 times down';
       s += '">↓↓</button></td>';
     }
@@ -2337,7 +2346,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
             s = 'latex(quote(' + out + '))';
           else
             s = 'mathml(quote(' + out + '),1)'; //Module.print(s);
-          // console.log(out,s);
+          //console.log(out,s);
           if (out.length > 10 && out.substr(0, 10) == 'GIAC_ERROR')
             s = '"' + out.substr(11, out.length - 11) + '"';
           else s = UI.caseval_noautosimp(s);
@@ -2846,9 +2855,9 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
   },
   not_empty:function(txt){
     var s=txt.length;
-    // console.log(s);
+    //console.log(s);
     for (var i=0;i<s;++i){
-      if (txt[i]!=' ')
+      if (txt[i]!=' ' && txt[i]!='\n')
 	return true;
     }
     return false;
@@ -2856,7 +2865,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
   prepare_cm: function (txt, h, cm) {
     var pos = txt.selectionStart;
     var i, s = txt.value, l = 0, c = 0;
-    for (i=0; i<pos; ++i) {
+    for (i = 0; i < pos; ++i) {
       if (s[i] == '\n') {
         l++;
         c = 0;
@@ -2938,14 +2947,13 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     var is_gr2d = mathmlout.substr(0, 5) == 'gr2d(';
     var s = UI.move_buttons(!UI.qa);
     var delbut = false;
-    var td_css = 'style="left: 4px;position: relative;"';
     if (textin.length && textin.charCodeAt(0) == 63)
-      s += '<td '+td_css+' colspan="2">' + UI.renderhelp(textout, textin.substr(1, textin.length - 1)) + '</td><td>';
+      s += '<td colspan="2">' + UI.renderhelp(textout, textin.substr(1, textin.length - 1)) + '</td><td>';
     else {
       if (UI.qa)
-        s += '<td '+td_css+' >';
+        s += '<td>';
       else
-        s += '<td colspan=2 '+td_css+' >';
+        s += '<td colspan=2>';
       s += '<textarea class="historyinput" ';
       if (is_svg && UI.qa)
         s += 'rows=8 style="font-size:large"';
@@ -3191,7 +3199,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     }
     var l = v.length, i, j, cs;
     s = "";
-    for (i=0; i<l; i += 2) {
+    for (i = 0; i < l; i += 2) {
       var name = v[i];
       var value = v[i + 1], nl=UI.count_newline(value)+1;
       if (nl>5) nl=5;
@@ -3506,7 +3514,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
   show_curseur: function () {
     document.getElementsByClassName("CodeMirror-cursors")[0].style.visibility = "visible";
     var cursors = document.getElementsByClassName("CodeMirror-cursor");
-    for (var i=0; i<cursors.length; i++) {
+    for (var i = 0; i < cursors.length; i++) {
       cursors[i].style.visibility = "visible";
     }
   },
@@ -3521,13 +3529,13 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     }
     if (Count < -1) {
       var i;
-      for (i=0; i>Count; i--)
+      for (i = 0; i > Count; i--)
         UI.moveCaretUpDown(field, -1);
       return;
     }
     if (Count > 1) {
       var i;
-      for (i=0; i<Count; i++)
+      for (i = 0; i < Count; i++)
         UI.moveCaretUpDown(field, 1);
       return;
     }
@@ -3662,7 +3670,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
         if (start.ch == 0 && start.line == 0) return;
         if (c > 0) {
           var s = field.getRange({line: l, ch: 0}, end), i;
-          for (i=0; i<s.length; i++) {
+          for (i = 0; i < s.length; i++) {
             if (s.charAt(i) != ' ') break;
           }
           //console.log(i,s.length,c);
@@ -3670,7 +3678,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
             var l1 = l - 1;
             for (; l1 >= 0; --l1) {
               s = field.getLine(l1);
-              for (i=0; i<s.length && i < c; i++) {
+              for (i = 0; i < s.length && i < c; i++) {
                 if (s[i] != ' ') break;
               }
               if (i != s.length && i < c) break;
@@ -3801,7 +3809,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     var C = field.cols;
     //console.log(C);
     var N = 0, i, j = 0, n = s.length, c;
-    for (i=0; i<n; i++, j++) {
+    for (i = 0; i < n; i++, j++) {
       c = s.charCodeAt(i);
       if (c == 10 || j == C) {
         N++;
@@ -4015,7 +4023,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     var l = v.length, w = 0, h = 0;
     if (l < 2) return;
     var scale = v[0];
-    for (var k=1; k<l; k++) {
+    for (var k = 1; k < l; k++) {
       var cur = v[k];
       var x = cur[0], y = cur[1];
       if (cur.length==3 && typeof cur[2]!="number"){
@@ -4042,7 +4050,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     //console.log(h,w);
     if (canvas.getContext) {
       var ctx = canvas.getContext('2d');
-      for (var k=1; k<l; k++) {
+      for (var k = 1; k < l; k++) {
         var cur = v[k], cl;
         //console.log(cur);
         if (!Array.isArray(cur) || (cl = cur.length) < 2) continue;
@@ -4144,7 +4152,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       // si r>0 arc/disque rayon=r & 0x1ff, theta1=(r >> 9) & 0x1ff, theta2=(r >> 18) & 0x1ff
       //        rempli=(r>>27)&0x1
       // si r<0 ligne polygonale extremite v[i] origine v[i+r] (r<0)
-      for (k=1; k<l; k++) {
+      for (k = 1; k < l; k++) {
         prec = v[k - 1];
         var cur = v[k];
         var preccouleur = prec[3] >> 11; // -> FIXME colors
