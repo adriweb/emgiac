@@ -8,7 +8,8 @@ var UI = {
   focusaftereval: true,
   docprefix: "https://www-fourier.ujf-grenoble.fr/%7eparisse/giac/doc/fr/cascmd_fr/",
   base_url: "https://www-fourier.ujf-grenoble.fr/%7eparisse/",
-  forum_url: "http://xcas.e.ujf-grenoble.fr/XCAS/posting.php?mode=post&f=12&subject=session",
+  forum_url: "http://xcas.e.ujf-grenoble.fr/XCAS/viewforum.php?f=25",
+  //forum_url: "http://xcas.e.ujf-grenoble.fr/XCAS/posting.php?mode=post&f=12&subject=session",
   //forum_url: "http://xcas.univ-grenoble-alpes.fr/forum/posting.php?mode=post&f=12&subject=session",
   forum_warn: true,
   focused: entree,
@@ -1606,7 +1607,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       copy += " class='bouton' onclick='var tmp=$id(\"theforumlink\"); tmp.style.display=\"inline\";tmp.select();document.execCommand(\"copy\");tmp.style.display=\"none\"; ";
       if (UI.forum_warn) {
         UI.forum_warn = false;
-        copy += UI.langue == -1 ? "alert(\"Le lien de la session a été copié dans le presse-papier, vous pouvez le coller dans la page qui va apparaitre\");" : "alert(\"Clipboard contains link to session, you can paste it in the tab that will open\");";
+        copy += UI.langue == -1 ? "alert(\"Le lien de la session a été copié dans le presse-papier\");" : "alert(\"Clipboard contains a link to session\");";
       }
       copy += "var win=window.open(\"" + UI.forum_url + "\", \"_blank\");'>&#x282A;</button>,";
       //console.log(copy);

@@ -3650,6 +3650,7 @@ For really large computations, use native Xcas versions.
 </script>
 <script src="longhelp_en.js"></script>
 <script language="javascript">
+    $id('thelink').innerHTML='<a href="'+UI.forum_url+'" target=_blank>Forum</a>';
     CodeMirror.registerHelper("hintWords", "simplemode", UI.xcascmd);
     var ua = navigator.userAgent.toLowerCase();
     if (ua.indexOf('firefox') === -1 && ua.indexOf('safari') === -1) {
