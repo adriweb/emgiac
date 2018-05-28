@@ -4165,33 +4165,36 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
           continue;
         }
         var radius = cur[4], precradius = prec[4];
+        var x1 = Math.floor(turtlezoom * (prec[0] - turtlex) + .5),
+            y1 = Math.floor(turtlezoom * (prec[1] - turtley) + .5),
+            x2 = Math.floor(turtlezoom * (cur[0] - turtlex) + .5),
+            y2 = Math.floor(turtlezoom * (cur[1] - turtley) + .5);
         if (radius > 0) {
           var r = radius & 0x1ff, theta1, theta2, rempli, x, y, R, angle;
-          theta1 = ((precradius + radius) >> 9) & 0x1ff;
-          theta2 = ((precradius + radius) >> 18) & 0x1ff;
+          theta1 = prec[2]+ ((radius >> 9) & 0x1ff);
+          theta2 = prec[2] + ((radius >> 18) & 0x1ff);
           rempli = (radius >> 27) & 1;
           R = Math.floor(turtlezoom * r + .5);
-          angle2 = Math.PI / 180 * (theta2 - 90);
           angle1 = Math.PI / 180 * (theta1 - 90);
+          angle2 = Math.PI / 180 * (theta2 - 90);
           x = Math.floor(turtlezoom * (cur[0] - turtlex - r * Math.cos(angle2)) + .5);
           y = Math.floor(turtlezoom * (cur[1] - turtley - r * Math.sin(angle2)) + .5);
           ctx.beginPath();
-          ctx.arc(x, h - y, R, angle1, angle2, true);
+          ctx.moveTo(x, h - y);
+          ctx.lineTo(x2, h - y2);
+	  console.log(x,y,x1,y1,angle1,angle2);
+          ctx.arc(x, h - y, R, -angle2,-angle1);
+          ctx.closePath();
           ctx.strokeStyle = ctx.fillStyle = UI.turtle_color(curcouleur);
           if (rempli)
             ctx.fill();
           else
             ctx.stroke();
-          ctx.closePath();
           continue;
         }
         if (prec[3] & 1) {
           ctx.strokeStyle = ctx.fillStyle = UI.turtle_color(preccouleur);
           ctx.beginPath();
-          var x1 = Math.floor(turtlezoom * (prec[0] - turtlex) + .5),
-              y1 = Math.floor(turtlezoom * (prec[1] - turtley) + .5),
-              x2 = Math.floor(turtlezoom * (cur[0] - turtlex) + .5),
-              y2 = Math.floor(turtlezoom * (cur[1] - turtley) + .5);
           ctx.moveTo(x1, h - y1);
           ctx.lineTo(x2, h - y2);
           ctx.closePath();
