@@ -2447,6 +2447,8 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       //console.log(cas);
       if (cas.charAt(0) == '"' && cas.length > 2)
         cas = cas.substr(1, cas.length - 2);
+      if (UI.usemathjax)
+	cas='$$'+cas+'$$';
       res += cas;
     }
     return res;
