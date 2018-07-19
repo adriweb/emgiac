@@ -9,14 +9,14 @@
     Session_Xcas
   </title>
   <style>
-    html, body {
-      background-color: #F4F4F4 !important;
+    html {
+      background-color: #FFFFFF;
     }
 
     body {
       color: black;
       text-align: justify;
-      padding: 10px;
+      background-color: #FFFFFF;
     }
 
     .curseur {
@@ -76,22 +76,8 @@
       height: 20px
     }
 
-    #mathoutput tbody {
-      margin-bottom: 10px;
-      display: inherit;
-    }
-
-    .historymovebtn {
-      height: 18px;
-      width: 28px;
-      line-height: 0 !important;
-    }
-
     .historyinput {
       width: 400px;
-      min-height: 28px !important;
-      font-size: 16px !important;
-      font-family: Menlo, Monaco, Consolas, "Courier New", monospace !important;
     }
   </style>
   <style type="text/css">
@@ -158,13 +144,6 @@
   <script>
     function $id(id) { return document.getElementById(id); }
   </script>
-
-  <link href="bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css">
-  <link href="bootstrap/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
-  <style>
-    .btn { padding: 3px 12px !important; }
-    hr { margin: 4px auto; border-top: 1px solid #a4a4a4; }
-  </style>
 </head>
 <body>
 <!-- https://developer.mozilla.org/fr/docs/Web/API/Service_Worker_API/Using_Service_Workers
@@ -464,7 +443,7 @@
         <button id="exportbutton" class="bouton" title="Cliquer ici pour publier la session en HTML avec le nom de fichier du champ texte qui pr&eacute;c&egrave;de" onclick='UI.savesession(1);'>Export</button>
         </span>
 <button id="loadbutton_cookie" class="bouton" title="Cliquer ici pour charger une session sauvegard&eacute;e" onclick="$id('loadfile_cookie').innerHTML=UI.listCookies();">Charge</button>
-<span id="loadfile_cookie"></span>
+  <span id="loadfile_cookie"></span>
 <form id="loadbutton_file" style="display:none">
   <label for="loadfileinput">Charger</label>
   <input id="loadfileinput" accept=".xw" type="file" title="Cliquer ici pour charger une session sauvegard&eacute;e" onchange="UI.loadfile(this.files);this.value=''">
@@ -767,7 +746,12 @@
                             <a
                                 href="#exec&python=0&+fonction%20jour_semaine0(j%2Cm%2Ca)%0A%20%20local%20J%2CL%2CSL%2Ca1%2Cb%2Cbi%3B%0A%20%20J%3A%3D%5B%22Dimanche%22%2C%22Lundi%22%2C%22Mardi%22%2C%22Mercredi%22%2C%22Jeudi%22%2C%22Vendredi%22%2C%22Samedi%22%5D%3B%0A%20%20a1%3A%3Da-1%3Bbi%3A%3D0%3B%0A%20%20si%20(irem(a%2C4)%3D%3D0%20and%20irem(a%2C100)!%3D0)%20or%20irem(a%2C400)%3D%3D0%20alors%0A%20%20%20%20bi%3A%3D1%3B%0A%20%20fsi%3B%0A%20%20si%20(m%3D%3D1)%20ou%20(m%3D%3D2)%20alors%0A%20%20%20%20b%3A%3Da1%2Biquo(a1%2C4)%2Biquo(a1%2C400)-iquo(a1%2C100)%2B(iquo(23*m%2C9)%2B5)%2Bj%3B%0A%20%20%20%20sinon%0A%20%20%20%20b%3A%3Da1%2Bbi%2Biquo(a1%2C4)%2Biquo(a1%2C400)-iquo(a1%2C100)%2B(iquo(23*m%2C9)%2B3)%2Bj%3B%0A%20%20fsi%3B%0A%20%20return%20J%5Birem(b%2C7)%5D%3B%0Affonction%3A%3B%0A%0Afonction%20jour_semaine(j%2Cm%2Ca)%0A%20%20local%20J%2CL%2CSL%2Ca1%2Cb%3B%0A%20%20a1%3A%3Da-1%3B%0A%20%20L%3A%3D%5B0%2C31%2C28%2C31%2C30%2C31%2C30%2C31%2C31%2C30%2C31%2C30%5D%3B%0A%20%20J%3A%3D%5B%22Dimanche%22%2C%22Lundi%22%2C%22Mardi%22%2C%22Mercredi%22%2C%22Jeudi%22%2C%22Vendredi%22%2C%22Samedi%22%5D%3B%0A%20%20si%20(irem(a%2C4)%3D%3D0%20and%20irem(a%2C100)!%3D0)%20or%20irem(a%2C400)%3D%3D0%20alors%0A%20%20%20%20L%5B2%5D%3A%3D29%3B%0A%20%20fsi%3B%0A%20%20SL%3A%3Direm(cumSum(L)%2C7)%3B%0A%20%20b%3A%3Da1%2Biquo(a1%2C4)%2Biquo(a1%2C400)-iquo(a1%2C100)%2BSL%5Bm-1%5D%2Bj%3B%0A%20%20return%20J%5Birem(b%2C7)%5D%3B%0Affonction%3A%3B&+jour_semaine0(5%2C4%2C2018)&+jour_semaine(5%2C4%2C2018)&"
                                 target="_blank">Xcas</a>
-                        </li>
+			</li>
+			<li>
+			<a
+			href="#exec&python=0&+///%3Ca%20href%3D%22http%3A%2F%2Fwww.les-mathematiques.net%2Fphorum%2Ffile.php%3F6%2Cfile%3D78088%2Cfilename%3Dfre2.pdf%22%20target%3D%22_blank%22%3EProbl%C3%A8me%206%20olympiades%20maths.%3C%2Fa%3E%0AOn%20d%C3%A9finit%20une%20fonction%20qui%20calcule%20la%20tangente%20d'un%20angle%2C%20det%20permet%20de%20calculer%20le%20d%C3%A9terminant%202x2%20pour%20trouver%20le%20sinus%2C%20*%20calcule%20le%20produit%20scalaire.&+def%20Tan(A%2CB%2CC)%3A%0A%20%20%23%20A%2CB%2CC%20listes%2C%20tangente%20angle%20issu%20de%20B%3Dsin%2Fcos%20%0A%20%20%23%20avec%20cos%3Dvecteur(B%2CA).vecteur(B%2CC)%20et%20sin%3Ddet(vecteur(B%2CA)%2Cvecteur(B%2CC))%0A%20%20BA%3DA-B%3B%0A%20%20BC%3DC-B%3B%0A%20%20return%20det(BA%2CBC)%2F(BA*BC)&+A%3A%3D%5B0%2C0%5D%3B%20B%3A%3D%5Bb%2C0%5D%3B%20%20%0AC%3A%3D%5Bc1%2Cc2%5D%3B%20D%3A%3D%5Bd1%2Cd2%5D%3B%0AX%3A%3D%5Bx1%2Cx2%5D%3B&+///Par%20invariance%20par%20translation%20on%20peut%20prendre%20%24A%24%20en%20l'origine%2C%20et%20par%20rotation%20%24B%24%20sur%20l'axe%20des%20%24x%24%20(on%20pourrait%20par%20dilatation%20prendre%20%24b%3D1%24).&+///eq1%2C%20eq2%2C%20eq3%20sont%20la%20mise%20en%20%C3%A9quation%20des%203%20contraintes.%20eq4%20est%20la%20relation%20cherch%C3%A9e.&+eq1%3A%3D((B-A)*(B-A))*((D-C)*(D-C))-%0A%20%20((C-B)*(C-B))*((D-A)*(D-A))&+eq2%3A%3DTan(X%2CA%2CB)-Tan(X%2CC%2CD)&+eq3%3A%3DTan(X%2CB%2CC)-Tan(X%2CD%2CA)&+eq4%3A%3DTan(B%2CX%2CA)%2BTan(D%2CX%2CC)&+v%3A%3D%5Bb%2Cc1%2Cc2%2Cd1%2Cd2%2Cx1%2Cx2%5D&+Eq2%3A%3Dnumer(eq2)%3A%3B%20Eq3%3A%3Dnumer(eq3)%3A%3B&+degree(Eq2%2Cv)%3Bdegree(Eq3%2Cv)&+%5BD1%5D%3A%3Dsolve(eq2%3D0%2Cd1)&+///On%20peut%20donc%20r%C3%A9soudre%20eq2%20en%20d1%20ou%20d2%2C%20ou%20eq3%20en%20c1%20ou%20c2%20(premier%20degr%C3%A9).&+Eq1_%3A%3Dnumer(eq1(d1%3DD1))%3A%3B%0Adegree(Eq1_%2Cv)%3B&+Eq3_%3A%3Dnumer(eq3(d1%3DD1))%3A%3B%0Adegree(Eq3_%2Cv)%3B&+///On%20obtient%20deux%20%C3%A9quations%20de%20degr%C3%A9%202%20en%20%24b%24%20ou%20en%20%24d2%24%2C%20en%20faisant%20la%20combinaison%20lin%C3%A9aire%20ad%C3%A9quate%20on%20se%20ram%C3%A8ne%20%C3%A0%20une%20%C3%A9quation%20de%20degr%C3%A9%201%20en%20%24d2%24%2C%20qu'on%20r%C3%A9soud.&+%5BD2%5D%3A%3Dsolve(%0A%20%20Eq1_*coeff(Eq3_%2Cd2%2C2)-%0A%20%20Eq3_*coeff(Eq1_%2Cd2%2C2)%3D0%2Cd2)&+///On%20subtitue%20la%20valeur%20de%20d1%20et%20de%20d2%20dans%20eq4%2C%20on%20trouve%20bien%200.&+normal(subst(eq4(d1%3DD1)%2Cd2%3DD2))&"
+target="_blank">Olympiades de maths 2018, probl&egrave;me 6</a>
+			</li>
                     </ul>
                 </div>
             <li style="display:inline">
@@ -864,11 +848,12 @@
                             <a
                                 href="#exec&python=0&+cyclic6%3A%3D%20%5B2*(x*y*z%2By*z*t%2Bz*t*u%2Bt*u*v%2Bu*v*x%2Bv*x*y)%2C%20%0Ax*y*z*t%2By*z*t*u%2Bz*t*u*v%2Bt*u*v*x%2Bu*v*x*y%2Bv*x*y*z%2C%20%0Ax*y*z*t*u*v-1%2C%20%0Ax%2By%2Bz%2Bt%2Bu%2Bv%2C%20%0Ax*y%2By*z%2Bz*t%2Bt*u%2Bu*v%2Bx*v%2C%20%0Ax*y*z*t*u%2By*z*t*u*v%2Bz*t*u*v*x%2Bt*u*v*x*y%2Bu*v*x*y*z%2Bv*x*y*z*t%5D%3B&+p%3A%3Dprevprime(2%5E24)%3B&+time(G%3A%3D%0A%20%20gbasis(cyclic6%20mod%20p%2C%0A%20%20%20%20indets(cyclic6)))&+size(G)&+G%5B20%5D&+time(H%3A%3D%0A%20%20gbasis(cyclic6%2C%0A%20%20%20%20indets(cyclic6)))&+H%5B20%5D&+normal(1%2F(lcoeff(H%5B20%5D%2Cv)%20mod%20p)%0A%20%20*H%5B20%5D)&+normal(1%2F(lcoeff(G%5B20%5D%2Cv)%20mod%20p)%0A%20%20*G%5B20%5D-1%2F(lcoeff(H%5B20%5D%2Cv)%20mod%20p)%0A%20%20*H%5B20%5D)&"
                                 target="_blank">cyclic6</a>.
-                            Pour des calculs plus intensifs, installez un navigateur récent
-                            activez wasm dans les r&eacute;glages et inspirez-vous de
+                            Pour des calculs plus intensifs, activez
+			wasm dans les r&eacute;glages
+                            et inspirez-vous de
                             <a
                                 href="#exec&python=1&+cyclic7%3A%3D%5Bx1%2Bx2%2Bx3%2Bx4%2Bx5%2Bx6%2Bx7%2C%0A%20%20%20%20%20%20%20%20%20%20x1*x2%2Bx1*x7%2Bx2*x3%2Bx3*x4%2Bx4*x5%2Bx5*x6%2Bx6*x7%2C%0A%20%20%20%20%20%20%20%20%20%20x1*x2*x3%2Bx1*x2*x7%2Bx1*x6*x7%2Bx2*x3*x4%2Bx3*x4*x5%2Bx4*x5*x6%2Bx5*x6*x7%2C%0A%20%20%20%20%20%20%20%20%20%20x1*x2*x3*x4%2Bx1*x2*x3*x7%2Bx1*x2*x6*x7%2Bx1*x5*x6*x7%2Bx2*x3*x4*x5%2Bx3*x4*x5*x6%2Bx4*x5*x6*x7%2C%0A%20%20%20%20%20%20%20%20%20%20x1*x2*x3*x4*x5%2Bx1*x2*x3*x4*x7%2Bx1*x2*x3*x6*x7%2Bx1*x2*x5*x6*x7%2Bx1*x4*x5*x6*x7%2Bx2*x3*x4*x5*x6%2Bx3*x4*x5*x6*x7%2C%0A%20%20%20%20%20%20%20%20%20%20x1*x2*x3*x4*x5*x6%2Bx1*x2*x3*x4*x5*x7%2Bx1*x2*x3*x4*x6*x7%2Bx1*x2*x3*x5*x6*x7%2Bx1*x2*x4*x5*x6*x7%2Bx1*x3*x4*x5*x6*x7%2Bx2*x3*x4*x5*x6*x7%2C%0A%20%20%20%20%20%20%20%20%20%20x1*x2*x3*x4*x5*x6*x7-1%5D%3A%3B&+p%3A%3Dprevprime(2%5E24)&+time(G%3A%3Dgbasis(cyclic7%20mod%20p%2Clname(cyclic7)%2Crevlex))%3B&+size(G)&"
-                                target="_blank">cyclic7 modulaire</a>.
+target="_blank">cyclic7 modulaire</a>.
 Pour avoir des informations pendant le d&eacute;roulement des calculs, tapez la commande
 <tt>debug_infolevel:=1</tt> (ou plus) et ouvrez la console du navigateur.
                             Pour des calculs vraiment intensifs, utilisez la version native de Xcas.
@@ -1273,10 +1258,9 @@ Pour avoir des informations pendant le d&eacute;roulement des calculs, tapez la 
                 de Grenoble, sous licence GPL3, pour une licence commerciale nous
                 contacter.
                 <br>
-                Sortie mathml et SVG (c) code initialement &eacute;crit par J.P. Branchard.
+                Sortie mathml et SVG (c) code principalement &eacute;crit par J.P. Branchard.
                 <br>
                 Commandes d'optimisation &eacute;crites par Luka Marohnić.
-                <br> Interface HTML5 &eacute;crite par B. Parisse et A. Bertrand.
                 </span>
             </li>
             <br>
@@ -3535,63 +3519,58 @@ Pour avoir des informations pendant le d&eacute;roulement des calculs, tapez la 
   <table id="mathoutput" contextmenu="cmdmenu" title="Historique"
          style="max-width:1000px "></table>
 </div>
-<div id="history4" style="margin: 6px auto 12px auto; display:none">
-  <button class="bouton btn btn-default" onclick="var tmp=$id('variables'); if(tmp.style.display=='inline') tmp.style.display='none'; else {tmp.style.display='inline';UI.listvars(3);}"><strong>Vars</strong></button>
+<div id="history4" style="display:none">
+  <button class="bouton" onclick="var tmp=$id('variables'); if(tmp.style.display=='inline') tmp.style.display='none'; else {tmp.style.display='inline';UI.listvars(3);}"><strong>Vars</strong></button>
   <span id="variables" style="display:none">
-    <button class="bouton btn btn-default" onclick="UI.insert(UI.focused,'python(')" title="python(f) affiche la conversion en syntaxe Python d'une fonction stock&eacute; dans la variable f ">→python</button>
-    <button class="bouton btn btn-default" onclick="UI.insert(UI.focused,'xcas(')" title="xcas(f) affiche la conversion en syntaxe Xcas d'une fonction stock&eacute; dans la variable f ">→xcas</button>
-    <button class="bouton btn btn-default" name="add_purge" onmousedown="event.preventDefault()" onClick="UI.insert(UI.focused,'purge(')" title="Efface le contenu d'une ou plusieurs variables, par exemple purge(a) ou purge(a,b,c)">efface</button>
-    <button class="bouton btn btn-default" onclick="UI.addhelp(' ','rm_all_vars(1)')" title="Effacer le contenu de toutes les variables">tout</button>
-    <span id="listvars"> </span>
-    <br>
-  </span>
+            <button class="bouton" onclick="UI.insert(UI.focused,'python(')"
+                    title="python(f) affiche la conversion en syntaxe Python d'une fonction stock&eacute; dans la variable f ">→python</button>
+            <button class="bouton" onclick="UI.insert(UI.focused,'xcas(')"
+                    title="xcas(f) affiche la conversion en syntaxe Xcas d'une fonction stock&eacute; dans la variable f ">→xcas</button>
+            <button class="bouton" name="add_purge"
+                    onmousedown="event.preventDefault()"
+                    onClick="UI.insert(UI.focused,'purge(')" title="Efface le contenu d'une ou plusieurs variables, par exemple purge(a) ou purge(a,b,c)">efface</button>
+            <button class="bouton" onclick="UI.addhelp(' ','rm_all_vars(1)')"
+                    title="Effacer le contenu de toutes les variables">tout</button>
+            <span id="listvars"> </span>
+            <br>
+            </span>
   <span id="historique">
-    <button class="bouton btn btn-default" onclick="UI.exec($id('mathoutput'),0)" title="Executer toutes les commandes de l'historique">Exec</button>
-    <button class="bouton btn btn-default" id="button_show_answers" onclick="UI.show_answers(true)" title="Montrer les r&eacute;ponses">+</button>
-    <button class="bouton btn btn-default" id="button_hide_answers" onclick="UI.show_answers(false)" title="Cacher les r&eacute;ponses">-</button>
-    <button class="bouton btn btn-default" onclick="UI.erase_all($id('mathoutput'))" title="Placer tout les niveaux de l'historique dans la corbeille"><span class="glyphicon glyphicon glyphicon-trash"></span></button>
-    <button class="bouton btn btn-default" onclick="UI.restoretrash()" title="Restaurer les niveaux plac&eacute;s dans la corbeille">Restaure</button>
-    <button class="bouton btn btn-default" onclick="UI.emptytrash()" title="Vider la corbeille">Vide</button>
-  </span>
+            <button class="bouton" onclick="UI.exec($id('mathoutput'),0)"
+                    title="Executer toutes les commandes de l'historique">Exec</button>
+            <button class="bouton" id="button_show_answers" onclick="UI.show_answers(true)" title="Montrer les r&eacute;ponses">+</button>
+            <button class="bouton" id="button_hide_answers" onclick="UI.show_answers(false)" title="Cacher les r&eacute;ponses">-</button>
+            <button class="bouton" onclick="UI.erase_all($id('mathoutput'))"
+                    title="Placer tout les niveaux de l'historique dans la
+                corbeille">→Corbeille</button>
+            <button class="bouton" onclick="UI.restoretrash()" title="Restaurer les niveaux plac&eacute;s dans la corbeille">Restaure</button>
+            <button class="bouton" onclick="UI.emptytrash()"
+                    title="Vider la corbeille">Vide</button>
+            </span>
 </div>
 <div contextmenu="cmdmenu" title="F1: aide sur le mot-clef avant le curseur.">
-  <textarea name="entree" id="entree" title="Taper une commande ici puis Entree pour valider" style="font-size:18px;width:98%"
-            rows=1 onclick="UI.focused=this;" onkeypress="UI.focused=this; if (event.keyCode==13 && event.shiftKey){UI.insert(this,'\n'); UI.indentline(this); return false;} if (event.keyCode!=13 || event.shiftKey) return true;UI.eval_cmdline1(value,true); return false;"></textarea>
-  <div>
-
-    <button class="bouton btn btn-success" id="button_ok" onclick="if (UI.assistant_ok()) return; if (UI.focused==cmentree || UI.focused==entree) UI.eval_cmdline(); else {UI.reeval(UI.focused,'',false);}" title="Evaluer la ligne de commande" style="margin-right: 10px;">
-      <span class="glyphicon glyphicon-ok"></span>
-    </button>
-
-    <div class="btn-group" role="group" style="margin-right: 10px;">
-      <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.move_caret_or_focus(UI.focused,-1)" title="Deplace vers la gauche le curseur"><span class="glyphicon glyphicon-arrow-left"></span></button>
-      <button class="bouton btn btn-default" id="button_droit" onmousedown="event.preventDefault()" onclick="UI.move_caret_or_focus(UI.focused,1)" title="Deplace vers la droite le curseur"><span class="glyphicon glyphicon-arrow-right"></span></button>
-      <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.moveCaretUpDown(UI.focused,-1)" title="Deplace vers le haut le curseur"><span class="glyphicon glyphicon-arrow-up"></span></button>
-      <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.moveCaretUpDown(UI.focused,1)" title="Deplace vers le bas le curseur"><span class="glyphicon glyphicon-arrow-down"></span></button>
-    </div>
-
-    <div class="btn-group" role="group" style="margin-right: 10px;">
-      <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.insert(UI.focused,'\n')" title="Saut de ligne" style="padding-top: 4px;"><span class="glyphicon glyphicon glyphicon-chevron-down"></span></button>
-      <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.indentline(UI.focused)" title="Indente"><span class="glyphicon glyphicon-indent-left"></span></button>
-      <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.backspace(UI.focused)" title="Efface">⌫</button>
-    </div>
-    <div class="btn-group" role="group" style="margin-right: 10px;">
-      <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.search(this,6)" title="Annuler"><span class="glyphicon glyphicon glyphicon-share-alt" style="transform: scaleX(-1);"></span></button>
-      <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.search(this,7)" title="Refaire"><span class="glyphicon glyphicon glyphicon-share-alt"></span></button>
-    </div>
-    <div class="btn-group" role="group" style="margin-right: 10px;">
-      <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.search(this,0)" title="Rechercher"><span class="glyphicon glyphicon glyphicon-search"></span></button>
-      <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.search(this,1)" title="Rechercher suivant"><span class="glyphicon glyphicon glyphicon-expand" style="transform: scaleX(-1); padding-top: 0;"></span></button>
-      <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.search(this,2)" title="Rechercher précédent"><span class="glyphicon glyphicon glyphicon-expand"></span></button>
-      <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.search(this,3)" title="Remplacer"><span class="glyphicon glyphicon glyphicon-edit"></span></button>
-    </div>
-
-    <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.search(this,5)" title="Aller ligne" style="padding-top: 4px; margin-right: 10px;"><span class="glyphicon glyphicon glyphicon-screenshot"></span></button>
-    <button class="bouton btn btn-default" name="select_button" id="select_button" onmousedown="event.preventDefault()" onclick="UI.selectionne()" title="Selectionne la ligne de commande" style="margin-right: 10px;"><span class="glyphicon glyphicon glyphicon-font"></span></button>
-    <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.completion(cmentree)" title="Donne une aide courte et quelques exemples d'utilisation d'une commande."><b>&nbsp;?&nbsp;</b></button>
-    <button id="stop_button" class="bouton btn btn-default" style="display:none" onclick="if (UI.webworker &amp;&amp; confirm('Voulez-vous vraiment terminer la session ?')){UI.webworker.terminate(); UI.busy=0;UI.webworker=0; alert('Session redemarree. Toutes les variables ont ete effacees.');}" title="Termine la session en cours">STOP</button>
-
-  </div>
+            <textarea name="entree" id="entree" title="Taper une commande ici puis Entree pour valider" style="font-size:18px;width:98%"
+                      rows=1 onclick="UI.focused=this;" onkeypress="UI.focused=this; if (event.keyCode==13 && event.shiftKey){UI.insert(this,'\n'); UI.indentline(this); return false;} if (event.keyCode!=13 || event.shiftKey) return true;UI.eval_cmdline1(value,true); return false;"></textarea>
+  <span>
+            <button class="bouton" style="color:green" id="button_ok" onclick="if (UI.assistant_ok()) return; if (UI.focused==cmentree || UI.focused==entree) UI.eval_cmdline(); else {UI.reeval(UI.focused,'',false);}" title="Evaluer la ligne de commande">
+            <strong>&nbsp;&nbsp;&#x2705;&nbsp;&nbsp;</strong></button>
+            <button class="bouton" onmousedown="event.preventDefault()" onClick="UI.completion(cmentree)" title="Donne une aide courte et quelques exemples d'utilisation d'une commande.">&nbsp;?&nbsp;</button>
+            <button class="bouton" onmousedown="event.preventDefault()" onClick="UI.move_caret_or_focus(UI.focused,-1)" title="Deplace vers la gauche le curseur">&nbsp;&nbsp;←&nbsp;&nbsp;</button><button class="bouton" id="button_droit" onmousedown="event.preventDefault()" onClick="UI.move_caret_or_focus(UI.focused,1)" title="Deplace vers la droite le curseur"> &nbsp;&nbsp;→&nbsp;&nbsp;</button><button class="bouton" onmousedown="event.preventDefault()" onClick="UI.moveCaretUpDown(UI.focused,-1)" title="Deplace vers le haut le curseur">&nbsp;↑&nbsp;&nbsp;</button><button class="bouton" onmousedown="event.preventDefault()" onClick="UI.moveCaretUpDown(UI.focused,1)" title="Deplace vers le bas le curseur">&nbsp;&nbsp;↓&nbsp;</button><button class="bouton" onmousedown="event.preventDefault()"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            onClick="UI.indentline(UI.focused)"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            title="Indente">→|</button>
+            <button class="bouton" onmousedown="event.preventDefault()" onClick="UI.backspace(UI.focused)" title="Efface">&nbsp;&#x232b;&nbsp;</button>
+            <button class="bouton" onmousedown="event.preventDefault()" onClick="UI.insert(UI.focused,'\n')" title="Saut de ligne">\n</button>
+            <button class="bouton" onmousedown="event.preventDefault()" onclick="UI.search(this,6)" title="Annuler"><img width="16" height="16" src="undo.png" alt="Annuler" align="center"></button><button class="bouton" onmousedown="event.preventDefault()" onclick="UI.search(this,7)" title="Refaire"><img width="16" height="16" src="redo.png" alt="Refaire" align="center"></button><button class="bouton" onmousedown="event.preventDefault()" onclick="UI.search(this,0)" title="Rechercher">find</button><button class="bouton" onmousedown="event.preventDefault()" onclick="UI.search(this,1)" title="Rechercher suivant">&#x21D2;</button><button class="bouton" onmousedown="event.preventDefault()" onclick="UI.search(this,2)" title="Rechercher pr&eacute;c&eacute;dent">&#x21D0;</button><button
+      class="bouton"
+      onmousedown="event.preventDefault()"
+      onclick="UI.search(this,3)"
+      title="Remplacer">rep</button><button
+      class="bouton" onmousedown="event.preventDefault()" onclick="UI.search(this,5)" title="Aller ligne">go</button>
+            <button class="bouton" name="select_button"
+                    id="select_button" onmousedown="event.preventDefault()"
+                    onClick="UI.selectionne()" title="Selectionne la ligne de commande">&nbsp;sel&nbsp;</button>  <button id="stop_button" class="bouton" style="display:none"
+                                                                                                                          onclick="if (UI.webworker && confirm('Voulez-vous vraiment terminer la session ?')){
+                UI.webworker.terminate(); UI.busy=0;UI.webworker=0; alert('Session redemarree. Toutes les variables ont ete effacees.');}" title="Termine la session en cours">STOP</button>
+            </span>
 </div>
 <div id="restoresession" style="display:none">
   <h1> Restauration de la session en cours</h1>
@@ -3645,27 +3624,22 @@ Pour avoir des informations pendant le d&eacute;roulement des calculs, tapez la 
 <script src="w3data.js"></script>
 <div w3-include-html="menufr.js"></div>
 <script src="FileSaver.js"></script>
-
-<!-- CodeMirror things -->
-<link rel="stylesheet" href="codemirror/codemirror.css">
-<link rel="stylesheet" href="codemirror/show-hint.css">
-<link rel="stylesheet" href="codemirror/dialog.css">
-<script src="codemirror/codemirror.js"></script>
-<script src="codemirror/search.js"></script>
-<script src="codemirror/searchcursor.js"></script>
-<script src="codemirror/jump-to-line.js"></script>
-<script src="codemirror/dialog.js"></script>
-<script src="codemirror/matchbrackets.js"></script>
-<script src="codemirror/show-hint.js"></script>
-<!-- Custom CodeMirror things -->
+<script src="codemirror.js"></script>
+<link rel="stylesheet" href="codemirror.css">
+<link rel="stylesheet" href="show-hint.css">
+<script src="search.js"></script>
+<script src="searchcursor.js"></script>
+<script src="jump-to-line.js"></script>
+<script src="dialog.js"></script>
+<link rel="stylesheet" href="dialog.css">
 <script src="xcasmode.js"></script>
 <script src="python.js"></script>
+<script src="matchbrackets.js"></script>
+<script src="show-hint.js"></script>
 <style type="text/css">
   .CodeMirror {
     border: 1px solid black;
     height: auto;
-    border-radius: 4px;
-    margin: 4px auto;
   }
 
   dt {
@@ -3673,9 +3647,7 @@ Pour avoir des informations pendant le d&eacute;roulement des calculs, tapez la 
     color: #666;
   }
 </style>
-
 <script src="xcas.js"></script>
-
 <script type='text/javascript'>
     // remove existing codemirror field
     prog = $id('prog');
@@ -3698,6 +3670,7 @@ Pour avoir des informations pendant le d&eacute;roulement des calculs, tapez la 
         htmlbuffer: '',
         preRun: [],
         postRun: [],
+        lastrefresh:0,
         print: (function () {
             var element = $id('output');
             element.innerHTML = '';// element.value = ''; // clear browser cache
@@ -3740,8 +3713,8 @@ Pour avoir des informations pendant le d&eacute;roulement des calculs, tapez la 
                     element.innerHTML += text; // element.value += text + "\n";
                     element.scrollTop = 99999; // focus on bottom
                 } else htmlbuffer += text;
-              element.scrollIntoView();
-            };
+                element.scrollIntoView();
+           };
         })(),
         printErr: function (text) {
             if (0) { // XXX disabled for safety typeof dump == 'function') {
@@ -3795,6 +3768,17 @@ Pour avoir des informations pendant le d&eacute;roulement des calculs, tapez la 
         return false;
     })();
     var webAssemblyAvailable = supported;
+    /*
+    if (Boolean(window.chrome)){
+    if (!UI.detectmob()) webAssemblyAvailable = !!window.WebAssembly && window.location.href.substr(0,4)!='file';
+    }
+    else {
+    var ua = window.navigator.userAgent;
+    var old_ie = ua.indexOf('MSIE ');
+    var new_ie = ua.indexOf('Trident/');
+    if (!UI.detectmob() && old_ie<=-1 && new_ie<=-1)
+      webAssemblyAvailable =!!window.WebAssembly;
+    } */
     if (webAssemblyAvailable) {
         var ck = UI.readCookie('xcas_wasm');
         if (ck) {
@@ -3814,12 +3798,16 @@ Pour avoir des informations pendant le d&eacute;roulement des calculs, tapez la 
 <script language="javascript">
     $id('thelink').innerHTML='<a href="'+UI.forum_url+'" target=_blank>Forum</a>';
     CodeMirror.registerHelper("hintWords", "simplemode", UI.xcascmd);
-    var ua = navigator.userAgent.toLowerCase();
-    if (ua.indexOf('firefox') === -1 && ua.indexOf('safari') === -1) {
-        var script = document.createElement("script");
-        script.type = "text/javascript";
-        script.src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML";
-        document.getElementsByTagName("head")[0].appendChild(script);
+    var ua = window.navigator.userAgent;
+    var old_ie = ua.indexOf('MSIE ');
+    var new_ie = ua.indexOf('Trident/');
+    if ((old_ie > -1) || (new_ie > -1) || Boolean(window.chrome)) {
+        (function () {
+            var script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML";
+            document.getElementsByTagName("head")[0].appendChild(script);
+        })();
     }
 </script>
 <script language="javascript">
