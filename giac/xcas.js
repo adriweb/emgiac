@@ -1256,7 +1256,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
   browser_type: function () {
     var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
     var isFirefox = typeof InstallTrigger !== 'undefined';   // Firefox 1.0+
-    var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+    var isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/)
     var isChrome = !!window.chrome && !isOpera;              // Chrome 1+
     var isIE = /*@cc_on!@*/false || !!document.documentMode; // At least IE6
     if (isFirefox) return 1;

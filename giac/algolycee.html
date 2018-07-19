@@ -52,7 +52,9 @@ td p{margin:0px;}
 </style>
 <script language="javascript">
     var ua = navigator.userAgent.toLowerCase();
-    if (ua.indexOf('firefox') === -1 && ua.indexOf('safari') === -1) {
+    var isGecko = ua.indexOf('gecko') > -1 && ua.indexOf('khtml') === -1 && ua.indexOf('trident') === -1;
+    var isWebKit = ua.indexOf('applewebkit') > -1 && ua.indexOf('chrome') === -1;
+    if (!isGecko && !isWebKit) {
         var script = document.createElement("script");
         script.type = "text/javascript";
         script.src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML";
@@ -9765,7 +9767,9 @@ Module['onRuntimeInitialized']=function(){ console.log('UI is ready'); Module.re
  };
  window.onload = function(e){
   var ua = navigator.userAgent.toLowerCase();
-  if (ua.indexOf('firefox') === -1 && ua.indexOf('safari') === -1) {
+  var isGecko = ua.indexOf('gecko') > -1 && ua.indexOf('khtml') === -1 && ua.indexOf('trident') === -1;
+  var isWebKit = ua.indexOf('applewebkit') > -1 && ua.indexOf('chrome') === -1;
+  if (!isGecko && !isWebKit) {
      UI.usemathjax=true;
      alert("Votre navigateur ne supporte MathML, on utilise MathJax pour l'affichage 2d.  Les calculs seraient plus rapides et les resultats seraient mieux affiches avec Firefox ou Safari.");
   }
