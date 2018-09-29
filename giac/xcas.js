@@ -1849,7 +1849,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     //mh=form.outdiv_height.value;
     var cms = mh - 2 * hb; // codemirror scrollbar max height
     if (UI.focused == cmentree) cms = Math.floor(hw * .67);
-    s = 'h1,h2,h3 { display:inline; font-size:1em;}\ninput[type="number"] { width:40px;}\n .outdiv { width:' + w + 'px; max-height: ' + mh + 'px;  overflow: auto;}\n.filenamecss {width:80px;height:20px}\n.historyinput {width:' + hi + 'px; font-size: 16px !important;line-height: normal !important; font-family: monospace !important; }\n.bouton{vertical-align:center; height:' + (mob ? hb : 29) + 'px;}\n.CodeMirror-scroll {height:auto; max-height:' + cms + 'px;}\n.CodeMirror {border: 1px solid black;  height:auto; min-width:' + hi + 'px;}\n  dt {font-family: monospace; color: #666;}\n  #mathoutput tbody {margin-bottom: 10px;display: inherit;}\n  .historymovebtn {height: 18px;width: 28px;line-height: 0 !important;}\n  #loadfileinput { display: inline; }\n  #thelink, #loadbutton_file { margin-left: 10px; }';
+    s = 'h1,h2,h3 { display:inline; font-size:1em;}\ninput[type="number"] { width:40px;}\n .outdiv { width:' + w + 'px; max-height: ' + mh + 'px;  overflow: auto;}\n.filenamecss {width:80px;height:20px}\n.historyinput {width:' + hi + 'px; font-size: 16px !important;line-height: normal !important; font-family: monospace !important; }\n.bouton{vertical-align:center; height:' + (mob ? hb : 29) + 'px;}\n.CodeMirror-scroll {height:auto; max-height:' + cms + 'px;}\n.CodeMirror {border: 1px solid black;  height:auto; min-width:' + hi + 'px;}\n  dt {font-family: monospace; color: #666;}\n  #mathoutput tbody {margin-bottom: 10px;display: inherit;}\n  .historymovebtn {height: 18px;width: 28px;line-height: 0 !important;}\n  #loadfileinput { display: inline; }\n  #thelink, #loadbutton_file { margin-left: 10px; }\n  td.tdMoveButtons { max-width: 36px; }\n  td.tdMoveButtons button { font-family: initial; font-size: initial; line-height: initial; height: 18px !important; padding: 0; width: 100% !important; }';
     //console.log(mh,cms);// Module.print(s);
     //Module.print(mh,cms);
     var st = $id('document_style');
@@ -2131,18 +2131,18 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     var s = '<tr onmouseenter="UI.switch_buttons(this,true)" onmouseleave="if (!UI.fixeddel) UI.switch_buttons(this,false)">';
     // s += '<td>&bull;</td>'; // f=f.nextSibling in switch_buttons
     if (newline) {
-      s += '<td><button style="width:20px;height:28px;" onclick="UI.moveup(this)" title="';
+      s += '<td class="tdMoveButtons"><button style="width:20px;height:28px;" onclick="UI.moveup(this)" title="';
       s += UI.langue == -1 ? 'd&eacute;placer vers le haut' : 'move level up';
       s += '">↑</button><br><button style="width:20px;height:28px;" onclick="UI.movedown(this)" title="';
       s += UI.langue == -1 ? 'd&eacute;placer vers la bas' : 'move level down';
       s += '">↓</button></td><td></td>';
     }
     else {
-      s += '<td><button style="width:20px;height:16px;" onclick="UI.moveup(this)" title="';
+      s += '<td class="tdMoveButtons"><button style="width:20px;height:16px;" onclick="UI.moveup(this)" title="';
       s += UI.langue == -1 ? 'd&eacute;placer vers le haut' : 'move level up';
       s += '">↑</button><button style="width:20px;height:16px;" onclick="UI.movedown(this)" title="';
       s += UI.langue == -1 ? 'd&eacute;placer vers la bas' : 'move level down';
-      s += '">↓</button></td><td><button style="width:20px;height:16px;" onclick="for (var i=0;i<5;i++) UI.moveup(this)" title="';
+      s += '">↓</button></td><td class="tdMoveButtons"><button style="width:20px;height:16px;" onclick="for (var i=0;i<5;i++) UI.moveup(this)" title="';
       s += UI.langue == -1 ? 'd&eacute;placer de 5 vers le haut' : 'move level 5 times up';
       s += '">↑↑</button><button style="width:20px;height:16px;" onclick="for (var i=0;i<5;i++) UI.movedown(this)" title="';
       s += UI.langue == -1 ? 'd&eacute;placer de 5 vers la bas' : 'move level 5 times down';
