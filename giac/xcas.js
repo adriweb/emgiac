@@ -1849,7 +1849,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     //mh=form.outdiv_height.value;
     var cms = mh - 2 * hb; // codemirror scrollbar max height
     if (UI.focused == cmentree) cms = Math.floor(hw * .67);
-    s = 'h1,h2,h3 { display:inline; font-size:1em;}\ninput[type="number"] { width:40px;}\n .outdiv { width:' + w + 'px; max-height: ' + mh + 'px;  overflow: auto;}\n.filenamecss {width:80px;height:20px}\n.historyinput {width:' + hi + 'px;}\n.bouton{vertical-align:center; height:' + (mob ? hb : 29) + 'px;}\n.CodeMirror-scroll {height:auto; max-height:' + cms + 'px;}\n.CodeMirror {border: 1px solid black;  height:auto; min-width:' + hi + 'px;}\n  dt {font-family: monospace; color: #666;}';
+    s = 'h1,h2,h3 { display:inline; font-size:1em;}\ninput[type="number"] { width:40px;}\n .outdiv { width:' + w + 'px; max-height: ' + mh + 'px;  overflow: auto;}\n.filenamecss {width:80px;height:20px}\n.historyinput {width:' + hi + 'px; min-height: 28px !important;font-size: 16px !important;font-family: Menlo, Monaco, Consolas, "Courier New", monospace !important; }\n.bouton{vertical-align:center; height:' + (mob ? hb : 29) + 'px;}\n.CodeMirror-scroll {height:auto; max-height:' + cms + 'px;}\n.CodeMirror {border: 1px solid black;  height:auto; min-width:' + hi + 'px;}\n  dt {font-family: monospace; color: #666;}\n  #mathoutput tbody {margin-bottom: 10px;display: inherit;}\n  .historymovebtn {height: 18px;width: 28px;line-height: 0 !important;}\n  #loadfileinput { display: inline; }\n  #thelink, #loadbutton_file { margin-left: 10px; }';
     //console.log(mh,cms);// Module.print(s);
     //Module.print(mh,cms);
     var st = $id('document_style');
