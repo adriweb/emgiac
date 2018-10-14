@@ -57,7 +57,7 @@ td p{margin:0px;}
     if (!isGecko && !isWebKit) {
         var script = document.createElement("script");
         script.type = "text/javascript";
-        script.src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML";
+        script.src = "./mathjax/MathJax.js?config=TeX-MML-AM_CHTML";
         document.getElementsByTagName("head")[0].appendChild(script);
     }
 </script>
@@ -9776,7 +9776,7 @@ Module['onRuntimeInitialized']=function(){ console.log('UI is ready'); Module.re
   if (UI.usemathjax){
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "./mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   }
   var elem= document.getElementById('controlindex');

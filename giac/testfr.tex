@@ -41,7 +41,7 @@ var isWebKit = ua.indexOf('applewebkit') > -1 && ua.indexOf('chrome') === -1;
 if (!isGecko && !isWebKit) {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML";
+    script.src = "./mathjax/MathJax.js?config=TeX-MML-AM_CHTML";
     document.getElementsByTagName("head")[0].appendChild(script);
 }
 </script>

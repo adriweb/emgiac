@@ -2413,7 +2413,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
         if (!UI.usemathjax) {
           var script = document.createElement("script");
           script.type = "text/javascript";
-          script.src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML";
+          script.src = "./mathjax/MathJax.js?config=TeX-AMS_CHTML";
           document.getElementsByTagName("head")[0].appendChild(script);
           window.setTimeout(UI.setmathjax, 400);
         }
