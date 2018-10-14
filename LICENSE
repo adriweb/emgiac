@@ -1,4 +1,6 @@
 By components:
+
 GMP/MPFR/MPFI: LGPL
 giac: GPL3
 codemirror: MIT
+MathJax: Apache v2.0
