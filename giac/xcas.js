@@ -71,7 +71,8 @@ var UI = {
     UI.focused = UI.savefocused;
     var st = $id('pourvarstep').value;
     if (UI.python_mode) {
-      UI.insert(UI.focused, '\nfor ' + $id('pourvarname').value + ' in range(' + $id('pourvarmin').value + ',' + ($id('pourvarmax').value+1));
+      var sup=eval($id('pourvarmax').value)+1;
+      UI.insert(UI.focused, '\nfor ' + $id('pourvarname').value + ' in range(' + $id('pourvarmin').value + ',' + sup);
       if (st.length) st = ',' + st;
       UI.insert(UI.focused, st + '):');
       UI.indentline(UI.focused);
