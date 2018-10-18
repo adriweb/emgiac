@@ -3384,35 +3384,35 @@ For really large computations, use native Xcas versions.
 
   <div>
 
-    <button class="bouton btn btn-success" id="button_ok" onclick="if (UI.assistant_ok()) return; if (UI.focused==cmentree || UI.focused==entree) UI.eval_cmdline(); else {UI.reeval(UI.focused,'',false);}" title="Evaluate commandline" style="margin-right: 10px;">
+    <button class="bouton btn btn-success" id="button_ok" onclick="if (UI.assistant_ok()) return; if (UI.focused==cmentree || UI.focused==entree) UI.eval_cmdline(); else {UI.reeval(UI.focused,'',false);}" title="Evaluate commandline" style="margin-right: 8px;">
       <span class="glyphicon glyphicon-ok"></span>
     </button>
 
-    <div class="btn-group" role="group" style="margin-right: 10px;">
+    <div class="btn-group" role="group" style="margin-right: 5px;">
       <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.move_caret_or_focus(UI.focused,-1)" title="Move cursor left"><span class="glyphicon glyphicon-arrow-left"></span></button>
       <button class="bouton btn btn-default" id="button_droit" onmousedown="event.preventDefault()" onclick="UI.move_caret_or_focus(UI.focused,1)" title="Move cursor right"><span class="glyphicon glyphicon-arrow-right"></span></button>
       <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.moveCaretUpDown(UI.focused,-1)" title="Move cursor up"><span class="glyphicon glyphicon-arrow-up"></span></button>
       <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.moveCaretUpDown(UI.focused,1)" title="Move cursor down"><span class="glyphicon glyphicon-arrow-down"></span></button>
     </div>
 
-    <div class="btn-group" role="group" style="margin-right: 10px;">
+    <div class="btn-group" role="group" style="margin-right: 5px;">
       <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.insert(UI.focused,'\n')" title="Newline" style="padding-top: 4px;"><span class="glyphicon glyphicon glyphicon-chevron-down"></span></button>
       <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.indentline(UI.focused)" title="Indent"><span class="glyphicon glyphicon-indent-left"></span></button>
       <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.backspace(UI.focused)" title="Erase">&#x232b;</button>
     </div>
-    <div class="btn-group" role="group" style="margin-right: 10px;">
+    <div class="btn-group" role="group" style="margin-right: 5px;">
       <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.search(this,6)" title="Undo"><span class="glyphicon glyphicon glyphicon-share-alt" style="transform: scaleX(-1);"></span></button>
       <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.search(this,7)" title="Redo"><span class="glyphicon glyphicon glyphicon-share-alt"></span></button>
     </div>
-    <div class="btn-group" role="group" style="margin-right: 10px;">
+    <div class="btn-group" role="group" style="margin-right: 5px;">
       <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.search(this,0)" title="Find"><span class="glyphicon glyphicon glyphicon-search"></span></button>
       <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.search(this,1)" title="Find next"><span class="glyphicon glyphicon glyphicon-expand" style="transform: scaleX(-1); padding-top: 0;"></span></button>
       <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.search(this,2)" title="Find previous"><span class="glyphicon glyphicon glyphicon-expand"></span></button>
       <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.search(this,3)" title="Replace"><span class="glyphicon glyphicon glyphicon-edit"></span></button>
     </div>
 
-    <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.search(this,5)" title="Go to line" style="padding-top: 4px; margin-right: 10px;"><span class="glyphicon glyphicon glyphicon-screenshot"></span></button>
-    <button class="bouton btn btn-default" name="select_button" id="select_button" onmousedown="event.preventDefault()" onclick="UI.selectionne()" title="Select commandline" style="margin-right: 10px;"><span class="glyphicon glyphicon glyphicon-font"></span></button>
+    <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.search(this,5)" title="Go to line" style="padding-top: 4px; margin-right: 5px;"><span class="glyphicon glyphicon glyphicon-screenshot"></span></button>
+    <button class="bouton btn btn-default" name="select_button" id="select_button" onmousedown="event.preventDefault()" onclick="UI.selectionne()" title="Select commandline" style="margin-right: 9px;"><span class="glyphicon glyphicon glyphicon-font"></span></button>
     <button class="bouton btn btn-default" onmousedown="event.preventDefault()" onclick="UI.completion(cmentree)" title="Provides a short help and a few usage examples on a command."><b>&nbsp;?&nbsp;</b></button>
     <button id="stop_button" class="bouton btn btn-default" style="display:none" onclick="if (UI.webworker &amp;&amp; confirm('Really end session?')){UI.webworker.terminate(); UI.busy=0;UI.webworker=0; alert('Session restarted. All variables have been cleared.');}" title="End current session">STOP</button>
 

@@ -1846,7 +1846,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     var hb = 29;
     if (hh >= 400) hb = 32;
     if (hh >= 500) hb = 34;
-    if (hh > 600) hb = 37;
+    if (hh > 600) hb = 35;
     //mh=form.outdiv_height.value;
     var cms = mh - 2 * hb; // codemirror scrollbar max height
     if (UI.focused == cmentree) cms = Math.floor(hw * .67);
@@ -3059,7 +3059,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
         s += '<textarea class="outdiv" onfocus="UI.set_focused(this)" onselect="if (UI.getsel(this).length>0) UI.selection=UI.getsel(this);" style="display:none">' + textout + '</textarea>';
         s += '<button style="display:none" onclick="previousSibling.previousSibling.style.display=\'block\'; previousSibling.style.display=\'none\';this.style.display=\'none\'">cancel</button>';
         s += '</td><td>';
-        s += '<button style="width:20px;height:30px;" onclick="UI.addcommentafter(this,true,\'\')" oncontextmenu="UI.addcommentafter(this,false,\'0\'); return false;" title="';
+        s += '<button style="width:20px" class="bouton" onclick="UI.addcommentafter(this,true,\'\')" oncontextmenu="UI.addcommentafter(this,false,\'0\'); return false;" title="';
         s += UI.langue == -1 ? 'Ajouter un commentaire (ou clic droit pour ajouter une ligne de commande)' : 'Add a comment (or right click to add a commandline)';
         s += '" >&#x270e;</button>';
         //s += '<button style="width:20px;height:30px;" onclick=\'UI.insert(UI.focused,decodeURIComponent("evalf('+encodeURIComponent(textin)+')"))\' title="Valeur approch&eacute;e" style="color:blue">~</button>';
