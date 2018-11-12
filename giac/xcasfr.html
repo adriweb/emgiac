@@ -372,6 +372,8 @@
         Syntaxe <input class="bouton" type="button" value="Python"
                        onclick="python_mode.checked=!python_mode.checked;"> <input
           class="bouton" type="checkbox" name="python_mode" title="Cocher pour utiliser la syntaxe compatible Python">,
+	^ pour xor <input class="bouton" type="checkbox" name="python_xor"
+	title="Si coche, ^ est le ou exclusif bit a bit en mode Python, si non coche ^ est la puissance">,
         <input class="bouton" type="button" title="Afficher les alertes Python" value="warnings" onclick="warnpy_mode.checked=!warnpy_mode.checked">
         <input class="bouton" type="checkbox" name="warnpy_mode"
                title="Cocher pour afficher les alertes Python" checked>
@@ -3925,10 +3927,12 @@ Pour avoir des informations pendant le d&eacute;roulement des calculs, tapez la 
                 ck = 1;
             else ck = 0;
         }
-        UI.python_mode = form.python_mode.checked = (ck == '1');
+        form.python_mode.checked = (ck == '1' || ck=='2');
+        form.python_xor.checked = (ck=='2');
+        UI.python_mode = eval(ck);
         $id('add_//').value = UI.python_mode ? '#' : '//';
         if (!UI.kbdshift) $id('add_:').value = UI.python_mode ? ':' : ':=';
-        UI.createCookie('xcas_python_mode', form.python_mode.checked ? 1 : -1, 10000);
+        UI.createCookie('xcas_python_mode', UI.python_mode, 10000);
         ck = UI.readCookie('xcas_complex_mode');
         if (ck) form.complex_mode.checked = (ck == '1');
         ck = UI.readCookie('xcas_with_sqrt');
