@@ -1847,7 +1847,7 @@ For really large computations, use native Xcas versions.
          id="add_boucle" value="loop" onclick="UI.savefocused=UI.focused; $id('assistant_boucle').style.display='block';$id('assistant_test').style.display='none';$id('assistant_prog').style.display='none'"
          title="for/while loop assistant"
   >
-  <input type="button" value="func" title="Function creation assistant" style="width:55px;height:35px" id="add_function" onclick="UI.savefocused=UI.focused;  $id('assistant_boucle').style.display='none';  $id('assistant_test').style.display='none'; $id('assistant_prog').style.display='block';UI.set_focus('funcname');">
+  <input type="button" value="func" title="Function creation assistant" style="width:55px;height:35px" id="add_function" onclick="UI.savefocused=UI.focused;  $id('assistant_boucle').style.display='none';  $id('assistant_test').style.display='none'; $id('assistant_prog').style.display='block';UI.set_focus('funcname');$id('localvarspan').style.display=UI.python_mode?'none':'inline';">
   <input type="button" style="width:46px;height:35px" name="add_debug"
          id="add_debug"
          value="debug" onmousedown="event.preventDefault()"
@@ -3167,10 +3167,10 @@ For really large computations, use native Xcas versions.
                          style="height:25px;font-size:large" id="funcname" title="Function name, for example f" rows=1>f</textarea><br>
   arguments <textarea onclick="UI.focused=this;"
                       style="height:25px;font-size:large" id="argsname" title="Function arguments, use comma as separator" rows=1>x</textarea><br>
-  local variables <textarea onclick="UI.focused=this;"
+ <span id="localvarspan"> local variables <textarea onclick="UI.focused=this;"
                             style="height:25px;font-size:large" id="localvars"
                             title="Local variables, use comma as separator. Leave empty if you do not need local variables. Symbolic variables should be declared as local and purged after."
-                            rows=1></textarea><br>
+                            rows=1></textarea><br></span>
   returned value <textarea onclick="UI.focused=this;"
                            style="height:25px;font-size:large" id="returnedvar" title="Returned value" rows=1></textarea><br>
   <button class="bouton" onclick="UI.assistant_prog_ok();">&#x2705;</button>

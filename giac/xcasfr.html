@@ -2057,7 +2057,7 @@ Pour avoir des informations pendant le d&eacute;roulement des calculs, tapez la 
          value="test" onmousedown="event.preventDefault()" onClick="UI.savefocused=UI.focused;  $id('assistant_boucle').style.display='none'; $id('assistant_prog').style.display='none'; $id('assistant_test').style.display='block' ;UI.set_focus('sicond'); //UI.insert(UI.focused,'\nsi  alors  sinon  fsi; ');UI.moveCaret(UI.focused,-20);UI.funcoff();" title="Assistant de cr&eacute;ation de test">
   <input type="button" style="width:40px;height:35px"
          id="add_boucle" value="boucle" onclick="UI.savefocused=UI.focused; $id('assistant_boucle').style.display='block';$id('assistant_test').style.display='none';$id('assistant_prog').style.display='none'" title="Assistant de cr&eacute;ation de boucle">
-  <input type="button" value="fonct" title="Assistant de cr&eacute;ation de fonction" style="width:55px;height:35px" id="add_function" onclick="UI.savefocused=UI.focused;  $id('assistant_boucle').style.display='none';  $id('assistant_test').style.display='none'; $id('assistant_prog').style.display='block';UI.set_focus('funcname');">
+  <input type="button" value="fonct" title="Assistant de cr&eacute;ation de fonction" style="width:55px;height:35px" id="add_function" onclick="UI.savefocused=UI.focused;  $id('assistant_boucle').style.display='none';  $id('assistant_test').style.display='none'; $id('assistant_prog').style.display='block';UI.set_focus('funcname');$id('localvarspan').style.display=UI.python_mode?'none':'inline';">
   <input type="button" style="width:46px;height:35px" name="add_debug"
          id="add_debug"
          value="debug" onmousedown="event.preventDefault()"
@@ -3336,7 +3336,7 @@ Pour avoir des informations pendant le d&eacute;roulement des calculs, tapez la 
   <strong>Nouvelle fonction</strong><br>
   nom de la fonction <textarea onclick="UI.focused=this;" style="height:25px;font-size:large" id="funcname" title="Nom de la fonction, par exemple f" rows=1>f</textarea><br>
   liste des arguments <textarea onclick="UI.focused=this;" style="height:25px;font-size:large" id="argsname" title="Arguments de la fonction s&eacute;par&eacute;s par des virgules" rows=1>x</textarea><br>
-  variables locales <textarea onclick="UI.focused=this;" style="height:25px;font-size:large" id="localvars" title="Variables locales, s&eacute;par&eacute;es par des virgule. Laisser vide pour une fonction d&eacute;finie par une expression. Pour utiliser des variables locales formelles, purgez-les apr&egrave;s les avoir d&eacute;clar&eacute;." rows=1></textarea><br>
+  <span id="localvarspan">variables locales <textarea onclick="UI.focused=this;" style="height:25px;font-size:large" id="localvars" title="Variables locales, s&eacute;par&eacute;es par des virgule. Laisser vide pour une fonction d&eacute;finie par une expression. Pour utiliser des variables locales formelles, purgez-les apr&egrave;s les avoir d&eacute;clar&eacute;." rows=1></textarea><br></span>
   valeur renvoy&eacute;e <textarea onclick="UI.focused=this;" style="height:25px;font-size:large" id="returnedvar" title="Valeur de retour" rows=1></textarea><br>
   <button class="bouton" onclick="UI.assistant_prog_ok();">&#x2705;</button>
   <button class="bouton" onclick="UI.focused=UI.savefocused;$id('assistant_prog').style.display='none'">&#x274C;</button>

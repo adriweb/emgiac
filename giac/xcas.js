@@ -197,7 +197,7 @@ var UI = {
     if (UI.python_mode) {
       UI.insert(UI.focused, 'def ' + fc + '(' + argu + '):');
       UI.indentline(UI.focused);
-      if (loc.length != 0) {
+      if (0 && loc.length != 0) {
         UI.insert(UI.focused, '\n# local ' + loc);
         UI.indentline(UI.focused);
         UI.insert(UI.focused, '\n\nreturn ' + ret);
