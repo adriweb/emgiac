@@ -4023,7 +4023,11 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       if (c < 0x17e)
         return UI.arc_en_ciel(c);
       //console.log('rgb('+Math.floor(c/(256*256))+','+(Math.floor(c/256) % 256)+','+(c%256)+')');
-      return 'rgb(' + Math.floor(c / (256 * 256)) + ',' + (Math.floor(c / 256) % 256) + ',' + (c % 256) + ')';
+      var r=8*((c>>11) & 0x1f);
+      var g=4*((c>>5) & 0x3f);
+      var b=8*(c & 0x1f);
+      return 'rgb(' + r + ',' + g + ',' + b + ')';
+      // return 'rgb(' + Math.floor(c / (256 * 256)) + ',' + (Math.floor(c / 256) % 256) + ',' + (c % 256) + ')';
     }
     return UI.color_list[c];
   },
