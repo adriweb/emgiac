@@ -2690,9 +2690,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
         if (field) {
           field = field.firstChild;
           if (field) {
-            var cm = field.nextSibling.CodeMirror;
-            if (field.id == 'entree') cm = cmentree;
-            if (field.nextSibling && field.nextSibling.id == 'entree') cm = cmentree;
+            var cm = field.nextSibling.CodeMirror || cmentree;
             if (cm) {
               if (cmd == 0) {
                 CodeMirror.commands.find(cm);
