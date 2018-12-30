@@ -1621,7 +1621,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       copy += "var win=window.open(\"" + UI.forum_url + "\", \"_blank\");'>&#x282A;</button>,";
       //console.log(copy);
       if (window.location.href.substr(0, 4) == 'file' && !UI.detectmob()) {
-        $id('thelink').innerHTML = '<a href="' + s + '" target="_blank">x2</a>, <a href="' + s2 + '" target="_blank">local</a>,' + copy;//+',<a href="http://xcas.e.ujf-grenoble.fr/XCAS/posting.php?mode=post&f=12&subject=session&message='+encodeURIComponent(sforum)+'" target="_blank">forum</a>,';
+        $id('thelink').innerHTML = '<a title="Clone session" href="' + s + '" target="_blank">x2</a>, <a title="Local clone" href="' + s2 + '" target="_blank">local</a>,' + copy;//+',<a href="http://xcas.e.ujf-grenoble.fr/XCAS/posting.php?mode=post&f=12&subject=session&message='+encodeURIComponent(sforum)+'" target="_blank">forum</a>,';
       }
       else
         $id('thelink').innerHTML = '<a href="' + s + '" target="_blank">x2</a>,' + (copy);
@@ -1631,7 +1631,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       else
         mailurl = 'mailto:' + UI.mailto + '?subject=session Xcas';
       mailurl += '&body=Bonjour%0d%0aVeuillez suivre ce lien : <' + encodeURIComponent(smail) + '>';
-      $id('themailto').innerHTML = '<a href="#" target="_blank">&nbsp;+&nbsp;</a>,<a href="' + mailurl + '" target="_blank"> &#x2709; </a>,';
+      $id('themailto').innerHTML = '<a href="#" title="New session" target="_blank">&nbsp;+&nbsp;</a>,<a title="E-mail session" href="' + mailurl + '" target="_blank"> &#x2709; </a>,';
     }
   },
   rewritestring: function (s) {
