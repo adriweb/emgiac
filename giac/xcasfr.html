@@ -449,7 +449,7 @@
 <span id="history1" style="display:none">
         <button class="bouton" title="Cliquer ici pour sauvegarder l'historique avec le nom de fichier du champ texte qui suit" onclick="if ($id('loadbutton_file').style.display=='none') UI.savesession(2); else UI.savesession(0);">&#x1f4be;</button>
         <textarea cols="7" id="outputfilename" class="filenamecss" style="font-size:large" title="Nom de sauvegarde du fichier. Avec Firefox, pour pouvoir faire plusieurs sauvegardes sous le meme nom, cocher Toujours demander... dans Pr&eacute;f&eacute;rences, G&eacute;n&eacute;ral, T&eacute;l&eacute;chargements.">session</textarea>
-        <button id="exportbutton" class="bouton" title="Cliquer ici pour publier la session en HTML avec le nom de fichier du champ texte qui pr&eacute;c&egrave;de" onclick='UI.savesession(1);'>Export</button>
+        <button id="exportbutton" class="bouton" title="Cliquer ici pour exporter vers KhiCas avec le nom de fichier du champ texte qui pr&eacute;c&egrave;de" onclick='UI.savesession(1);'>Export</button>
         </span>
 <button id="loadbutton_cookie" class="bouton" title="Cliquer ici pour charger une session sauvegard&eacute;e" onclick="$id('loadfile_cookie').innerHTML=UI.listCookies();">Charge</button>
 <span id="loadfile_cookie"></span>

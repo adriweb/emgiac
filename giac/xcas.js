@@ -1656,11 +1656,15 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     }
     return res;
   },
-  makelink: function (start) {
+  makelink: function (start) { // start=-1 Casio save
+    console.log('makelink',start);
     var s = 'python=';
     if (UI.python_mode) s += (UI.python_mode+'&'); else s += '0&';
     var cur = $id('mathoutput').firstChild;
     var i = 0;
+    var casiovars=UI.caseval_noautosimp('VARS(-1)');
+    casiovars += ';python_compat('+UI.python_mode+');angle_radian('+ ($id('config').angle_mode.checked?1:0)+');';
+    var casioscript="",casioin=[];
     for (; cur; i++) {
       if (i >= start) {
         var field = cur.firstChild;
@@ -1669,6 +1673,12 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
         var fs = field.innerHTML;
         if (fs.length > 6 && fs.substr(0, 6) == "<span ") { // comment
           fs = field.firstChild.firstChild.value;
+	  if (start==-1){
+	    casioin.push('/*'+fs+'*/');
+	    casioin.push('');
+            cur = cur.nextSibling;
+	    continue;
+	  }
           fs = encodeURIComponent(fs);
           //fs=fs.replace(/\n/g,'%0a');
           //console.log(fs);
@@ -1720,7 +1730,28 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
         if (pos >= 0 && pos < fs.length) {
           // var tmp=field.firstChild.value.replace(/\n/g,'%0a'); tmp=tmp.replace(';','%3b','g');
           // s += '+' + tmp.replace('&&',' and ','g') + '&';
-          var tmp = encodeURIComponent(field.firstChild.value);
+          var tmp = field.firstChild.value;
+	  if (start==-1){ // Casio export
+	    if (tmp.indexOf('\n')!=-1)
+	      casioscript += tmp;
+	    else {
+	      casioin.push(tmp);
+	      if (field.nextSibling){
+		field=field.nextSibling.firstChild;
+		if (field){
+		    field=field.nextSibling;
+		  if (field){
+		    fs = field.innerHTML;
+		    casioin.push(fs);
+		  }
+		  else
+		    casioin.push('Graphic object');
+		}
+	      }
+	      else casioin.push("");
+	    }
+	  }
+	  else tmp=encodeURIComponent(tmp);
           s += '+' + tmp + '&';
           cur = cur.nextSibling;
           continue;
@@ -1730,6 +1761,10 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
           cur = cur.nextSibling;
           continue;
         }
+	if (start==-1){
+	  casioin.push('/*'+fs+'*/');
+	  casioin.push('')
+	}
         s += '+///' + fs + '&';
       }
       cur = cur.nextSibling;
@@ -1737,6 +1772,7 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
     // Module.print(s);
     s = s.replace(/\"/g, '%22');
     s = s.replace(/>/g, '%3e');
+    if (start==-1) return [casiovars,casioscript,casioin];
     return s;
   },
   canvas_mousemove: function (event, no) {
@@ -2044,6 +2080,51 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
       return;
     }
     if (i == 1) {
+      s=UI.makelink(-1);
+      if (s[1].length==0)
+	s[1]='\n';
+      var l=4+s[0].length+4+s[1].length;
+      for (var j=0;j<s[2].length;j++)
+	l+=6+s[2][j].length;
+      console.log(l);
+      var buf=new Uint8Array(l+2);
+      buf[0]=0;
+      l=s[0].length;
+      buf[1]=l/65536;
+      buf[2]=(l/256)%256;
+      buf[3]=l%256;
+      for (var j=0;j<s[0].length;++j){
+	buf[4+j]=s[0].charCodeAt(j);
+      }
+      var pos=4+l;
+      buf[pos]=0;
+      l=s[1].length;
+      buf[pos+1]==l/65536;
+      buf[pos+2]=(l/256)%256;
+      buf[pos+3]=l%256;
+      for (var j=0;j<s[1].length;++j){
+	buf[pos+4+j]=s[1].charCodeAt(j);
+      }
+      pos +=4+l;
+      for (var i=0;i<s[2].length;++i){
+	var S=s[2][i];
+	l=S.length;
+	if (l==0) continue;
+	buf[pos]=l/256;
+	buf[pos+1]=l%256;
+	buf[pos+4]=(i%2)?1:0;
+	buf[pos+5]=1;
+	for (var j=0;j<S.length;++j){
+	  buf[pos+6+j]=S.charCodeAt(j);
+	}
+	pos += 6+l;
+      }
+      var blob = new Blob([buf]);
+      filename += ".xw";
+      saveAs(blob, filename);
+      return;
+      // Casio change: make a Int8Array
+      // create Blob([Int8Array_varname]) or Blob([Int8Array_varname],{type: "application/octet-stream"}))
       s = $id("fulldocument").innerHTML;
       s = '<html id="fulldocument" manifest="xcas.appcache">' + s + '</html>';
     }
@@ -2095,7 +2176,65 @@ id="matr_case' + i + '_' + j + '">' + oldval + '</textarea><div class="matrixcel
             UI.exec($id('mathoutput'), 0);
           // Module.print(s);
         }
-        else alert(UI.langue == -1 ? 'Format de document invalide' : 'Invalid document format');
+        else {
+	  // Casio change ?reader.readAsArrayBuffer or readAsBinaryString
+	  if (s.charCodeAt(0)==0){
+	    var editpos=0;
+	    var editl=s.charCodeAt(1);
+	    editl=editl*256+s.charCodeAt(2);
+	    editl=editl*256+s.charCodeAt(3);
+	    var edits=s.substr(4,editl);
+	    console.log(edits);
+	    var py=edits[editl-19];
+	    var rad=edits[editl-3];
+	    console.log(edits,py,rad);
+	    edits=edits.substr(0,edits.length-34);
+	    UI.python_mode=0;
+	    if (edits.length)
+	      UI.caseval(edits);
+	    UI.python_mode=py;
+	    editpos=4+editl;
+	    editl=s.charCodeAt(editpos);
+	    for (var i=1;i<=3;i++)
+	      editl=editl*256+s.charCodeAt(editpos+i);
+	    edits=s.substr(editpos+4,editl);
+	    //console.log('script ',edits,edits.length);
+	    if (edits=='\n')
+	      edits=UI.python_mode?'def\n':'function\nffunction';
+	    if (edits.length)
+	      UI.eval_cmdline1(edits,true);
+	    editpos += 4+editl;
+	    while (editpos<s.length-4){
+	      editl=s.charCodeAt(editpos);
+	      editl=editl*256+s.charCodeAt(editpos+1);
+	      if (editl==0) break;
+	      var t=s.charCodeAt(editpos+4);
+	      var ro=s.charCodeAt(editpos+5);
+	      edits=s.substr(editpos+6,editl);
+	      console.log(t,ro,edits);
+	      if (edits.length>=2){
+		if (edits[0]=='#')
+		  edits='///'+edits.substr(1,edits.length-1);
+		else {
+		  if (edits[0]=='/'){
+		    if (edits[1]=='/')
+		      edits ='/'+edits;
+		    else {
+		      if (edits[1]=='*' && edits.length>=4){
+			edits='///'+edits.substr(2,edits.length-4);
+		      }
+		    }
+		  }
+		}
+	      }
+	      if (edits.length && t==0)
+		UI.eval_cmdline1(edits,true);
+	      editpos+= 6+editl;
+	    }
+	  }
+	  else
+	    alert(UI.langue == -1 ? 'Format de document invalide' : 'Invalid document format');
+	}
         if (UI.focusaftereval) UI.focused.focus();
       }
     }
